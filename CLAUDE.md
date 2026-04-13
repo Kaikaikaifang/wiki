@@ -74,6 +74,7 @@ updated: YYYY-MM-DD
 6. 更新 `wiki/overview.md`（如有重大新洞见）
 7. 在 `wiki/log.md` 追加日志条目
 8. 提交一次 git commit，记录本次 wiki 变更用于版本管理
+9. 执行一次 git push，将本次版本同步到远端仓库
 
 一个来源通常会触及 5–15 个 wiki 页面。
 
@@ -90,6 +91,7 @@ updated: YYYY-MM-DD
 3. 回答时附上来源引用（`[[页面名]]`）
 4. 如果答案有独立价值，询问用户是否归档为新 wiki 页面
 5. 如果本次查询产出了新的 wiki 变更，提交一次 git commit 记录版本
+6. 将该 commit push 到远端仓库，保持 wiki 的持久同步
 
 ### 检查（Lint）
 
@@ -104,8 +106,9 @@ updated: YYYY-MM-DD
 
 ### 版本记录（Git）
 
-- 任何实际写入 `wiki/`、`AGENTS.md` 或 `CLAUDE.md` 的工作流，最后都应提交一次 git commit。
+- 任何实际写入 `wiki/`、`AGENTS.md` 或 `CLAUDE.md` 的工作流，最后都应执行 `git commit`，随后执行 `git push`。
 - commit message 应简洁说明本次操作类型与对象，例如：`ingest: atomic habits ch1`、`query: summarize habit loops`、`lint: fix broken wikilinks`。
+- 如果当前环境无法 push，应明确告知用户原因，并在恢复网络后尽快同步远端。
 
 ---
 
