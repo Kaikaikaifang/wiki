@@ -66,17 +66,20 @@ updated: YYYY-MM-DD
 
 当用户说"摄入 [来源]"或"处理 [文件]"时：
 
-1. 读取 `raw/` 中的来源文件
-2. 与用户简短讨论核心要点（可选，用户主导）
-3. 在 `wiki/sources/` 创建摘要页
-4. 更新 `wiki/index.md`（添加新条目）
-5. 更新相关的 `topics/` 和 `entities/` 页面（新建或修改）
-6. 更新 `wiki/overview.md`（如有重大新洞见）
-7. 在 `wiki/log.md` 追加日志条目
-8. 提交一次 git commit，记录本次 wiki 变更用于版本管理
-9. 执行一次 git push，将本次版本同步到远端仓库
+1. 若文件当前位于默认导入目录 `Clippings/`，先按来源类型将其归类移动到 `raw/` 下对应子目录（如 `raw/articles/`、`raw/journal/`、`raw/podcasts/`、`raw/books/`）
+2. 读取 `raw/` 中的来源文件
+3. 与用户简短讨论核心要点（可选，用户主导）
+4. 在 `wiki/sources/` 创建摘要页
+5. 更新 `wiki/index.md`（添加新条目）
+6. 更新相关的 `topics/` 和 `entities/` 页面（新建或修改）
+7. 更新 `wiki/overview.md`（如有重大新洞见）
+8. 在 `wiki/log.md` 追加日志条目
+9. 提交一次 git commit，记录本次 wiki 变更用于版本管理
+10. 执行一次 git push，将本次版本同步到远端仓库
 
 一个来源通常会触及 5–15 个 wiki 页面。
+
+补充约定：若文件已位于 `raw/` 对应子目录，则跳过归类移动步骤，直接继续后续摄入。
 
 **日记特殊处理**：日记原文保持私密，wiki 页面只记录*规律、主题、情绪趋势*，不引用原文内容。
 

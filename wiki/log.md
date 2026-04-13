@@ -17,3 +17,7 @@
 ## [2026-04-13] ingest | QMD 本地搜索引擎
 
 触及页面：sources/qmd、entities/qmd、topics/local-first-search、topics/hybrid-retrieval、topics/llm-wiki-pattern、topics/knowledge-management、index、overview。
+
+## [2026-04-13] workflow | 更新导入前归档规则
+
+同步更新 AGENTS.md 与 CLAUDE.md：当用户从默认 `Clippings/` 目录处理或摄入文件时，先将文件归类移动到 `raw/` 的对应子目录，再执行后续摄入步骤；若文件已在 `raw/` 中则跳过该步骤。
