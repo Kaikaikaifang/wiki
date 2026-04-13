@@ -30,7 +30,7 @@ wiki/         ← LLM 生成并维护的所有页面
 
 ## 页面规范
 
-### Frontmatter（每个 wiki 页面必须包含）
+### Frontmatter（除 `wiki/log.md` 外，每个 wiki 页面必须包含）
 
 ```yaml
 ---
@@ -41,6 +41,9 @@ source_count: 0        # 支撑该页面的来源数量
 updated: YYYY-MM-DD
 ---
 ```
+
+- `wiki/index.md` 属于导航页，`type` 可使用 `index`
+- `wiki/log.md` 属于操作日志页，保持**无 frontmatter**，并遵循“只追加，不修改”原则
 
 ### 标签规范
 

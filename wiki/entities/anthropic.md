@@ -1,7 +1,7 @@
 ---
 title: Anthropic
 type: entity
-tags: [组织, AI, LLM, AI Agent]
+tags: [组织, AI, LLM, Agent]
 source_count: 3
 updated: 2026-04-13
 ---
@@ -41,4 +41,4 @@ Anthropic 在本 wiki 当前主要连接两条主题：
 ---
 
 来源：[[sources/building-effective-ai-agents]] · [[sources/how-we-built-our-multi-agent-research-system]] · [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]]
-相关页面：[[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[entities/managed-agents]]
+相关页面：[[overview]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[entities/managed-agents]]
