@@ -33,3 +33,7 @@
 ## [2026-04-13] ingest | Scaling Managed Agents: Decoupling the brain from the hands
 
 触及页面：sources/scaling-managed-agents-decoupling-the-brain-from-the-hands、entities/managed-agents、topics/long-horizon-agents、topics/multi-agent-systems、topics/agentic-systems、topics/agent-computer-interface、entities/anthropic、index、overview。
+
+## [2026-04-13] workflow | 明确 tags 无空格规范
+
+同步更新 AGENTS.md 与 CLAUDE.md：frontmatter 中的 `tags` 不允许包含空格；生成、归档与 lint 时均应统一使用无空格标签，例如 `Agent`、`提示词工程`。
