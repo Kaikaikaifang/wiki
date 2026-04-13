@@ -115,6 +115,10 @@ updated: YYYY-MM-DD
 - 推荐示例：`ingest: atomic habits ch1`、`query: compare deep work and deliberate practice`、`lint: fix orphan pages`、`wiki: update overview links`、`workflow: refine git sync rules`。
 - 一次工作流只做一个主题时，优先提交为一个 commit；不要为微小中间状态频繁提交。
 - push 约定：默认在当前工作流完成后立即 `git push origin <current-branch>`；若连续进行了多个本地 commit，也应在结束时统一 push。
+- `wiki/log.md` 与 git 历史应尽量一一对应：一次有记录价值的工作流，通常对应一条日志和一个 commit。
+- 日志中的操作类型应与 commit 的 `type` 保持一致，例如日志写 `ingest`，commit 也应使用 `ingest: ...`。
+- 日志标题可用中文面向阅读，commit message 保持英文面向版本历史；两者应描述同一对象，不必逐字一致。
+- 推荐对应示例：`## [2026-04-13] ingest | Atomic Habits 第一章` ↔ `ingest: atomic habits ch1`。
 
 ---
 
@@ -147,6 +151,12 @@ updated: YYYY-MM-DD
 ```bash
 grep "^## \[" wiki/log.md | tail -5   # 查看最近 5 条操作
 ```
+
+补充约定：
+
+- 若本次工作流写入了日志并创建了 commit，二者应在语义上对应同一批变更。
+- 日志更适合写成人类可读的中文摘要；commit 更适合写成简洁英文标签。
+- 若一次工作流包含多个独立主题，优先拆成多条日志与多个 commit，而不是混在同一条记录里。
 
 ---
 
