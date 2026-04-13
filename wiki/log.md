@@ -25,3 +25,11 @@
 ## [2026-04-13] ingest | Building Effective AI Agents
 
 触及页面：sources/building-effective-ai-agents、topics/agentic-systems、topics/agent-computer-interface、entities/anthropic、index、overview。
+
+## [2026-04-13] ingest | How we built our multi-agent research system
+
+触及页面：sources/how-we-built-our-multi-agent-research-system、topics/multi-agent-systems、topics/long-horizon-agents、topics/agentic-systems、topics/agent-computer-interface、entities/anthropic、index、overview。
+
+## [2026-04-13] ingest | Scaling Managed Agents: Decoupling the brain from the hands
+
+触及页面：sources/scaling-managed-agents-decoupling-the-brain-from-the-hands、entities/managed-agents、topics/long-horizon-agents、topics/multi-agent-systems、topics/agentic-systems、topics/agent-computer-interface、entities/anthropic、index、overview。

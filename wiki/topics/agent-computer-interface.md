@@ -2,7 +2,7 @@
 title: Agent-Computer Interface
 type: topic
 tags: [AI Agent, 工具设计, Prompt Engineering]
-source_count: 1
+source_count: 3
 updated: 2026-04-13
 ---
 
@@ -35,6 +35,8 @@ ACI（agent-computer interface）可以理解为：**agent 如何理解、调用
 
 因此，一个常见原则是：**让输出格式尽量贴近互联网中自然出现的文本形态。**
 
+[[sources/how-we-built-our-multi-agent-research-system]] 进一步补充了另一层：除了格式本身，**tool selection 也必须被显式教会**。如果 agent 不先审视当前可用工具，不理解每个工具的适用边界，就算模型再强，也可能在一开始就走错搜索空间。
+
 ## 设计方法
 
 可以把工具说明当作写给团队里初级工程师的 docstring：
@@ -58,11 +60,15 @@ ACI 不是写完就算，它需要像产品接口一样被迭代：
 
 Anthropic 在 SWE-bench coding agent 上的经验甚至是：**优化工具花的时间比优化总 prompt 更多。**
 
+而在 [[sources/how-we-built-our-multi-agent-research-system]] 中，他们甚至让 agent 反复试用 MCP 工具并改写工具描述，最终降低后续 agent 的任务完成时间。这说明 ACI 不只是手工文档工作，也可以进入 agent 驱动的迭代闭环。
+
 ## 一个典型案例
 
 文章提到，相对路径工具在 agent 离开根目录后容易出错；改成**始终要求绝对路径**后，工具使用稳定性明显提升。这个例子说明：很多所谓“模型能力问题”，其实是接口设计问题。
 
+[[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]] 则把 ACI 再向下推进一层：当 sandbox、MCP 服务、手机或其他执行环境都统一抽象成 `execute(name, input) → string` 时，agent 面对的是一个更稳定的“手的接口”。这类抽象并不降低复杂度本身，但能降低系统边界的脆弱性。
+
 ---
 
-来源：[[sources/building-effective-ai-agents]]
-相关页面：[[topics/agentic-systems]] · [[entities/anthropic]]
+来源：[[sources/building-effective-ai-agents]] · [[sources/how-we-built-our-multi-agent-research-system]] · [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]]
+相关页面：[[topics/agentic-systems]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[entities/managed-agents]] · [[entities/anthropic]]

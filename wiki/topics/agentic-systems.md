@@ -2,7 +2,7 @@
 title: Agentic Systems
 type: topic
 tags: [AI Agent, 工作流, 方法论]
-source_count: 1
+source_count: 3
 updated: 2026-04-13
 ---
 
@@ -32,6 +32,8 @@ updated: 2026-04-13
 7. **Autonomous agent**：在环境中多轮行动，持续自我校正。
 
 这条阶梯的价值不在于“越往后越高级”，而在于提醒自己：**优先选择能满足目标的最低复杂度方案。**
+
+[[sources/how-we-built-our-multi-agent-research-system]] 则补上了一个关键现实：当任务天然适合 breadth-first 并行探索时，**orchestrator-worker 型多智能体**可以被看作这条阶梯上“并行化 + 长程自治”的一次组合升级。它不是默认终点，而是只在研究类任务中非常有效的一种特化形态。
 
 ## 什么时候用 workflow
 
@@ -64,6 +66,14 @@ agent 的优势来自自治，但风险也来自自治：
 - 不透明的中间推理让调试更难；
 - 如果缺少停止条件与人工检查点，容易失控。
 
+进一步看，[[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]] 说明真正成熟的 agentic system 还需要区分：
+
+- **会话层**：保存可恢复、可回放的历史；
+- **harness 层**：管理上下文、调用模型、连接工具；
+- **执行层**：真正做动作的 sandbox 或外部工具。
+
+也就是说，agentic system 不只是 prompt + tools，还包含一套运行时架构。
+
 因此，agent 设计通常需要配套：sandbox、guardrails、迭代上限、人工介入点与显式日志。
 
 ## 一个实用判断句
@@ -72,5 +82,5 @@ agent 的优势来自自治，但风险也来自自治：
 
 ---
 
-来源：[[sources/building-effective-ai-agents]]
-相关页面：[[topics/agent-computer-interface]] · [[entities/anthropic]]
+来源：[[sources/building-effective-ai-agents]] · [[sources/how-we-built-our-multi-agent-research-system]] · [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]]
+相关页面：[[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[entities/managed-agents]] · [[entities/anthropic]]
