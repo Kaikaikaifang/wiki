@@ -2,7 +2,7 @@
 title: LLM Wiki 模式
 type: topic
 tags: [知识管理, LLM, 方法论, PKM]
-source_count: 1
+source_count: 2
 updated: 2026-04-13
 ---
 
@@ -37,9 +37,15 @@ updated: 2026-04-13
 ## 规模与工具
 
 - 小规模（< 100 来源）：`index.md` 足够，无需向量检索
-- 中大规模：引入 [qmd](https://github.com/tobi/qmd) 本地搜索引擎
+- 中大规模：引入 [[entities/qmd]] 这类本地搜索引擎，补充检索与取回能力
+
+## 与搜索层的边界
+
+[[topics/llm-wiki-pattern]] 的重点是**知识编译**：把来源沉淀为摘要、主题页、实体页和综述。[[entities/qmd]] 代表的搜索层重点是**检索与取回**：在大量 markdown 中快速找到、排序并返回相关内容。
+
+二者并不冲突：wiki 负责长期积累后的结构化知识，搜索引擎负责在原始资料和大量页面中高效导航。
 
 ---
 
-来源：[[sources/llm-wiki]]
-相关页面：[[topics/knowledge-management]] · [[entities/andrej-karpathy]]
+来源：[[sources/llm-wiki]] · [[sources/qmd]]
+相关页面：[[topics/knowledge-management]] · [[topics/local-first-search]] · [[topics/hybrid-retrieval]] · [[entities/andrej-karpathy]] · [[entities/qmd]]

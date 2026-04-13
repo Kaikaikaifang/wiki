@@ -2,7 +2,7 @@
 title: 知识管理
 type: topic
 tags: [知识管理, PKM, 方法论]
-source_count: 1
+source_count: 2
 updated: 2026-04-13
 ---
 
@@ -24,11 +24,20 @@ updated: 2026-04-13
 
 将维护成本趋近于零。参见 [[topics/llm-wiki-pattern]]。
 
+## 访问层与编译层
+
+知识管理里有两类常被混淆的能力：
+
+- **编译层**：把原始资料沉淀成结构化知识页面
+- **访问层**：在大量资料中快速检索、定位并取回内容
+
+[[topics/llm-wiki-pattern]] 主要解决前者，[[topics/local-first-search]] 与 [[topics/hybrid-retrieval]] 主要增强后者。两层配合，知识库才既能长期积累，也能在规模增长后保持可用。
+
 ## 历史参照
 
 [[entities/vannevar-bush]] 1945 年的 Memex 构想：私人的、主动策划的知识库，文档间的关联与文档本身同等重要。这个愿景比万维网更接近 LLM Wiki 的精神。
 
 ---
 
-来源：[[sources/llm-wiki]]
-相关页面：[[topics/llm-wiki-pattern]] · [[entities/vannevar-bush]]
+来源：[[sources/llm-wiki]] · [[sources/qmd]]
+相关页面：[[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/hybrid-retrieval]] · [[entities/vannevar-bush]] · [[entities/qmd]]

@@ -2,6 +2,7 @@
 title: "LLM Wiki — 用 LLM 构建个人知识库的模式"
 type: source
 tags: [知识管理, LLM, 方法论, PKM]
+source_count: 1
 source_file: raw/articles/llm-wiki.md
 author: Andrej Karpathy
 published: 2026-04-13
