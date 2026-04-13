@@ -14,6 +14,8 @@ updated: 2026-04-13
 
 ## 主题
 
+- [[topics/agent-computer-interface]] — 面向模型而非人类的工具接口设计原则
+- [[topics/agentic-systems]] — 从增强型 LLM 到 workflow 与自治 agent 的复杂度阶梯
 - [[topics/hybrid-retrieval]] — 组合 BM25、向量检索、查询扩展与重排的检索范式
 - [[topics/local-first-search]] — 在本机完成索引与检索，保留 markdown 文件为事实来源
 - [[topics/llm-wiki-pattern]] — LLM 增量构建持久 wiki 的模式，替代 RAG 检索
@@ -21,11 +23,13 @@ updated: 2026-04-13
 
 ## 实体
 
+- [[entities/anthropic]] — 以 Claude 与 agent 工程实践著称的 AI 公司
 - [[entities/andrej-karpathy]] — AI 研究者，LLM Wiki 模式提出者
 - [[entities/qmd]] — 面向 markdown 与 agent 工作流的本地搜索引擎
 - [[entities/vannevar-bush]] — 1945 年 Memex 构想提出者，LLM Wiki 的精神先驱
 
 ## 来源
 
+- [[sources/building-effective-ai-agents]] — Anthropic 的 agent 工程文章（2026-04-13，网络文章）
 - [[sources/llm-wiki]] — LLM Wiki 模式论文（Karpathy，2026-04-13，网络文章）
 - [[sources/qmd]] — QMD README（tobi/qmd，2026-04-13，项目文档）
