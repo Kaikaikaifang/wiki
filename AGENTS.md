@@ -73,6 +73,7 @@ updated: YYYY-MM-DD
 5. 更新相关的 `topics/` 和 `entities/` 页面（新建或修改）
 6. 更新 `wiki/overview.md`（如有重大新洞见）
 7. 在 `wiki/log.md` 追加日志条目
+8. 提交一次 git commit，记录本次 wiki 变更用于版本管理
 
 一个来源通常会触及 5–15 个 wiki 页面。
 
@@ -88,6 +89,7 @@ updated: YYYY-MM-DD
 2. 读取相关页面，综合答案
 3. 回答时附上来源引用（`[[页面名]]`）
 4. 如果答案有独立价值，询问用户是否归档为新 wiki 页面
+5. 如果本次查询产出了新的 wiki 变更，提交一次 git commit 记录版本
 
 ### 检查（Lint）
 
@@ -99,6 +101,11 @@ updated: YYYY-MM-DD
 - 缺失的交叉引用
 - 可以用网络搜索填补的数据空白
 - 建议下一步可以深入的问题或来源
+
+### 版本记录（Git）
+
+- 任何实际写入 `wiki/`、`AGENTS.md` 或 `CLAUDE.md` 的工作流，最后都应提交一次 git commit。
+- commit message 应简洁说明本次操作类型与对象，例如：`ingest: atomic habits ch1`、`query: summarize habit loops`、`lint: fix broken wikilinks`。
 
 ---
 
