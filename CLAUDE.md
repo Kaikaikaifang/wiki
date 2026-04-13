@@ -109,6 +109,12 @@ updated: YYYY-MM-DD
 - 任何实际写入 `wiki/`、`AGENTS.md` 或 `CLAUDE.md` 的工作流，最后都应执行 `git commit`，随后执行 `git push`。
 - commit message 应简洁说明本次操作类型与对象，例如：`ingest: atomic habits ch1`、`query: summarize habit loops`、`lint: fix broken wikilinks`。
 - 如果当前环境无法 push，应明确告知用户原因，并在恢复网络后尽快同步远端。
+- 推荐格式统一为：`<type>: <object>`。
+- `type` 建议仅使用：`ingest`、`query`、`lint`、`wiki`、`workflow`。
+- `object` 应描述本次变更的主要对象，使用小写英文短语，必要时保留书名 / 章节 / 主题名。
+- 推荐示例：`ingest: atomic habits ch1`、`query: compare deep work and deliberate practice`、`lint: fix orphan pages`、`wiki: update overview links`、`workflow: refine git sync rules`。
+- 一次工作流只做一个主题时，优先提交为一个 commit；不要为微小中间状态频繁提交。
+- push 约定：默认在当前工作流完成后立即 `git push origin <current-branch>`；若连续进行了多个本地 commit，也应在结束时统一 push。
 
 ---
 
