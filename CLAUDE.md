@@ -1,0 +1,155 @@
+# LLM Wiki — 个人知识库模式文件
+
+## 目的与领域
+
+这是一个个人知识 / 自我提升 wiki。由 Claude Code 或 OpenAI Codex 负责维护，Obsidian 作为浏览工具。
+
+核心原则：**wiki 是持续积累的产物，不是每次查询时重新推导的结果。** 每摄入一个来源，知识就被编译进 wiki；每次提问，答案可以归档回 wiki，继续沉淀。
+
+---
+
+## 目录结构
+
+```
+raw/          ← 原始资料（只读，永不修改）
+  articles/   ← 网络文章（Obsidian Web Clipper 导出的 markdown）
+  journal/    ← 日记条目
+  podcasts/   ← 播客笔记 / 文字稿
+  books/      ← 书籍章节 / 读书笔记
+
+wiki/         ← LLM 生成并维护的所有页面
+  index.md    ← 内容目录（每次摄入后更新）
+  log.md      ← 只追加的操作日志
+  overview.md ← 整体综述与核心主题
+  topics/     ← 主题 / 概念综合页
+  entities/   ← 人物、框架、心智模型、工具
+  sources/    ← 每个来源的摘要页
+```
+
+---
+
+## 页面规范
+
+### Frontmatter（每个 wiki 页面必须包含）
+
+```yaml
+---
+title: 页面标题
+type: topic | entity | source | overview
+tags: [标签1, 标签2]
+source_count: 0        # 支撑该页面的来源数量
+updated: YYYY-MM-DD
+---
+```
+
+### 文件命名
+
+- 全部小写，单词间用连字符，英文命名
+- 示例：`topics/habit-formation.md`、`entities/james-clear.md`、`sources/atomic-habits-ch1.md`
+
+### 交叉引用
+
+- 所有内部链接使用 Obsidian wikilink 语法：`[[页面名]]`
+- 链接到具体章节：`[[页面名#章节标题]]`
+- 每个页面底部维护"相关页面"列表
+
+### 内容语言
+
+- 所有 wiki 页面内容使用**中文**撰写
+- 文件名、frontmatter 字段名保持英文
+
+---
+
+## 工作流
+
+### 摄入（Ingest）
+
+当用户说"摄入 [来源]"或"处理 [文件]"时：
+
+1. 读取 `raw/` 中的来源文件
+2. 与用户简短讨论核心要点（可选，用户主导）
+3. 在 `wiki/sources/` 创建摘要页
+4. 更新 `wiki/index.md`（添加新条目）
+5. 更新相关的 `topics/` 和 `entities/` 页面（新建或修改）
+6. 更新 `wiki/overview.md`（如有重大新洞见）
+7. 在 `wiki/log.md` 追加日志条目
+
+一个来源通常会触及 5–15 个 wiki 页面。
+
+**日记特殊处理**：日记原文保持私密，wiki 页面只记录*规律、主题、情绪趋势*，不引用原文内容。
+
+**书籍处理**：可按章节逐步摄入，每章一个 source 页面，同时维护书籍总览页。
+
+### 查询（Query）
+
+当用户提问时：
+
+1. 读取 `wiki/index.md` 定位相关页面
+2. 读取相关页面，综合答案
+3. 回答时附上来源引用（`[[页面名]]`）
+4. 如果答案有独立价值，询问用户是否归档为新 wiki 页面
+
+### 检查（Lint）
+
+当用户说"检查 wiki"或"lint"时，扫描并报告：
+
+- 页面间的矛盾或过时内容
+- 孤立页面（无入链）
+- 被多次提及但缺少独立页面的概念
+- 缺失的交叉引用
+- 可以用网络搜索填补的数据空白
+- 建议下一步可以深入的问题或来源
+
+---
+
+## 索引格式（wiki/index.md）
+
+```markdown
+## 主题
+- [[topics/xxx]] — 一行摘要
+
+## 实体
+- [[entities/xxx]] — 一行摘要
+
+## 来源
+- [[sources/xxx]] — 一行摘要（来源类型，日期）
+```
+
+---
+
+## 日志格式（wiki/log.md）
+
+每条日志以固定前缀开头，便于 grep：
+
+```
+## [YYYY-MM-DD] ingest | 来源标题
+## [YYYY-MM-DD] query | 问题摘要
+## [YYYY-MM-DD] lint | 检查摘要
+```
+
+示例：
+```bash
+grep "^## \[" wiki/log.md | tail -5   # 查看最近 5 条操作
+```
+
+---
+
+## 扩展说明
+
+- **搜索工具**：wiki 规模较小时，index.md 已足够。当来源超过 ~100 个、页面超过几百个时，考虑引入 [qmd](https://github.com/tobi/qmd) 作为本地搜索引擎。
+- **Dataview**：Obsidian Dataview 插件可利用 frontmatter 生成动态表格，例如按标签列出所有主题页。
+- **版本历史**：wiki 是 git 仓库，所有变更自动有版本记录。
+
+---
+
+## 多 Agent 协作说明
+
+本 wiki 同时支持 Claude Code（读取 CLAUDE.md）和 OpenAI Codex（读取 AGENTS.md）维护。两者共享同一套 wiki 文件，通过 git 保持同步。
+
+**每次新会话的启动流程（无论哪个 agent）：**
+
+1. 读取 `wiki/log.md` 末尾几条，了解上次做了什么
+2. 读取 `wiki/index.md`，掌握当前 wiki 全貌
+3. 然后执行用户指令
+
+这两步替代了"resume 上一次会话"——wiki 本身就是持久状态，log 是时间线，index 是地图。不需要依赖对话历史。
