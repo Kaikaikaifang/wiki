@@ -3,7 +3,7 @@ title: 内容目录
 type: index
 tags: [索引, 导航]
 source_count: 0
-updated: 2026-04-14
+updated: 2026-04-15
 ---
 
 # 内容目录
@@ -27,6 +27,7 @@ updated: 2026-04-14
 - [[topics/llm-wiki-pattern]] — LLM 增量构建持久 wiki 的模式，替代 RAG 检索
 - [[topics/multi-agent-systems]] — 适合并行开放式任务的多智能体分工与协作模式
 - [[topics/knowledge-management]] — 知识管理的核心问题与主要范式对比
+- [[topics/query-result-caching]] — 用 TTL、准入条件与安全边界复用昂贵 `SELECT` 结果
 - [[topics/query-shape-and-index-usage]] — `where` 子句形状如何决定索引是否真正缩小扫描范围
 - [[topics/sql-execution-plans]] — 把执行计划当作 SQL 性能调优的第一现场
 - [[topics/sql-indexing]] — 把索引视为开发者必须掌握的查询设计能力
@@ -36,6 +37,7 @@ updated: 2026-04-14
 
 - [[entities/anthropic]] — 以 Claude 与 agent 工程实践著称的 AI 公司
 - [[entities/andrej-karpathy]] — AI 研究者，LLM Wiki 模式提出者
+- [[entities/clickhouse]] — 面向 OLAP 的列式数据库，强调分析查询性能与可观测性
 - [[entities/managed-agents]] — Anthropic 的托管式长程 agent 运行时产品
 - [[entities/markus-winand]] — 以 SQL 索引与执行计划教学著称的数据库作者
 - [[entities/qmd]] — 面向 markdown 与 agent 工作流的本地搜索引擎
@@ -44,6 +46,7 @@ updated: 2026-04-14
 ## 来源
 
 - [[sources/building-effective-ai-agents]] — Anthropic 的 agent 工程文章（2026-04-13，网络文章）
+- [[sources/clickhouse-query-cache]] — ClickHouse 查询缓存文档（2026-04-15，网络文章）
 - [[sources/how-we-built-our-multi-agent-research-system]] — Anthropic 关于 Research 多智能体系统的复盘（2026-04-13，网络文章）
 - [[sources/llm-wiki]] — LLM Wiki 模式论文（Karpathy，2026-04-13，网络文章）
 - [[sources/qmd]] — QMD README（tobi/qmd，2026-04-13，项目文档）
