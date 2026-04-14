@@ -3,7 +3,7 @@ title: Vannevar Bush / Memex
 type: entity
 tags: [人物, 历史, 知识管理]
 source_count: 1
-updated: 2026-04-13
+updated: 2026-04-14
 ---
 
 # Vannevar Bush / Memex

@@ -3,7 +3,7 @@ title: 知识管理
 type: topic
 tags: [知识管理, PKM, 方法论]
 source_count: 2
-updated: 2026-04-13
+updated: 2026-04-14
 ---
 
 # 知识管理

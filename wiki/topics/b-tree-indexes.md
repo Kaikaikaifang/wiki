@@ -7,7 +7,7 @@ tags:
   - 索引
   - 数据库
 source_count: 2
-updated: 2026-04-13
+updated: 2026-04-14
 ---
 
 # B-Tree Indexes

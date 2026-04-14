@@ -10,7 +10,7 @@ source_count: 1
 source_file: raw/articles/building-effective-ai-agents.md
 author: Erik Schluntz, Barry Zhang
 published: 2026-04-13
-updated: 2026-04-13
+updated: 2026-04-14
 ---
 
 # Building Effective AI Agents

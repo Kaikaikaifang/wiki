@@ -3,7 +3,7 @@ title: Anthropic
 type: entity
 tags: [组织, AI, LLM, Agent]
 source_count: 3
-updated: 2026-04-13
+updated: 2026-04-14
 ---
 
 # Anthropic

@@ -3,7 +3,7 @@ title: Andrej Karpathy
 type: entity
 tags: [人物, AI研究者, 作者]
 source_count: 1
-updated: 2026-04-13
+updated: 2026-04-14
 ---
 
 # Andrej Karpathy

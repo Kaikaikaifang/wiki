@@ -10,7 +10,7 @@ source_count: 1
 source_file: raw/articles/how-we-built-our-multi-agent-research-system.md
 author: Jeremy Hadfield, Barry Zhang, Kenneth Lien, Florian Scholz, Jeremy Fox, Daniel Ford
 published: 2026-04-13
-updated: 2026-04-13
+updated: 2026-04-14
 ---
 
 # How we built our multi-agent research system

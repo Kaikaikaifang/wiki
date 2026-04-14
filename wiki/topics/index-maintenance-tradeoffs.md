@@ -7,7 +7,7 @@ tags:
   - 写入
   - 性能
 source_count: 2
-updated: 2026-04-13
+updated: 2026-04-14
 ---
 
 # Index Maintenance Tradeoffs

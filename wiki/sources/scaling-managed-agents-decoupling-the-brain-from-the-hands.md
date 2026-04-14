@@ -10,7 +10,7 @@ source_count: 1
 source_file: raw/articles/scaling-managed-agents-decoupling-the-brain-from-the-hands.md
 author: Lance Martin, Gabe Cemaj, Michael Cohen
 published: 2026-04-13
-updated: 2026-04-13
+updated: 2026-04-14
 ---
 
 # Scaling Managed Agents: Decoupling the brain from the hands

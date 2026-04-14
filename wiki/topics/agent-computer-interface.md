@@ -6,7 +6,7 @@ tags:
   - 工具设计
   - 提示词工程
 source_count: 3
-updated: 2026-04-13
+updated: 2026-04-14
 ---
 
 # Agent-Computer Interface

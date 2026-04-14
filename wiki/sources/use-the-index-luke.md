@@ -9,7 +9,7 @@ tags:
 source_count: 1
 source_file: raw/books/use-the-index-luke-sql-performance.md
 author: Markus Winand
-updated: 2026-04-13
+updated: 2026-04-14
 ---
 
 # Use The Index, Luke

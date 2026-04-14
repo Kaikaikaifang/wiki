@@ -3,7 +3,7 @@ title: QMD
 type: entity
 tags: [工具, 搜索, 本地优先, MCP]
 source_count: 1
-updated: 2026-04-13
+updated: 2026-04-14
 ---
 
 # QMD

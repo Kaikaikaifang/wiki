@@ -3,7 +3,7 @@ title: "Use The Index, Luke — SQL Performance and Indexing"
 source: "https://use-the-index-luke.com/sql/table-of-contents"
 author: "Markus Winand"
 published:
-created: 2026-04-13
+created: 2026-04-14
 description: "Aggregated raw capture of the Use The Index, Luke SQL performance table of contents and linked chapters."
 tags:
   - "clippings"

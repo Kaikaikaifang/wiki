@@ -44,6 +44,8 @@ updated: YYYY-MM-DD
 
 - `wiki/index.md` 属于导航页，`type` 可使用 `index`
 - `wiki/log.md` 属于操作日志页，保持**无 frontmatter**，并遵循“只追加，不修改”原则
+- 所有 `updated`、`created`、日志标题中的日期，统一使用**东八区北京时间**（`Asia/Shanghai`），不要使用系统默认时区或 UTC
+- 若需要生成当天日期，优先显式使用 `TZ=Asia/Shanghai date +%F` 取值后再写入
 
 ### 标签规范
 
@@ -170,6 +172,8 @@ updated: YYYY-MM-DD
 ## [YYYY-MM-DD] query | 问题摘要
 ## [YYYY-MM-DD] lint | 检查摘要
 ```
+
+以上 `YYYY-MM-DD` 统一按**东八区北京时间**（`Asia/Shanghai`）生成。
 
 示例：
 

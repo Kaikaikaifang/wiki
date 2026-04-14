@@ -7,7 +7,7 @@ tags:
   - 查询设计
   - 性能
 source_count: 4
-updated: 2026-04-13
+updated: 2026-04-14
 ---
 
 # Query Shape and Index Usage

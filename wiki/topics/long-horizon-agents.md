@@ -7,7 +7,7 @@ tags:
   - 上下文管理
   - 运行时
 source_count: 2
-updated: 2026-04-13
+updated: 2026-04-14
 ---
 
 # Long-Horizon Agents

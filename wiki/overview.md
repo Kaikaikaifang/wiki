@@ -3,7 +3,7 @@ title: 整体综述
 type: overview
 tags: [方法论, 知识管理]
 source_count: 6
-updated: 2026-04-13
+updated: 2026-04-14
 ---
 
 # 整体综述
@@ -35,7 +35,7 @@ updated: 2026-04-13
 - 2026-04-13：摄入 Anthropic 的 agent 工程文章，引入 agentic systems 与 ACI 两条新主题
 - 2026-04-13：摄入 Anthropic 的多智能体 Research 复盘，新增多智能体协作与评估视角
 - 2026-04-13：摄入 Anthropic 的 Managed Agents 架构文章，新增长程 agent 运行时与安全边界视角
-- 2026-04-13：摄入 Use The Index, Luke，新增 SQL 索引、执行计划、连接、排序与分页相关主题
+- 2026-04-14：摄入 Use The Index, Luke，新增 SQL 索引、执行计划、连接、排序与分页相关主题
 
 ---
 
