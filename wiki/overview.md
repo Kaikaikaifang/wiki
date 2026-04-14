@@ -2,7 +2,7 @@
 title: 整体综述
 type: overview
 tags: [方法论, 知识管理]
-source_count: 7
+source_count: 8
 updated: 2026-04-15
 ---
 
@@ -19,6 +19,8 @@ updated: 2026-04-15
 这次新增的 [[sources/use-the-index-luke]] 则把 wiki 的技术主题进一步落到经典数据库工程：它不是讨论 AI 系统，而是讨论**应用查询如何通过索引、执行计划与访问路径设计获得稳定性能**。这条线把“系统如何思考与执行”扩展成了“数据层如何被高效访问”，新增了 [[topics/sql-indexing]]、[[topics/query-shape-and-index-usage]]、[[topics/sql-execution-plans]]、[[topics/sql-join-performance]] 等一组更底层的性能主题。
 
 新摄入的 [[sources/clickhouse-query-cache]] 则把数据库性能视角再往前推一步：除了通过索引减少扫描，还可以在分析型场景里**复用已经算过的结果**。它新增了 [[topics/query-result-caching]] 与 [[entities/clickhouse]] 这条偏 OLAP 的性能主线：通过 TTL、缓存准入与权限隔离，在可接受的新鲜度窗口内换取更低延迟与更低资源消耗。
+
+紧接着补入的 [[sources/introducing-the-clickhouse-query-cache]] 则把这条主线从“怎么用”延伸到“为什么这样设计”。它补充了 query cache 早期作为实验功能的定位、用真实慢查询调试命中失败的过程，以及从事务不一致设计、AST 匹配到未来淘汰策略的产品演化背景。
 
 ## 当前关注
 
@@ -40,7 +42,8 @@ updated: 2026-04-15
 - 2026-04-13：摄入 Anthropic 的 Managed Agents 架构文章，新增长程 agent 运行时与安全边界视角
 - 2026-04-14：摄入 Use The Index, Luke，新增 SQL 索引、执行计划、连接、排序与分页相关主题
 - 2026-04-15：摄入 ClickHouse Query Cache 文档，新增 OLAP 查询结果缓存与 ClickHouse 相关主题
+- 2026-04-15：补充 ClickHouse Query Cache 设计博客，完善该主题的设计动机、调试方式与演化脉络
 
 ---
 
-相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]]
+相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[sources/introducing-the-clickhouse-query-cache]]

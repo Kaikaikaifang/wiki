@@ -2,7 +2,7 @@
 title: ClickHouse
 type: entity
 tags: [数据库, ClickHouse, OLAP, 列式存储]
-source_count: 1
+source_count: 2
 updated: 2026-04-15
 ---
 
@@ -30,6 +30,8 @@ ClickHouse 在第二类问题上提供了一个很清晰的工程化答案。
 
 这些特征说明 ClickHouse 的设计不是简单追求“快”，而是把**快、可控、安全、可观测**一起纳入产品接口。
 
+[[sources/introducing-the-clickhouse-query-cache]] 还补上了一层很重要的背景：ClickHouse 不只是给出一份“现成配置手册”，而是公开解释了这个功能最初为什么以实验特性出现、为什么选择事务不一致缓存、以及未来希望如何把它扩展成更成熟的缓存子系统。
+
 ## 在我的知识图谱中的位置
 
 如果说 [[entities/markus-winand]] 帮我建立了“围绕访问路径设计 SQL”的视角，那么 ClickHouse 代表的是另一种数据库工程心智：**围绕分析工作负载设计计算与复用机制。**
@@ -38,6 +40,6 @@ ClickHouse 在第二类问题上提供了一个很清晰的工程化答案。
 
 ---
 
-来源：[[sources/clickhouse-query-cache]]
+来源：[[sources/clickhouse-query-cache]] · [[sources/introducing-the-clickhouse-query-cache]]
 
-相关页面：[[topics/query-result-caching]] · [[topics/sql-indexing]] · [[sources/clickhouse-query-cache]]
+相关页面：[[topics/query-result-caching]] · [[topics/sql-indexing]] · [[sources/clickhouse-query-cache]] · [[sources/introducing-the-clickhouse-query-cache]]

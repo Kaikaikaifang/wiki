@@ -74,4 +74,4 @@ ClickHouse 以查询的 AST 作为缓存键，因此 `SELECT 1` 与 `select 1` �
 
 ---
 
-相关页面：[[topics/query-result-caching]] · [[entities/clickhouse]] · [[topics/sql-indexing]]
+相关页面：[[sources/introducing-the-clickhouse-query-cache]] · [[topics/query-result-caching]] · [[entities/clickhouse]] · [[topics/sql-indexing]]

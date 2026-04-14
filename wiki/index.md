@@ -48,6 +48,7 @@ updated: 2026-04-15
 - [[sources/building-effective-ai-agents]] — Anthropic 的 agent 工程文章（2026-04-13，网络文章）
 - [[sources/clickhouse-query-cache]] — ClickHouse 查询缓存文档（2026-04-15，网络文章）
 - [[sources/how-we-built-our-multi-agent-research-system]] — Anthropic 关于 Research 多智能体系统的复盘（2026-04-13，网络文章）
+- [[sources/introducing-the-clickhouse-query-cache]] — ClickHouse Query Cache 的设计与早期使用解读（2023-02-09，网络文章）
 - [[sources/llm-wiki]] — LLM Wiki 模式论文（Karpathy，2026-04-13，网络文章）
 - [[sources/qmd]] — QMD README（tobi/qmd，2026-04-13，项目文档）
 - [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]] — Anthropic 关于 Managed Agents 运行时架构的文章（2026-04-13，网络文章）
