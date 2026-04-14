@@ -64,6 +64,15 @@ updated: YYYY-MM-DD
 - 链接到具体章节：`[[页面名#章节标题]]`
 - 每个页面底部维护"相关页面"列表
 
+### Markdown 格式
+
+- 所有 `wiki/` 页面，以及 `AGENTS.md`、`CLAUDE.md`，都应遵循 [GitHub Flavored Markdown](https://github.github.com/gfm/)
+- 不同段落之间必须保留空行，尤其是标题、正文、列表、引用、代码块、分隔线之间
+- `来源：`、`相关页面：` 等页尾段落之间必须保留空行，避免在渲染时粘连
+- 中文与英文 / 数字 / 专有名词混排时，应在语义边界补空格，例如 `SQL 查询`、`GFM 格式`、`Top-N 查询`
+- 代码块优先使用 fenced code block，并与前后正文保留空行
+- lint 或手工修订时，若发现不符合 GFM 的段落间距、列表间距或中英混排，应一并修复
+
 ### 内容语言
 
 - 所有 wiki 页面内容使用**中文**撰写
@@ -163,6 +172,7 @@ updated: YYYY-MM-DD
 ```
 
 示例：
+
 ```bash
 grep "^## \[" wiki/log.md | tail -5   # 查看最近 5 条操作
 ```
