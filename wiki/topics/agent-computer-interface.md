@@ -74,4 +74,5 @@ Anthropic 在 SWE-bench coding agent 上的经验甚至是：**优化工具花�
 ---
 
 来源：[[sources/building-effective-ai-agents]] · [[sources/how-we-built-our-multi-agent-research-system]] · [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]]
+
 相关页面：[[topics/agentic-systems]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[entities/managed-agents]] · [[entities/anthropic]]

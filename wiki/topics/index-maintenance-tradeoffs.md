@@ -6,7 +6,7 @@ tags:
   - 索引
   - 写入
   - 性能
-source_count: 1
+source_count: 2
 updated: 2026-04-13
 ---
 
@@ -51,5 +51,6 @@ updated: 2026-04-13
 
 ---
 
-来源：[[sources/use-the-index-luke]]
+来源：[[sources/use-the-index-luke-clustering-data]] · [[sources/use-the-index-luke-modifying-data]]
+
 相关页面：[[topics/sql-indexing]] · [[topics/b-tree-indexes]] · [[topics/query-shape-and-index-usage]] · [[topics/index-supported-sorting-and-pagination]]

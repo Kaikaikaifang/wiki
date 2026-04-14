@@ -6,7 +6,7 @@ tags:
   - 执行计划
   - 数据库
   - 性能
-source_count: 1
+source_count: 4
 updated: 2026-04-13
 ---
 
@@ -64,5 +64,6 @@ updated: 2026-04-13
 
 ---
 
-来源：[[sources/use-the-index-luke]]
+来源：[[sources/use-the-index-luke-anatomy-of-an-index]] · [[sources/use-the-index-luke-the-where-clause]] · [[sources/use-the-index-luke-the-join-operation]] · [[sources/use-the-index-luke-execution-plans]]
+
 相关页面：[[topics/query-shape-and-index-usage]] · [[topics/sql-join-performance]] · [[topics/index-supported-sorting-and-pagination]] · [[topics/sql-indexing]]

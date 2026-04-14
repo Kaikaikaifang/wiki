@@ -86,4 +86,5 @@ agent 的优势来自自治，但风险也来自自治：
 ---
 
 来源：[[sources/building-effective-ai-agents]] · [[sources/how-we-built-our-multi-agent-research-system]] · [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]]
+
 相关页面：[[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[entities/managed-agents]] · [[entities/anthropic]]

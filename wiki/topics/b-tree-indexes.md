@@ -6,7 +6,7 @@ tags:
   - BTree
   - 索引
   - 数据库
-source_count: 1
+source_count: 2
 updated: 2026-04-13
 ---
 
@@ -56,5 +56,6 @@ SQL Server 的 clustered index、MySQL InnoDB 的主键组织方式，以及 Ora
 
 ---
 
-来源：[[sources/use-the-index-luke]]
+来源：[[sources/use-the-index-luke-anatomy-of-an-index]] · [[sources/use-the-index-luke-clustering-data]]
+
 相关页面：[[topics/sql-indexing]] · [[topics/query-shape-and-index-usage]] · [[topics/index-maintenance-tradeoffs]] · [[topics/sql-execution-plans]]

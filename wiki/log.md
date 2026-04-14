@@ -49,3 +49,7 @@
 ## [2026-04-13] wiki | 拆分 Use The Index, Luke 章节页
 
 将 `sources/use-the-index-luke` 保留为总览入口，并拆分为前言、索引结构、`where`、可扩展性、连接、聚簇、排序分组、分页、写入代价、执行计划与误区等章节来源页，便于后续查询与交叉引用。
+
+## [2026-04-13] lint | 修正 source_count 与 Markdown 间距
+
+根据拆分后的章节来源页，回填相关 `topics` 的 `source_count` 与来源引用；同时按 GFM 习惯修正页尾 `来源` / `相关页面` 之间的空行，并复查 wiki 中英混排间距与 wikilink 完整性。

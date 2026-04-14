@@ -39,4 +39,5 @@ Managed Agents 是 Anthropic 在 Claude Platform 上提供的托管式长程 age
 ---
 
 来源：[[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]]
+
 相关页面：[[topics/long-horizon-agents]] · [[topics/multi-agent-systems]] · [[entities/anthropic]]

@@ -6,7 +6,7 @@ tags:
   - 排序
   - 分页
   - 索引
-source_count: 1
+source_count: 2
 updated: 2026-04-13
 ---
 
@@ -48,5 +48,6 @@ updated: 2026-04-13
 
 ---
 
-来源：[[sources/use-the-index-luke]]
+来源：[[sources/use-the-index-luke-sorting-and-grouping]] · [[sources/use-the-index-luke-partial-results]]
+
 相关页面：[[topics/query-shape-and-index-usage]] · [[topics/sql-execution-plans]] · [[topics/sql-join-performance]] · [[topics/sql-indexing]]

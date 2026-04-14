@@ -6,7 +6,7 @@ tags:
   - 索引
   - 查询设计
   - 性能
-source_count: 1
+source_count: 4
 updated: 2026-04-13
 ---
 
@@ -67,5 +67,6 @@ updated: 2026-04-13
 
 ---
 
-来源：[[sources/use-the-index-luke]]
+来源：[[sources/use-the-index-luke-preface]] · [[sources/use-the-index-luke-the-where-clause]] · [[sources/use-the-index-luke-execution-plans]] · [[sources/use-the-index-luke-partial-results]]
+
 相关页面：[[topics/sql-indexing]] · [[topics/b-tree-indexes]] · [[topics/sql-execution-plans]] · [[topics/index-supported-sorting-and-pagination]]

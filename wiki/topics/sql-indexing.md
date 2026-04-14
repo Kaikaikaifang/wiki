@@ -6,7 +6,7 @@ tags:
   - 索引
   - 数据库
   - 性能
-source_count: 1
+source_count: 9
 updated: 2026-04-13
 ---
 
@@ -56,5 +56,6 @@ Markus Winand 把索引的价值分成三层：
 
 ---
 
-来源：[[sources/use-the-index-luke]]
+来源：[[sources/use-the-index-luke-preface]] · [[sources/use-the-index-luke-anatomy-of-an-index]] · [[sources/use-the-index-luke-the-where-clause]] · [[sources/use-the-index-luke-testing-and-scalability]] · [[sources/use-the-index-luke-clustering-data]] · [[sources/use-the-index-luke-sorting-and-grouping]] · [[sources/use-the-index-luke-partial-results]] · [[sources/use-the-index-luke-modifying-data]] · [[sources/use-the-index-luke-myth-directory]]
+
 相关页面：[[topics/b-tree-indexes]] · [[topics/query-shape-and-index-usage]] · [[topics/sql-execution-plans]] · [[topics/index-maintenance-tradeoffs]] · [[entities/markus-winand]]
