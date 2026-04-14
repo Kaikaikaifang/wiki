@@ -1,7 +1,10 @@
 ---
 title: Agent-Computer Interface
 type: topic
-tags: [AI Agent, 工具设计, Prompt Engineering]
+tags:
+  - Agent
+  - 工具设计
+  - 提示词工程
 source_count: 3
 updated: 2026-04-13
 ---

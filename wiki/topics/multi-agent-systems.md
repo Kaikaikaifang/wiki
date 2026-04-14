@@ -1,7 +1,10 @@
 ---
 title: Multi-Agent Systems
 type: topic
-tags: [AI Agent, 多智能体, 研究工作流]
+tags:
+  - Agent
+  - 多智能体
+  - 研究工作流
 source_count: 2
 updated: 2026-04-13
 ---

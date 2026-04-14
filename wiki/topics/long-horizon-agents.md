@@ -1,7 +1,11 @@
 ---
 title: Long-Horizon Agents
 type: topic
-tags: [AI Agent, 长程任务, 上下文管理, 运行时]
+tags:
+  - Agent
+  - 长程任务
+  - 上下文管理
+  - 运行时
 source_count: 2
 updated: 2026-04-13
 ---

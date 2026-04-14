@@ -1,7 +1,11 @@
 ---
 title: "Scaling Managed Agents: Decoupling the brain from the hands"
 type: source
-tags: [AI Agent, 长程任务, 运行时架构, 安全]
+tags:
+  - Agent
+  - 长程任务
+  - 运行时架构
+  - 安全
 source_count: 1
 source_file: raw/articles/scaling-managed-agents-decoupling-the-brain-from-the-hands.md
 author: Lance Martin, Gabe Cemaj, Michael Cohen

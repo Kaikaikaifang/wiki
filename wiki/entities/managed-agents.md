@@ -1,7 +1,11 @@
 ---
 title: Managed Agents
 type: entity
-tags: [产品, AI Agent, 运行时, Claude]
+tags:
+  - 产品
+  - Agent
+  - 运行时
+  - Claude
 source_count: 1
 updated: 2026-04-13
 ---

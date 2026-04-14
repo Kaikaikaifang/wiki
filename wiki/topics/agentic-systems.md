@@ -1,7 +1,10 @@
 ---
 title: Agentic Systems
 type: topic
-tags: [AI Agent, 工作流, 方法论]
+tags:
+  - Agent
+  - 工作流
+  - 方法论
 source_count: 3
 updated: 2026-04-13
 ---

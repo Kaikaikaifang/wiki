@@ -1,7 +1,11 @@
 ---
-title: "How we built our multi-agent research system"
+title: How we built our multi-agent research system
 type: source
-tags: [AI Agent, 多智能体, 研究工作流, Prompt Engineering]
+tags:
+  - Agent
+  - 多智能体
+  - 研究工作流
+  - 提示词工程
 source_count: 1
 source_file: raw/articles/how-we-built-our-multi-agent-research-system.md
 author: Jeremy Hadfield, Barry Zhang, Kenneth Lien, Florian Scholz, Jeremy Fox, Daniel Ford

@@ -1,7 +1,11 @@
 ---
-title: "Building Effective AI Agents"
+title: Building Effective AI Agents
 type: source
-tags: [AI Agent, 方法论, 工作流, 工具设计]
+tags:
+  - Agent
+  - 方法论
+  - 工作流
+  - 工具设计
 source_count: 1
 source_file: raw/articles/building-effective-ai-agents.md
 author: Erik Schluntz, Barry Zhang
