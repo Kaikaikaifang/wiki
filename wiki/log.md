@@ -121,3 +121,7 @@
 ## [2026-04-16] wiki | 继续改写短实体与来源页面
 
 继续按博客体改写一批较短的历史页面，包括 `entities/anthropic`、`entities/clickhouse-keeper`、`entities/managed-agents`、`entities/zookeeper`、`sources/clickhouse-replicated-table-engines`、`sources/clickhouse-attach-as-replicated`、`sources/altinity-converting-mergetree-to-replicated`、`sources/clickhouse-keeper`、`sources/use-the-index-luke-clustering-data`、`sources/use-the-index-luke-modifying-data` 与 `sources/use-the-index-luke-myth-directory`；补充更明确的作者判断、背景动机与阅读引导，缩小短页与长页之间的风格落差。
+
+## [2026-04-16] wiki | 收尾短章节来源页的博客体改写
+
+继续按博客体改写一批章节级历史来源页，包括 `sources/use-the-index-luke-preface`、`sources/use-the-index-luke-anatomy-of-an-index`、`sources/use-the-index-luke-sorting-and-grouping`、`sources/use-the-index-luke-testing-and-scalability`、`sources/use-the-index-luke-execution-plans`、`sources/use-the-index-luke-the-join-operation`、`sources/clickhouse-manage-and-deploy`、`sources/clickhouse-operator-introduction`、`sources/clickhouse-separation-storage-compute` 与 `sources/clickhouse-multi-region-replication`；补充阅读动机、技术判断与章节定位，继续降低章节摘要感。
