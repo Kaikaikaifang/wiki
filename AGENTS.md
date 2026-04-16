@@ -34,7 +34,7 @@ wiki/         ← LLM 生成并维护的所有页面
 
 ```yaml
 ---
-title: 页面标题
+title: 中文标题
 type: topic | entity | source | overview
 tags: [标签1, 标签2]
 source_count: 0        # 支撑该页面的来源数量
@@ -44,6 +44,8 @@ updated: YYYY-MM-DD
 
 - `wiki/index.md` 属于导航页，`type` 可使用 `index`
 - `wiki/log.md` 属于操作日志页，保持**无 frontmatter**，并遵循“只追加，不修改”原则
+- `title` 字段使用中文，要求简短且言简意赅
+- frontmatter 已包含标题信息；正文首行不再额外重复同名 `# title` 一级标题，正文直接从摘要或 `##` 小节开始
 - 所有 `updated`、`created`、日志标题中的日期，统一使用**东八区北京时间**（`Asia/Shanghai`），不要使用系统默认时区或 UTC
 - 若需要生成当天日期，优先显式使用 `TZ=Asia/Shanghai date +%F` 取值后再写入
 
@@ -57,7 +59,7 @@ updated: YYYY-MM-DD
 
 ### 文件命名
 
-- 全部小写，单词间用连字符，英文命名
+- 文件名使用英文，全部小写，单词间用连字符，尽可能简短且言简意赅
 - 示例：`topics/habit-formation.md`、`entities/james-clear.md`、`sources/atomic-habits-ch1.md`
 
 ### 交叉引用
@@ -79,6 +81,7 @@ updated: YYYY-MM-DD
 
 - 所有 wiki 页面内容使用**中文**撰写
 - 文件名、frontmatter 字段名保持英文
+- frontmatter 的 `title` 字段值使用中文
 
 ---
 

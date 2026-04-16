@@ -93,3 +93,7 @@
 ## [2026-04-16] query | 单节点 ClickHouse 迁移到集群
 
 归档关于“多副本多分片集群里是否仍可使用 `MergeTree`、单节点生产环境迁到集群能否无缝切换、能否在迁移时一并完成表引擎切换，以及迁移过程中需要完成哪些工作”的问答；新增 `topics/clickhouse-single-node-to-cluster-migration`，并更新 `index` 与 `overview`，明确区分 `MergeTree` 的可用性与适用性，补充业务侧平滑切换与数据库内部迁移工程之间的边界。
+
+## [2026-04-16] workflow | 统一页面命名与标题元信息规范
+
+更新 `AGENTS.md` 与 `CLAUDE.md` 的页面规范，明确文件名使用简短英文连字符命名、frontmatter 的 `title` 使用简短中文标题，并规定 frontmatter 后不再重复同名一级标题。
