@@ -1,5 +1,5 @@
 ---
-title: Use The Index, Luke：连接操作
+title: 连接操作
 type: source
 tags:
   - SQL

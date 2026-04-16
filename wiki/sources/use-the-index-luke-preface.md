@@ -1,5 +1,5 @@
 ---
-title: Use The Index, Luke：前言
+title: 前言
 type: source
 tags:
   - SQL

@@ -1,5 +1,5 @@
 ---
-title: Use The Index, Luke：分页与 Top-N
+title: 分页与 Top-N
 type: source
 tags:
   - SQL

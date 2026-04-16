@@ -101,3 +101,7 @@
 ## [2026-04-16] wiki | 清理历史页面标题与格式
 
 批量清理 `wiki/` 历史页面：统一将 frontmatter 的 `title` 改为简短中文标题，移除 frontmatter 后重复的同名一级标题，并同步更新 `updated` 日期；文件名未批量重命名，因为现有命名整体已符合英文连字符规则，且避免为压缩长度而打断既有历史引用。
+
+## [2026-04-16] wiki | 简化 Use The Index, Luke 标题
+
+更新 `wiki/sources/use-the-index-luke*.md` 这一批来源页的 frontmatter `title`，去掉 `Use The Index, Luke` 来源名前缀，仅保留简短中文概括，避免标题重复携带来源信息。

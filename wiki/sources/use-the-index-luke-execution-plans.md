@@ -1,5 +1,5 @@
 ---
-title: Use The Index, Luke：执行计划
+title: 执行计划
 type: source
 tags:
   - SQL

@@ -1,5 +1,5 @@
 ---
-title: Use The Index, Luke：Where 子句
+title: where 子句
 type: source
 tags:
   - SQL

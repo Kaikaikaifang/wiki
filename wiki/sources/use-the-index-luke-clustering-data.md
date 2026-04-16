@@ -1,5 +1,5 @@
 ---
-title: Use The Index, Luke：聚簇数据
+title: 聚簇与覆盖索引
 type: source
 tags:
   - SQL

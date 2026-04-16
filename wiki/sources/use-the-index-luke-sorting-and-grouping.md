@@ -1,5 +1,5 @@
 ---
-title: Use The Index, Luke：排序与分组
+title: 排序与分组
 type: source
 tags:
   - SQL

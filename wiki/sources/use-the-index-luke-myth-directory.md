@@ -1,5 +1,5 @@
 ---
-title: Use The Index, Luke：性能误区
+title: 性能误区
 type: source
 tags:
   - SQL

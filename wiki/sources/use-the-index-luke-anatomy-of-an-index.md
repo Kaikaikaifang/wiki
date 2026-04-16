@@ -1,5 +1,5 @@
 ---
-title: Use The Index, Luke：索引结构
+title: 索引结构
 type: source
 tags:
   - SQL

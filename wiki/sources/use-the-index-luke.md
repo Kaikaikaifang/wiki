@@ -1,5 +1,5 @@
 ---
-title: Use The Index, Luke 总览
+title: SQL 索引教程总览
 type: source
 tags:
   - SQL
