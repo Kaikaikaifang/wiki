@@ -73,3 +73,7 @@
 ## [2026-04-15] query | 服务与云数据库网络时延排查
 
 归档关于服务访问云数据库时如何判断网络时延是否导致接口变慢的问答；新增 `topics/service-db-network-latency-diagnosis`，总结冷连接、热连接、应用侧与数据库侧双侧耗时对比、单请求 SQL 数统计，以及同集群自建库与托管云数据库的优先对比项，并补充到 `index` 与相关性能主题页。
+
+## [2026-04-16] ingest | ClickHouse 部署与运维文档
+
+摄入 `https://clickhouse.com/docs/guides/manage-and-deploy-index` 及相关官方文档，归档 `raw/articles/clickhouse-manage-and-deploy-overview.md`、`raw/articles/clickhouse-replication-and-scaling.md`、`raw/articles/clickhouse-separation-storage-compute.md`、`raw/articles/clickhouse-external-disks-for-storing-data.md` 与 `raw/articles/clickhouse-multi-region-replication.md`；新增 `sources/clickhouse-manage-and-deploy`、`sources/clickhouse-replication-and-scaling`、`sources/clickhouse-separation-storage-compute`、`sources/clickhouse-external-disks-for-storing-data`、`sources/clickhouse-multi-region-replication` 与 `topics/clickhouse-deployment-topologies`，并更新 `entities/clickhouse`、`index` 与 `overview`，补充分片、多副本、存算分离、冷热数据分层与多地域复制边界。

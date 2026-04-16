@@ -2,8 +2,8 @@
 title: 整体综述
 type: overview
 tags: [方法论, 知识管理]
-source_count: 8
-updated: 2026-04-15
+source_count: 13
+updated: 2026-04-16
 ---
 
 # 整体综述
@@ -22,6 +22,8 @@ updated: 2026-04-15
 
 紧接着补入的 [[sources/introducing-the-clickhouse-query-cache]] 则把这条主线从“怎么用”延伸到“为什么这样设计”。它补充了 query cache 早期作为实验功能的定位、用真实慢查询调试命中失败的过程，以及从事务不一致设计、AST 匹配到未来淘汰策略的产品演化背景。
 
+这次继续沿着 ClickHouse 往下挖的 [[sources/clickhouse-manage-and-deploy]]、[[sources/clickhouse-replication-and-scaling]]、[[sources/clickhouse-separation-storage-compute]]、[[sources/clickhouse-external-disks-for-storing-data]] 与 [[sources/clickhouse-multi-region-replication]]，则把主题从“查询如何更省”扩展到“分析数据库如何真正部署成生产系统”。它们新增了 [[topics/clickhouse-deployment-topologies]] 这条主线，把副本、分片、Keeper、对象存储、本地缓存与多地域时延约束串成一个完整的架构判断框架。
+
 ## 当前关注
 
 - 理解并内化 LLM Wiki 模式本身
@@ -32,6 +34,7 @@ updated: 2026-04-15
 - 理解长程 agent 的状态层、上下文层与执行层应如何分离
 - 建立一套关于 SQL 索引、执行计划与分页策略的基础性能判断
 - 理解分析型数据库中的查询结果缓存如何在新鲜度、安全性与成本之间折中
+- 理解 ClickHouse 中分片、副本、存算分离与冷热分层之间的组合关系
 
 ## 演化轨迹
 
@@ -43,7 +46,8 @@ updated: 2026-04-15
 - 2026-04-14：摄入 Use The Index, Luke，新增 SQL 索引、执行计划、连接、排序与分页相关主题
 - 2026-04-15：摄入 ClickHouse Query Cache 文档，新增 OLAP 查询结果缓存与 ClickHouse 相关主题
 - 2026-04-15：补充 ClickHouse Query Cache 设计博客，完善该主题的设计动机、调试方式与演化脉络
+- 2026-04-16：摄入 ClickHouse 部署与运维文档，新增分片、副本、存算分离与冷热分层主题
 
 ---
 
-相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[sources/introducing-the-clickhouse-query-cache]]
+相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[sources/clickhouse-replication-and-scaling]]

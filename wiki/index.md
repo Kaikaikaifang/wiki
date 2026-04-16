@@ -3,7 +3,7 @@ title: 内容目录
 type: index
 tags: [索引, 导航]
 source_count: 0
-updated: 2026-04-15
+updated: 2026-04-16
 ---
 
 # 内容目录
@@ -19,6 +19,7 @@ updated: 2026-04-15
 - [[topics/agent-computer-interface]] — 面向模型而非人类的工具接口设计原则
 - [[topics/agentic-systems]] — 从增强型 LLM 到 workflow 与自治 agent 的复杂度阶梯
 - [[topics/b-tree-indexes]] — 用叶子链表、树遍历与回表理解索引为什么会快或慢
+- [[topics/clickhouse-deployment-topologies]] — 把分片、副本、Keeper、存算分离与冷热分层放进同一部署判断框架
 - [[topics/hybrid-retrieval]] — 组合 BM25、向量检索、查询扩展与重排的检索范式
 - [[topics/index-maintenance-tradeoffs]] — 索引提升读取性能时带来的写入维护成本与过度索引问题
 - [[topics/index-supported-sorting-and-pagination]] — 利用索引支撑排序、Top-N 与 seek 分页
@@ -48,7 +49,12 @@ updated: 2026-04-15
 ## 来源
 
 - [[sources/building-effective-ai-agents]] — Anthropic 的 agent 工程文章（2026-04-13，网络文章）
+- [[sources/clickhouse-external-disks-for-storing-data]] — ClickHouse 外部存储与文件缓存文档（2026-04-16，网络文章）
+- [[sources/clickhouse-manage-and-deploy]] — ClickHouse 部署与运维文档总览（2026-04-16，网络文章）
+- [[sources/clickhouse-multi-region-replication]] — ClickHouse 多地域复制 FAQ（2026-04-16，网络文章）
 - [[sources/clickhouse-query-cache]] — ClickHouse 查询缓存文档（2026-04-15，网络文章）
+- [[sources/clickhouse-replication-and-scaling]] — ClickHouse 分片与多副本集群示例（2026-04-16，网络文章）
+- [[sources/clickhouse-separation-storage-compute]] — ClickHouse 存算分离与 S3 架构指南（2026-04-16，网络文章）
 - [[sources/how-we-built-our-multi-agent-research-system]] — Anthropic 关于 Research 多智能体系统的复盘（2026-04-13，网络文章）
 - [[sources/introducing-the-clickhouse-query-cache]] — ClickHouse Query Cache 的设计与早期使用解读（2023-02-09，网络文章）
 - [[sources/llm-wiki]] — LLM Wiki 模式论文（Karpathy，2026-04-13，网络文章）
