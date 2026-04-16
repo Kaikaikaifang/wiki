@@ -10,11 +10,11 @@ source_count: 2
 updated: 2026-04-16
 ---
 
-> 长程 agent 的核心难题不是“能不能多跑几轮”，而是如何在长时间、可失败、可恢复的过程中保持状态一致与任务连续性。
+> 一旦 agent 真要跑到几十轮、几百轮，问题就不再是 prompt 工程够不够精巧，而是你到底有没有在做一套能活过失败、重启和部署变更的系统。
 
 ## 问题本质
 
-[[sources/how-we-built-our-multi-agent-research-system]] 和 [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]] 都指出：一旦 agent 运行时间拉长，系统面对的就不再只是 prompt 质量问题，而是**状态、恢复、上下文与部署**问题。
+[[sources/how-we-built-our-multi-agent-research-system]] 和 [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]] 都指出：一旦 agent 运行时间拉长，系统面对的就不再只是 prompt 质量问题，而是**状态、恢复、上下文与部署**问题。我越来越觉得，这条分界线就是 demo 和 production 之间真正的断层。
 
 ## 为什么长程会更难
 
@@ -25,7 +25,7 @@ updated: 2026-04-16
 
 ## 记忆层与工作集要分开
 
-最重要的设计原则是：**可恢复历史 ≠ 当前上下文窗口。**
+最重要的设计原则是：**可恢复历史 ≠ 当前上下文窗口。** 这句话看起来简单，但它几乎决定了系统后面还能不能被长期维护。
 
 根据 [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]]，更稳的做法是：
 
@@ -33,7 +33,7 @@ updated: 2026-04-16
 - 把压缩、裁剪、重排等上下文工程留给 harness；
 - 让 agent 在需要时回读事件，而不是只依赖一次性摘要。
 
-这样做的好处是，未来即使上下文工程策略变化，也不会损坏底层历史。
+这样做的好处是，未来即使上下文工程策略变化，也不会损坏底层历史。我很喜欢这种分层，因为它接受了一个现实：上下文策略会反复变化，但历史真相层不应该跟着一起漂移。
 
 ## 可靠性模式
 
@@ -53,7 +53,7 @@ updated: 2026-04-16
 - lead agent 需要管理预算、同步和综合；
 - 如果切到异步执行，协调成本会继续上升。
 
-因此，越是多智能体，越需要先把长程运行时打牢。
+因此，越是多智能体，越需要先把长程运行时打牢。否则你只是把一个会丢状态的 agent，放大成一群会丢状态的 agent。
 
 ## 一个实用判断句
 

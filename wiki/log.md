@@ -113,3 +113,7 @@
 ## [2026-04-16] wiki | 改写历史基础页面为博客体
 
 按新的个人技术博客写作规范，批量改写一组历史基础页面，包括 `overview`、`topics/knowledge-management`、`topics/local-first-search`、`topics/hybrid-retrieval`、`topics/llm-wiki-pattern`、`entities/andrej-karpathy`、`entities/vannevar-bush`、`entities/qmd`、`sources/llm-wiki` 与 `sources/qmd`；统一补入作者视角、问题意识、叙述性引子与更强的判断表达，减少卡片式摘要感。
+
+## [2026-04-16] wiki | 继续改写 SQL 与 Agent 历史页面
+
+继续按博客体改写一批历史核心页面，包括 `topics/sql-indexing`、`topics/query-shape-and-index-usage`、`topics/sql-execution-plans`、`entities/markus-winand`、`sources/use-the-index-luke`、`entities/clickhouse`、`topics/agentic-systems`、`topics/agent-computer-interface`、`topics/multi-agent-systems`、`topics/long-horizon-agents`、`topics/clickhouse-deployment-topologies` 与 `topics/clickhouse-keeper-vs-zookeeper`；强化作者视角、技术判断与叙事性开场，减少讲义式表达。

@@ -6,7 +6,7 @@ source_count: 7
 updated: 2026-04-16
 ---
 
-> 用分片、副本、Keeper、对象存储与本地缓存拼出面向分析型负载的生产部署形态。
+> 我对 ClickHouse 部署最强烈的感受是，它逼你放弃“有没有标准架构”这种偷懒问法，转而老老实实回答自己到底想解决哪一类瓶颈。
 
 ## 核心判断
 
@@ -17,11 +17,11 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 - 需要的是**同地域高可用**还是**跨地域冗余**；
 - 需要的是**热数据高性能**还是**冷数据低成本长期保留**。
 
-官方文档给出的答案不是一套唯一架构，而是一组可组合能力：`ReplicatedMergeTree`、`Distributed`、ClickHouse Keeper、`storage_policy`、对象存储、filesystem cache。
+官方文档给出的答案不是一套唯一架构，而是一组可组合能力：`ReplicatedMergeTree`、`Distributed`、ClickHouse Keeper、`storage_policy`、对象存储、filesystem cache。我很喜欢这种表达方式，因为它要求使用者自己承担架构判断，而不是期待文档替你选型。
 
 ## 分片与副本不是一回事
 
-[[sources/clickhouse-replication-and-scaling]] 让我把这两个常被混说的词真正拆开了：
+[[sources/clickhouse-replication-and-scaling]] 让我把这两个常被混说的词真正拆开了。很多部署讨论一开始就糊掉，就是因为扩容和容灾根本不是同一个问题。
 
 - **分片**解决的是单机容量、I/O 和并行度上限；
 - **副本**解决的是节点故障下的数据冗余与服务连续性。
@@ -56,7 +56,7 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 - 如果组织已经把 ZooKeeper 作为跨系统共享的基础设施，继续沿用 ZooKeeper 也可能更稳；
 - 从 ZooKeeper 迁移到 Keeper 时，应把它当作一次受控切换，而不是“先混着跑再慢慢替换”。
 
-也就是说，协调层选型不是单纯的“技术优劣”问题，而是**专用化与通用化**之间的运维边界选择。
+也就是说，协调层选型不是单纯的“技术优劣”问题，而是**专用化与通用化**之间的运维边界选择。对我来说，这种判断比单点 benchmark 有意义得多。
 
 ## Operator 下的 replicated 默认值
 
