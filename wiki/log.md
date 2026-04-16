@@ -81,3 +81,7 @@
 ## [2026-04-16] query | DDL 与 DML 的区别
 
 归档关于 `DDL` 与 `DML` 区别的问答；新增 `topics/ddl-vs-dml`，结合 ClickHouse 中 `ON CLUSTER` 的语境，说明 DDL 负责结构变更、DML 负责数据变更，以及为什么 `ON CLUSTER` 只同步 DDL 而不承担 DML 分发。
+
+## [2026-04-16] ingest | ClickHouse Keeper 文档
+
+摄入 `https://clickhouse.com/docs/guides/sre/keeper/clickhouse-keeper`，归档 `raw/articles/clickhouse-keeper.md`；新增 `sources/clickhouse-keeper`、`topics/clickhouse-keeper-vs-zookeeper`、`entities/clickhouse-keeper` 与 `entities/zookeeper`，并更新 `topics/clickhouse-deployment-topologies`、`entities/clickhouse`、`index` 与 `overview`，补充 Keeper 与 ZooKeeper 的兼容边界、迁移约束、优缺点及生产选型建议。

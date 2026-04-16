@@ -20,6 +20,7 @@ updated: 2026-04-16
 - [[topics/agentic-systems]] — 从增强型 LLM 到 workflow 与自治 agent 的复杂度阶梯
 - [[topics/b-tree-indexes]] — 用叶子链表、树遍历与回表理解索引为什么会快或慢
 - [[topics/clickhouse-deployment-topologies]] — 把分片、副本、Keeper、存算分离与冷热分层放进同一部署判断框架
+- [[topics/clickhouse-keeper-vs-zookeeper]] — 用“专用协调层”与“通用协调服务”的边界判断 Keeper 与 ZooKeeper
 - [[topics/ddl-vs-dml]] — 用“改结构”和“改数据”的区别理解 `ON CLUSTER` 为什么只管 DDL
 - [[topics/hybrid-retrieval]] — 组合 BM25、向量检索、查询扩展与重排的检索范式
 - [[topics/index-maintenance-tradeoffs]] — 索引提升读取性能时带来的写入维护成本与过度索引问题
@@ -42,15 +43,18 @@ updated: 2026-04-16
 - [[entities/anthropic]] — 以 Claude 与 agent 工程实践著称的 AI 公司
 - [[entities/andrej-karpathy]] — AI 研究者，LLM Wiki 模式提出者
 - [[entities/clickhouse]] — 面向 OLAP 的列式数据库，强调分析查询性能与可观测性
+- [[entities/clickhouse-keeper]] — ClickHouse 的原生协调服务，面向复制与分布式 DDL
 - [[entities/managed-agents]] — Anthropic 的托管式长程 agent 运行时产品
 - [[entities/markus-winand]] — 以 SQL 索引与执行计划教学著称的数据库作者
 - [[entities/qmd]] — 面向 markdown 与 agent 工作流的本地搜索引擎
 - [[entities/vannevar-bush]] — 1945 年 Memex 构想提出者，LLM Wiki 的精神先驱
+- [[entities/zookeeper]] — 经典分布式协调服务，在 ClickHouse 里主要作为 Keeper 的对照基线
 
 ## 来源
 
 - [[sources/building-effective-ai-agents]] — Anthropic 的 agent 工程文章（2026-04-13，网络文章）
 - [[sources/clickhouse-external-disks-for-storing-data]] — ClickHouse 外部存储与文件缓存文档（2026-04-16，网络文章）
+- [[sources/clickhouse-keeper]] — ClickHouse Keeper 文档，聚焦配置、兼容边界与迁移要点（2026-04-16，网络文章）
 - [[sources/clickhouse-manage-and-deploy]] — ClickHouse 部署与运维文档总览（2026-04-16，网络文章）
 - [[sources/clickhouse-multi-region-replication]] — ClickHouse 多地域复制 FAQ（2026-04-16，网络文章）
 - [[sources/clickhouse-query-cache]] — ClickHouse 查询缓存文档（2026-04-15，网络文章）

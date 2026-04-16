@@ -2,7 +2,7 @@
 title: ClickHouse Deployment Topologies
 type: topic
 tags: [数据库, ClickHouse, 部署, 架构]
-source_count: 5
+source_count: 6
 updated: 2026-04-16
 ---
 
@@ -47,6 +47,18 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 - 元数据变更怎么扩散；
 - 数据写入怎么路由；
 - 副本同步又依赖什么协调层。
+
+## Keeper 与 ZooKeeper 的选型边界
+
+[[sources/clickhouse-keeper]] 把这个边界写得很清楚：ClickHouse Keeper 与 ZooKeeper 协议兼容，但它不是要成为通用 ZooKeeper 生态的完整替身。
+
+这让我对部署拓扑又多了一层理解：
+
+- 如果协调层只为 ClickHouse 服务，Keeper 往往是更自然的默认项；
+- 如果组织已经把 ZooKeeper 作为跨系统共享的基础设施，继续沿用 ZooKeeper 也可能更稳；
+- 从 ZooKeeper 迁移到 Keeper 时，应把它当作一次受控切换，而不是“先混着跑再慢慢替换”。
+
+也就是说，协调层选型不是单纯的“技术优劣”问题，而是**专用化与通用化**之间的运维边界选择。
 
 ## 存算分离是另一条独立维度
 
@@ -95,6 +107,6 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 
 ---
 
-来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]]
+来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]]
 
-相关页面：[[entities/clickhouse]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]]
+相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]]

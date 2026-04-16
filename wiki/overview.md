@@ -2,7 +2,7 @@
 title: 整体综述
 type: overview
 tags: [方法论, 知识管理]
-source_count: 13
+source_count: 14
 updated: 2026-04-16
 ---
 
@@ -24,6 +24,8 @@ updated: 2026-04-16
 
 这次继续沿着 ClickHouse 往下挖的 [[sources/clickhouse-manage-and-deploy]]、[[sources/clickhouse-replication-and-scaling]]、[[sources/clickhouse-separation-storage-compute]]、[[sources/clickhouse-external-disks-for-storing-data]] 与 [[sources/clickhouse-multi-region-replication]]，则把主题从“查询如何更省”扩展到“分析数据库如何真正部署成生产系统”。它们新增了 [[topics/clickhouse-deployment-topologies]] 这条主线，把副本、分片、Keeper、对象存储、本地缓存与多地域时延约束串成一个完整的架构判断框架。
 
+最新补入的 [[sources/clickhouse-keeper]] 则把这条主线继续推进到协调层选型：当 ClickHouse 已经需要 Keeper 这类组件时，团队真正要判断的不是“能不能用”，而是**应不应该在 ClickHouse 专用协调层与通用 ZooKeeper 基础设施之间做切换**。它新增了 [[topics/clickhouse-keeper-vs-zookeeper]]，把兼容性、迁移边界、组织复用与生产运维建议放进同一判断框架。
+
 ## 当前关注
 
 - 理解并内化 LLM Wiki 模式本身
@@ -35,6 +37,7 @@ updated: 2026-04-16
 - 建立一套关于 SQL 索引、执行计划与分页策略的基础性能判断
 - 理解分析型数据库中的查询结果缓存如何在新鲜度、安全性与成本之间折中
 - 理解 ClickHouse 中分片、副本、存算分离与冷热分层之间的组合关系
+- 理解 ClickHouse 中 Keeper 与 ZooKeeper 的适用边界，以及协调层选型如何影响生产复杂度
 
 ## 演化轨迹
 
@@ -47,7 +50,8 @@ updated: 2026-04-16
 - 2026-04-15：摄入 ClickHouse Query Cache 文档，新增 OLAP 查询结果缓存与 ClickHouse 相关主题
 - 2026-04-15：补充 ClickHouse Query Cache 设计博客，完善该主题的设计动机、调试方式与演化脉络
 - 2026-04-16：摄入 ClickHouse 部署与运维文档，新增分片、副本、存算分离与冷热分层主题
+- 2026-04-16：摄入 ClickHouse Keeper 文档，新增 Keeper 与 ZooKeeper 的协调层选型主题
 
 ---
 
-相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[sources/clickhouse-replication-and-scaling]]
+相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]]
