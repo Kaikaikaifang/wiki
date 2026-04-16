@@ -11,6 +11,8 @@ updated: 2026-04-16
 
 来源：[[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [原文](https://clickhouse.com/docs/guides/sre/keeper/clickhouse-keeper)
 
+这篇文档对我最重要的作用，是把 Keeper 从一个“ClickHouse 自带协调组件”的模糊印象，拉成了一个边界非常清楚的生产组件。读完之后，我更不容易再用“兼容 ZooKeeper”这几个字把它想得过于简单。
+
 ## 核心结论
 
 这篇文档明确了 ClickHouse 的官方立场：**Keeper 是面向 ClickHouse 集群协调层的原生实现，协议兼容 ZooKeeper，但并不承诺成为 ZooKeeper 生态里的通用替身。**
@@ -34,7 +36,7 @@ updated: 2026-04-16
 
 以前我容易把“协议兼容”理解成“可以无脑替换”。但这篇文档提醒我，协议兼容只说明**核心交互模型接近**，不说明外围生态、动态重配置语义、混部方式和迁移路径都完全等价。
 
-这对生产选型很关键，因为真正的选择问题不是“Keeper 能不能跑”，而是“我的集群是否只需要 ClickHouse 自己那一部分协调能力”。
+这对生产选型很关键，因为真正的选择问题不是“Keeper 能不能跑”，而是“我的集群是否只需要 ClickHouse 自己那一部分协调能力”。我觉得这就是这篇文档最值得被长期保留的判断。
 
 ---
 

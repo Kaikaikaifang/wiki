@@ -11,6 +11,8 @@ updated: 2026-04-16
 
 来源：[[entities/clickhouse]] · [原文](https://clickhouse.com/docs/sql-reference/statements/attach#attach-mergetree-table-as-replicatedmergetree)
 
+这篇文档虽然很短，但它把一个迁移里最容易被低估的问题说得非常透：数据文件已经在盘上，并不意味着复制身份就已经成立。对我来说，这种“短文档里藏着关键边界”的材料特别值得单独记下来。
+
 ## 核心结论
 
 `ATTACH TABLE ... AS REPLICATED` 把“原地转换”的入口变得更简单了，但文档同时把一个容易踩坑的点写得很明白：**表本地数据和 Keeper / ZooKeeper 元数据不是同一回事。**
@@ -30,7 +32,7 @@ updated: 2026-04-16
 
 ## 对我的启发
 
-这篇文档把一个很实用的原则说透了：**只看数据文件转换成功还不够，还得看复制元数据是否和新身份一致。** 这也是为什么生产迁移不能只验证 `ATTACH` 成功，还要验证 `SYSTEM RESTORE REPLICA` 后的真实状态。
+这篇文档把一个很实用的原则说透了：**只看数据文件转换成功还不够，还得看复制元数据是否和新身份一致。** 这也是为什么生产迁移不能只验证 `ATTACH` 成功，还要验证 `SYSTEM RESTORE REPLICA` 后的真实状态。我很喜欢这种提醒，因为它直接把注意力从“语法成功了没”拉回到“系统身份真的对了吗”。
 
 ---
 

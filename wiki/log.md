@@ -117,3 +117,7 @@
 ## [2026-04-16] wiki | 继续改写 SQL 与 Agent 历史页面
 
 继续按博客体改写一批历史核心页面，包括 `topics/sql-indexing`、`topics/query-shape-and-index-usage`、`topics/sql-execution-plans`、`entities/markus-winand`、`sources/use-the-index-luke`、`entities/clickhouse`、`topics/agentic-systems`、`topics/agent-computer-interface`、`topics/multi-agent-systems`、`topics/long-horizon-agents`、`topics/clickhouse-deployment-topologies` 与 `topics/clickhouse-keeper-vs-zookeeper`；强化作者视角、技术判断与叙事性开场，减少讲义式表达。
+
+## [2026-04-16] wiki | 继续改写短实体与来源页面
+
+继续按博客体改写一批较短的历史页面，包括 `entities/anthropic`、`entities/clickhouse-keeper`、`entities/managed-agents`、`entities/zookeeper`、`sources/clickhouse-replicated-table-engines`、`sources/clickhouse-attach-as-replicated`、`sources/altinity-converting-mergetree-to-replicated`、`sources/clickhouse-keeper`、`sources/use-the-index-luke-clustering-data`、`sources/use-the-index-luke-modifying-data` 与 `sources/use-the-index-luke-myth-directory`；补充更明确的作者判断、背景动机与阅读引导，缩小短页与长页之间的风格落差。
