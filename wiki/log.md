@@ -89,3 +89,7 @@
 ## [2026-04-16] ingest | ClickHouse replicated 引擎与旧表转换
 
 摄入 `https://clickhouse.com/docs/clickhouse-operator/guides/introduction`、`https://kb.altinity.com/altinity-kb-setup-and-maintenance/altinity-kb-converting-mergetree-to-replicated/`、`https://clickhouse.com/docs/engines/table-engines/mergetree-family/replication#converting-from-mergetree-to-replicatedmergetree` 与 `https://clickhouse.com/docs/sql-reference/statements/attach#attach-mergetree-table-as-replicatedmergetree`，归档 `raw/articles/clickhouse-operator-introduction.md`、`raw/articles/altinity-converting-mergetree-to-replicated.md`、`raw/articles/clickhouse-replicated-table-engines.md` 与 `raw/articles/clickhouse-attach-as-replicated.md`；新增 `sources/clickhouse-operator-introduction`、`sources/altinity-converting-mergetree-to-replicated`、`sources/clickhouse-replicated-table-engines`、`sources/clickhouse-attach-as-replicated` 与 `topics/clickhouse-replicated-engines-and-conversion`，并更新 `topics/clickhouse-deployment-topologies`、`entities/clickhouse`、`index` 与 `overview`，补充生产环境使用 replicated 引擎的分层含义，以及旧 `MergeTree` 表迁移到 `ReplicatedMergeTree` 的主要路径与风险边界。
+
+## [2026-04-16] query | 单节点 ClickHouse 迁移到集群
+
+归档关于“多副本多分片集群里是否仍可使用 `MergeTree`、单节点生产环境迁到集群能否无缝切换、能否在迁移时一并完成表引擎切换，以及迁移过程中需要完成哪些工作”的问答；新增 `topics/clickhouse-single-node-to-cluster-migration`，并更新 `index` 与 `overview`，明确区分 `MergeTree` 的可用性与适用性，补充业务侧平滑切换与数据库内部迁移工程之间的边界。
