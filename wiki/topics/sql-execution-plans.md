@@ -66,4 +66,4 @@ updated: 2026-04-14
 
 来源：[[sources/use-the-index-luke-anatomy-of-an-index]] · [[sources/use-the-index-luke-the-where-clause]] · [[sources/use-the-index-luke-the-join-operation]] · [[sources/use-the-index-luke-execution-plans]]
 
-相关页面：[[topics/query-shape-and-index-usage]] · [[topics/sql-join-performance]] · [[topics/index-supported-sorting-and-pagination]] · [[topics/sql-indexing]]
+相关页面：[[topics/query-shape-and-index-usage]] · [[topics/sql-join-performance]] · [[topics/index-supported-sorting-and-pagination]] · [[topics/sql-indexing]] · [[topics/service-db-network-latency-diagnosis]]

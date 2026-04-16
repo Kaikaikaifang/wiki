@@ -30,6 +30,7 @@ updated: 2026-04-15
 - [[topics/postgresql-index-ddl-locking]] — 理解 PostgreSQL 中索引创建与删除 DDL 的锁强度和线上体感
 - [[topics/query-result-caching]] — 用 TTL、准入条件与安全边界复用昂贵 `SELECT` 结果
 - [[topics/query-shape-and-index-usage]] — `where` 子句形状如何决定索引是否真正缩小扫描范围
+- [[topics/service-db-network-latency-diagnosis]] — 用冷连接、热连接与双侧耗时拆分判断接口慢点是否在数据库链路
 - [[topics/sql-execution-plans]] — 把执行计划当作 SQL 性能调优的第一现场
 - [[topics/sql-indexing]] — 把索引视为开发者必须掌握的查询设计能力
 - [[topics/sql-join-performance]] — 按 join 算法选择不同索引策略，而不是机械补索引
