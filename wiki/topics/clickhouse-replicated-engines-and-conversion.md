@@ -1,12 +1,10 @@
 ---
-title: ClickHouse Replicated Engines and Conversion
+title: ClickHouse 复制引擎与旧表转换
 type: topic
 tags: [数据库, ClickHouse, ReplicatedMergeTree, 复制, 迁移]
 source_count: 4
 updated: 2026-04-16
 ---
-
-# ClickHouse Replicated Engines and Conversion
 
 > 在生产环境里，最好一开始就把 replicated 路径选对；从 `MergeTree` 再转 `ReplicatedMergeTree` 是可行的，但本质上属于迁移工程。
 

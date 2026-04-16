@@ -3,10 +3,8 @@ title: LLM Wiki 模式
 type: topic
 tags: [知识管理, LLM, 方法论, PKM]
 source_count: 2
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# LLM Wiki 模式
 
 > 用 LLM 增量构建并维护持久 wiki，替代每次从零推导的 RAG 检索。
 

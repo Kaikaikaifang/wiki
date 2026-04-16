@@ -1,5 +1,5 @@
 ---
-title: ATTACH As Replicated
+title: 以 Replicated 方式挂载
 type: source
 tags: [数据库, ClickHouse, ATTACH, ReplicatedMergeTree]
 source_count: 1
@@ -8,8 +8,6 @@ author: ClickHouse
 published: 2026-04-16
 updated: 2026-04-16
 ---
-
-# ATTACH As Replicated
 
 来源：[[entities/clickhouse]] · [原文](https://clickhouse.com/docs/sql-reference/statements/attach#attach-mergetree-table-as-replicatedmergetree)
 

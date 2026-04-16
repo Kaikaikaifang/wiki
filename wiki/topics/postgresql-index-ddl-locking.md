@@ -1,5 +1,5 @@
 ---
-title: PostgreSQL Index DDL Locking
+title: PostgreSQL 索引 DDL 锁
 type: topic
 tags:
   - PostgreSQL
@@ -7,10 +7,8 @@ tags:
   - DDL
   - 锁
 source_count: 0
-updated: 2026-04-15
+updated: 2026-04-16
 ---
-
-# PostgreSQL Index DDL Locking
 
 > 在 PostgreSQL 里，`CONCURRENTLY` 的核心价值不是“更快”，而是尽量避免索引 DDL 长时间挡住业务读写。
 

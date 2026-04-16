@@ -1,12 +1,10 @@
 ---
-title: ClickHouse Deployment Topologies
+title: ClickHouse 部署拓扑
 type: topic
 tags: [数据库, ClickHouse, 部署, 架构]
 source_count: 7
 updated: 2026-04-16
 ---
-
-# ClickHouse Deployment Topologies
 
 > 用分片、副本、Keeper、对象存储与本地缓存拼出面向分析型负载的生产部署形态。
 

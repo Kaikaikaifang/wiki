@@ -1,5 +1,5 @@
 ---
-title: SQL Join Performance
+title: SQL 连接性能
 type: topic
 tags:
   - SQL
@@ -7,10 +7,8 @@ tags:
   - 数据库
   - 性能
 source_count: 2
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# SQL Join Performance
 
 > 连接并不天然慢，慢的是不匹配连接算法的索引与查询形状。
 

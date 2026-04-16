@@ -1,12 +1,10 @@
 ---
-title: ClickHouse Keeper
+title: ClickHouse Keeper 协调服务
 type: entity
 tags: [数据库, ClickHouse, Keeper, 协调服务]
 source_count: 2
 updated: 2026-04-16
 ---
-
-# ClickHouse Keeper
 
 > ClickHouse 的原生协调服务，用来承接复制元数据、分布式 DDL 与相关集群状态协调。
 

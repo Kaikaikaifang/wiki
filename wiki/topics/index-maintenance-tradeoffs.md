@@ -1,5 +1,5 @@
 ---
-title: Index Maintenance Tradeoffs
+title: 索引维护权衡
 type: topic
 tags:
   - SQL
@@ -7,10 +7,8 @@ tags:
   - 写入
   - 性能
 source_count: 2
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# Index Maintenance Tradeoffs
 
 > 每一个索引都在提升读路径的同时，给写路径增加持续维护成本。
 

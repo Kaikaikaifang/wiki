@@ -1,15 +1,13 @@
 ---
-title: Agentic Systems
+title: Agentic 系统
 type: topic
 tags:
   - Agent
   - 工作流
   - 方法论
 source_count: 3
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# Agentic Systems
 
 > 用一条复杂度递进路径理解增强型 LLM、workflow 与自治 agent。
 

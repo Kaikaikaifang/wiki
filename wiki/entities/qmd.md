@@ -1,12 +1,10 @@
 ---
-title: QMD
+title: QMD 搜索引擎
 type: entity
 tags: [工具, 搜索, 本地优先, MCP]
 source_count: 1
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# QMD
 
 QMD 是一个面向 markdown 文档的本地搜索工具，支持 CLI、SDK 与 MCP server。它把 BM25、向量检索、查询扩展和 LLM 重排组合起来，服务于个人知识库、代码文档和 agent 工作流。
 

@@ -1,5 +1,5 @@
 ---
-title: Query Shape and Index Usage
+title: 查询形状与索引使用
 type: topic
 tags:
   - SQL
@@ -7,10 +7,8 @@ tags:
   - 查询设计
   - 性能
 source_count: 4
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# Query Shape and Index Usage
 
 > 决定索引效果的，往往不是“建没建索引”，而是查询把列写成了什么形状。
 

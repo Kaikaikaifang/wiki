@@ -1,12 +1,10 @@
 ---
-title: ZooKeeper
+title: ZooKeeper 协调服务
 type: entity
 tags: [数据库, ZooKeeper, 协调服务, 分布式系统]
 source_count: 1
 updated: 2026-04-16
 ---
-
-# ZooKeeper
 
 > 经典的分布式协调服务，在这个 wiki 里主要作为 ClickHouse Keeper 的对照基线出现。
 

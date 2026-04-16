@@ -1,5 +1,5 @@
 ---
-title: "Manage and deploy overview"
+title: ClickHouse 部署总览
 type: source
 tags: [数据库, ClickHouse, 部署, 运维]
 source_count: 1
@@ -8,8 +8,6 @@ author: ClickHouse
 published: 2026-04-16
 updated: 2026-04-16
 ---
-
-# Manage and deploy overview
 
 来源：[[entities/clickhouse]] · [原文](https://clickhouse.com/docs/guides/manage-and-deploy-index)
 

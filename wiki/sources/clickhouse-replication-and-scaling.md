@@ -1,5 +1,5 @@
 ---
-title: "Replication + scaling"
+title: ClickHouse 复制与扩展
 type: source
 tags: [数据库, ClickHouse, 分片, 副本]
 source_count: 1
@@ -8,8 +8,6 @@ author: ClickHouse
 published: 2026-04-16
 updated: 2026-04-16
 ---
-
-# Replication + scaling
 
 来源：[[entities/clickhouse]] · [原文](https://clickhouse.com/docs/architecture/cluster-deployment)
 

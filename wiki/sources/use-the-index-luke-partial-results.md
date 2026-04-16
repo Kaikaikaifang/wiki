@@ -1,5 +1,5 @@
 ---
-title: Use The Index, Luke — Partial Results
+title: Use The Index, Luke：分页与 Top-N
 type: source
 tags:
   - SQL
@@ -9,10 +9,8 @@ tags:
 source_count: 1
 source_file: raw/books/use-the-index-luke-sql-performance.md
 author: Markus Winand
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# Use The Index, Luke — Partial Results
 
 来源：[[entities/markus-winand]] · [原文](https://use-the-index-luke.com/sql/partial-results)
 

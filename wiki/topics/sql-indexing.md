@@ -1,5 +1,5 @@
 ---
-title: SQL Indexing
+title: SQL 索引
 type: topic
 tags:
   - SQL
@@ -7,10 +7,8 @@ tags:
   - 数据库
   - 性能
 source_count: 9
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# SQL Indexing
 
 > 把索引当作开发者必须掌握的查询设计能力，而不是数据库团队事后补救的技巧。
 

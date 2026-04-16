@@ -1,5 +1,5 @@
 ---
-title: Use The Index, Luke — Anatomy of an Index
+title: Use The Index, Luke：索引结构
 type: source
 tags:
   - SQL
@@ -9,10 +9,8 @@ tags:
 source_count: 1
 source_file: raw/books/use-the-index-luke-sql-performance.md
 author: Markus Winand
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# Use The Index, Luke — Anatomy of an Index
 
 来源：[[entities/markus-winand]] · [原文](https://use-the-index-luke.com/sql/anatomy)
 

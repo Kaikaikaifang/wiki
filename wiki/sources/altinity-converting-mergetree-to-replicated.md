@@ -1,5 +1,5 @@
 ---
-title: Altinity Converting MergeTree to Replicated
+title: Altinity：MergeTree 转 Replicated
 type: source
 tags: [数据库, ClickHouse, 复制, 迁移]
 source_count: 1
@@ -8,8 +8,6 @@ author: Altinity
 published: 2026-04-16
 updated: 2026-04-16
 ---
-
-# Altinity Converting MergeTree to Replicated
 
 来源：[[entities/clickhouse]] · [原文](https://kb.altinity.com/altinity-kb-setup-and-maintenance/altinity-kb-converting-mergetree-to-replicated/)
 

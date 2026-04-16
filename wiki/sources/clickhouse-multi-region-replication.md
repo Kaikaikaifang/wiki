@@ -1,5 +1,5 @@
 ---
-title: "Does ClickHouse support multi-region replication?"
+title: ClickHouse 多地域复制
 type: source
 tags: [数据库, ClickHouse, 多地域, 副本]
 source_count: 1
@@ -8,8 +8,6 @@ author: ClickHouse
 published: 2026-04-16
 updated: 2026-04-16
 ---
-
-# Does ClickHouse support multi-region replication?
 
 来源：[[entities/clickhouse]] · [原文](https://clickhouse.com/docs/knowledgebase/multi-region-replication)
 

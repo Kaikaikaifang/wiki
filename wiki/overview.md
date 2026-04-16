@@ -6,8 +6,6 @@ source_count: 18
 updated: 2026-04-16
 ---
 
-# 整体综述
-
 ## 核心主题
 
 目前 wiki 围绕一个核心方法论展开：**[[topics/llm-wiki-pattern]]**——用 LLM 增量构建并维护持久知识库，替代每次从零推导的 RAG 检索。

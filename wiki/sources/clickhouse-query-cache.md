@@ -1,15 +1,13 @@
 ---
-title: "ClickHouse Query Cache 文档"
+title: ClickHouse 查询缓存文档
 type: source
 tags: [数据库, ClickHouse, 缓存, OLAP]
 source_count: 1
 source_file: raw/articles/query-cache-clickhouse-docs.md
 author: ClickHouse
 published: 2026-04-15
-updated: 2026-04-15
+updated: 2026-04-16
 ---
-
-# ClickHouse Query Cache 文档
 
 来源：[[entities/clickhouse]] · [原文](https://clickhouse.com/docs/operations/query-cache)
 

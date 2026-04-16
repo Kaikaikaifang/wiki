@@ -1,5 +1,5 @@
 ---
-title: ClickHouse Keeper
+title: ClickHouse Keeper 文档
 type: source
 tags: [数据库, ClickHouse, Keeper, 协调服务]
 source_count: 1
@@ -8,8 +8,6 @@ author: ClickHouse
 published: 2026-04-16
 updated: 2026-04-16
 ---
-
-# ClickHouse Keeper
 
 来源：[[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [原文](https://clickhouse.com/docs/guides/sre/keeper/clickhouse-keeper)
 

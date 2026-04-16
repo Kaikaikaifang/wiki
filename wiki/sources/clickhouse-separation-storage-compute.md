@@ -1,5 +1,5 @@
 ---
-title: "Separation of storage and compute"
+title: ClickHouse 存算分离
 type: source
 tags: [数据库, ClickHouse, 存算分离, 对象存储]
 source_count: 1
@@ -8,8 +8,6 @@ author: ClickHouse
 published: 2026-04-16
 updated: 2026-04-16
 ---
-
-# Separation of storage and compute
 
 来源：[[entities/clickhouse]] · [原文](https://clickhouse.com/docs/guides/separation-storage-compute)
 

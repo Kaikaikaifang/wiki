@@ -1,5 +1,5 @@
 ---
-title: Markus Winand
+title: Markus Winand 作者
 type: entity
 tags:
   - SQL
@@ -7,10 +7,8 @@ tags:
   - 性能
   - 作者
 source_count: 1
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# Markus Winand
 
 > 以 [[sources/use-the-index-luke]] 和 SQL 性能教学著称的数据库作者与讲师。
 

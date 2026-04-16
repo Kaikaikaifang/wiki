@@ -3,10 +3,8 @@ title: 混合检索
 type: topic
 tags: [搜索, 检索, BM25, 向量搜索, LLM]
 source_count: 1
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# 混合检索
 
 ## 核心思想
 

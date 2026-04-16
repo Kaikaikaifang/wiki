@@ -1,5 +1,5 @@
 ---
-title: Managed Agents
+title: Managed Agents 产品
 type: entity
 tags:
   - 产品
@@ -7,10 +7,8 @@ tags:
   - 运行时
   - Claude
 source_count: 1
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# Managed Agents
 
 Managed Agents 是 Anthropic 在 Claude Platform 上提供的托管式长程 agent 服务。它的意义不只是“帮你托管 agent”，而是提出了一种更一般的 agent 运行时设计思路：**把会话、控制循环与执行环境解耦成稳定接口。**
 

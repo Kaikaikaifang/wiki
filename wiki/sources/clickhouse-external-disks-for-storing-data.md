@@ -1,5 +1,5 @@
 ---
-title: "External disks for storing data"
+title: ClickHouse 外部存储
 type: source
 tags: [数据库, ClickHouse, 存储策略, 冷热分层]
 source_count: 1
@@ -8,8 +8,6 @@ author: ClickHouse
 published: 2026-04-16
 updated: 2026-04-16
 ---
-
-# External disks for storing data
 
 来源：[[entities/clickhouse]] · [原文](https://clickhouse.com/docs/operations/storing-data)
 

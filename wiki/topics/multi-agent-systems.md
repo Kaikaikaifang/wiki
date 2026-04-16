@@ -1,15 +1,13 @@
 ---
-title: Multi-Agent Systems
+title: 多智能体系统
 type: topic
 tags:
   - Agent
   - 多智能体
   - 研究工作流
 source_count: 2
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# Multi-Agent Systems
 
 > 多智能体不是“多开几个模型”而已，而是把有限上下文、有限 token 与有限注意力拆成可协作的并行工作单元。
 

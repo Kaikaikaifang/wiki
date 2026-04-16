@@ -1,12 +1,10 @@
 ---
-title: Query Result Caching
+title: 查询结果缓存
 type: topic
 tags: [数据库, 缓存, OLAP, 性能]
 source_count: 2
-updated: 2026-04-15
+updated: 2026-04-16
 ---
-
-# Query Result Caching
 
 > 用可控的新鲜度窗口复用昂贵 `SELECT` 的结果，换取更低延迟与更低计算成本。
 

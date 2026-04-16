@@ -1,5 +1,5 @@
 ---
-title: How we built our multi-agent research system
+title: 多智能体研究系统复盘
 type: source
 tags:
   - Agent
@@ -10,10 +10,8 @@ source_count: 1
 source_file: raw/articles/how-we-built-our-multi-agent-research-system.md
 author: Jeremy Hadfield, Barry Zhang, Kenneth Lien, Florian Scholz, Jeremy Fox, Daniel Ford
 published: 2026-04-13
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# How we built our multi-agent research system
 
 来源：[[entities/anthropic]] · [原文](https://www.anthropic.com/engineering/multi-agent-research-system)
 

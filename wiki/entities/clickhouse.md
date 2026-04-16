@@ -1,12 +1,10 @@
 ---
-title: ClickHouse
+title: ClickHouse 数据库
 type: entity
 tags: [数据库, ClickHouse, OLAP, 列式存储]
 source_count: 12
 updated: 2026-04-16
 ---
-
-# ClickHouse
 
 > 面向 OLAP 与实时分析场景的列式数据库，也是一套非常强调可观测性与系统级性能取舍的数据库产品。
 

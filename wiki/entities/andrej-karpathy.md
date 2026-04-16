@@ -1,12 +1,10 @@
 ---
-title: Andrej Karpathy
+title: 安德烈·卡帕西
 type: entity
 tags: [人物, AI研究者, 作者]
 source_count: 1
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# Andrej Karpathy
 
 AI 研究者，前 OpenAI / Tesla。以深度学习教育内容著称（Neural Networks: Zero to Hero 系列）。
 

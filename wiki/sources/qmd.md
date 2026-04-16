@@ -1,15 +1,13 @@
 ---
-title: "QMD — 本地优先的 Markdown 搜索引擎"
+title: QMD 与本地 Markdown 搜索
 type: source
 tags: [搜索, 本地优先, MCP, Agent, 知识管理]
 source_count: 1
 source_file: raw/articles/qmd.md
 author: tobi / qmd
 published: 2026-04-13
-updated: 2026-04-13
+updated: 2026-04-16
 ---
-
-# QMD — 本地优先的 Markdown 搜索引擎
 
 来源：[[entities/qmd]] · [原文](https://github.com/tobi/qmd/blob/main/README.md)
 

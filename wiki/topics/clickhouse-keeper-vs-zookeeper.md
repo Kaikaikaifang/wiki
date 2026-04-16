@@ -1,12 +1,10 @@
 ---
-title: ClickHouse Keeper vs ZooKeeper
+title: ClickHouse Keeper 与 ZooKeeper
 type: topic
 tags: [数据库, ClickHouse, Keeper, ZooKeeper, 高可用]
 source_count: 3
 updated: 2026-04-16
 ---
-
-# ClickHouse Keeper vs ZooKeeper
 
 > 在 ClickHouse 集群里，两者都能承担协调层角色，但它们适合的组织环境并不完全相同。
 

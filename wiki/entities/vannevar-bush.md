@@ -1,12 +1,10 @@
 ---
-title: Vannevar Bush / Memex
+title: 范内瓦·布什
 type: entity
 tags: [人物, 历史, 知识管理]
 source_count: 1
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# Vannevar Bush / Memex
 
 美国科学家，1945 年在论文《As We May Think》中提出 **Memex** 构想：一种个人的、机械化的知识存储设备，用户可以在文档间建立"关联路径"（associative trails）并保存。
 

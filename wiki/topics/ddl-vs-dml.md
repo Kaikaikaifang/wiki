@@ -1,5 +1,5 @@
 ---
-title: DDL vs DML
+title: DDL 与 DML
 type: topic
 tags:
   - 数据库
@@ -9,8 +9,6 @@ tags:
 source_count: 1
 updated: 2026-04-16
 ---
-
-# DDL vs DML
 
 > `DDL` 改结构，`DML` 改数据。理解这个区分，才能看懂为什么 ClickHouse 里的 `ON CLUSTER` 只负责一类语句，不负责另一类语句。
 

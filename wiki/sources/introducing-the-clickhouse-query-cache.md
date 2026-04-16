@@ -1,15 +1,13 @@
 ---
-title: "Introducing the ClickHouse Query Cache"
+title: ClickHouse 查询缓存解读
 type: source
 tags: [数据库, ClickHouse, 缓存, OLAP]
 source_count: 1
 source_file: raw/articles/introducing-the-clickhouse-query-cache.md
 author: Robert Schulze
 published: 2023-02-09
-updated: 2026-04-15
+updated: 2026-04-16
 ---
-
-# Introducing the ClickHouse Query Cache
 
 来源：[[entities/clickhouse]] · [原文](https://clickhouse.com/blog/introduction-to-the-clickhouse-query-cache-and-design)
 

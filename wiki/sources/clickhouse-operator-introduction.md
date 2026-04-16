@@ -1,5 +1,5 @@
 ---
-title: Introduction to the ClickHouse Operator
+title: ClickHouse Operator 入门
 type: source
 tags: [数据库, ClickHouse, Kubernetes, Operator]
 source_count: 1
@@ -8,8 +8,6 @@ author: ClickHouse
 published: 2026-04-16
 updated: 2026-04-16
 ---
-
-# Introduction to the ClickHouse Operator
 
 来源：[[entities/clickhouse]] · [原文](https://clickhouse.com/docs/clickhouse-operator/guides/introduction)
 

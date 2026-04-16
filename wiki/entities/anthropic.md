@@ -1,12 +1,10 @@
 ---
-title: Anthropic
+title: Anthropic 公司
 type: entity
 tags: [组织, AI, LLM, Agent]
 source_count: 3
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# Anthropic
 
 Anthropic 是一家以 Claude 系列模型、对齐研究与 agent 工程实践著称的 AI 公司。在本 wiki 当前涉及的语境中，它的重要性不只是“模型提供者”，而是**总结并公开了许多贴近生产环境的 agent 设计经验**。
 

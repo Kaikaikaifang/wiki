@@ -1,5 +1,5 @@
 ---
-title: Long-Horizon Agents
+title: 长程 Agent
 type: topic
 tags:
   - Agent
@@ -7,10 +7,8 @@ tags:
   - 上下文管理
   - 运行时
 source_count: 2
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# Long-Horizon Agents
 
 > 长程 agent 的核心难题不是“能不能多跑几轮”，而是如何在长时间、可失败、可恢复的过程中保持状态一致与任务连续性。
 

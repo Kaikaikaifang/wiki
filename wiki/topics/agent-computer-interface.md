@@ -1,15 +1,13 @@
 ---
-title: Agent-Computer Interface
+title: Agent 计算机接口
 type: topic
 tags:
   - Agent
   - 工具设计
   - 提示词工程
 source_count: 3
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# Agent-Computer Interface
 
 > 对 agent 而言，工具接口设计不是附属细节，而是系统能力的一部分。
 

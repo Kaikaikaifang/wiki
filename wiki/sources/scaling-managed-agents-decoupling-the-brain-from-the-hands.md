@@ -1,5 +1,5 @@
 ---
-title: "Scaling Managed Agents: Decoupling the brain from the hands"
+title: Managed Agents 运行时架构
 type: source
 tags:
   - Agent
@@ -10,10 +10,8 @@ source_count: 1
 source_file: raw/articles/scaling-managed-agents-decoupling-the-brain-from-the-hands.md
 author: Lance Martin, Gabe Cemaj, Michael Cohen
 published: 2026-04-13
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# Scaling Managed Agents: Decoupling the brain from the hands
 
 来源：[[entities/anthropic]] · [[entities/managed-agents]] · [原文](https://www.anthropic.com/engineering/managed-agents)
 

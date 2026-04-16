@@ -1,5 +1,5 @@
 ---
-title: Index-Supported Sorting and Pagination
+title: 索引支撑的排序与分页
 type: topic
 tags:
   - SQL
@@ -7,10 +7,8 @@ tags:
   - 分页
   - 索引
 source_count: 2
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# Index-Supported Sorting and Pagination
 
 > 索引不只负责查找，还能避免排序、支持流式返回前几条结果。
 

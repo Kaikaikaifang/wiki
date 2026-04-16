@@ -1,12 +1,10 @@
 ---
-title: ClickHouse Single-Node to Cluster Migration
+title: ClickHouse 单节点迁集群
 type: topic
 tags: [数据库, ClickHouse, 集群, 迁移, ReplicatedMergeTree]
 source_count: 5
 updated: 2026-04-16
 ---
-
-# ClickHouse Single-Node to Cluster Migration
 
 > 从单节点 ClickHouse 迁到多副本多分片集群，真正要解决的不是“怎么把机器变多”，而是“怎么把写路径、复制语义和切换窗口一起收敛成可控迁移”。
 

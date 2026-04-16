@@ -1,5 +1,5 @@
 ---
-title: Replicated Table Engines
+title: ClickHouse 复制表引擎
 type: source
 tags: [数据库, ClickHouse, ReplicatedMergeTree, 复制]
 source_count: 1
@@ -8,8 +8,6 @@ author: ClickHouse
 published: 2026-04-16
 updated: 2026-04-16
 ---
-
-# Replicated Table Engines
 
 来源：[[entities/clickhouse]] · [原文](https://clickhouse.com/docs/engines/table-engines/mergetree-family/replication#converting-from-mergetree-to-replicatedmergetree)
 

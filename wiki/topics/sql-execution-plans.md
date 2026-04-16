@@ -1,5 +1,5 @@
 ---
-title: SQL Execution Plans
+title: SQL 执行计划
 type: topic
 tags:
   - SQL
@@ -7,10 +7,8 @@ tags:
   - 数据库
   - 性能
 source_count: 4
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# SQL Execution Plans
 
 > 执行计划是 SQL 性能问题的第一现场，不看 plan 就谈调优，通常只是在猜。
 

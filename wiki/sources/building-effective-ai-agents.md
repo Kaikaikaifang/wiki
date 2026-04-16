@@ -1,5 +1,5 @@
 ---
-title: Building Effective AI Agents
+title: AI Agent 构建方法
 type: source
 tags:
   - Agent
@@ -10,10 +10,8 @@ source_count: 1
 source_file: raw/articles/building-effective-ai-agents.md
 author: Erik Schluntz, Barry Zhang
 published: 2026-04-13
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# Building Effective AI Agents
 
 来源：[[entities/anthropic]] · [原文](https://www.anthropic.com/engineering/building-effective-agents)
 

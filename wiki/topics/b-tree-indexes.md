@@ -1,5 +1,5 @@
 ---
-title: B-Tree Indexes
+title: B-Tree 索引
 type: topic
 tags:
   - SQL
@@ -7,10 +7,8 @@ tags:
   - 索引
   - 数据库
 source_count: 2
-updated: 2026-04-14
+updated: 2026-04-16
 ---
-
-# B-Tree Indexes
 
 > 用“树遍历 + 叶子链表 + 回表”理解为什么索引既能快，也能慢。
 
