@@ -2,7 +2,7 @@
 title: ClickHouse Deployment Topologies
 type: topic
 tags: [数据库, ClickHouse, 部署, 架构]
-source_count: 6
+source_count: 7
 updated: 2026-04-16
 ---
 
@@ -60,6 +60,16 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 
 也就是说，协调层选型不是单纯的“技术优劣”问题，而是**专用化与通用化**之间的运维边界选择。
 
+## Operator 下的 replicated 默认值
+
+[[sources/clickhouse-operator-introduction]] 让我补上了 Kubernetes 语境里很重要的一层：
+
+- Operator 推荐生产环境使用 `Replicated` 数据库引擎；
+- 它会帮你同步数据库定义；
+- 但表数据复制仍然依赖 ClickHouse 自己的复制机制。
+
+这意味着“用了 Operator”不等于“复制问题已经自动解决”。如果目标是副本级高可用，那么数据库层和表层都要选对 replicated 路径。
+
 ## 存算分离是另一条独立维度
 
 [[sources/clickhouse-separation-storage-compute]] 说明，ClickHouse 可以把 `MergeTree` 数据放在 S3 等对象存储上，让计算和存储独立扩缩容。这个决策和“要不要分片”并不是同一个问题：
@@ -107,6 +117,6 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 
 ---
 
-来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]]
+来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]]
 
-相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]]
+相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]]
