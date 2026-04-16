@@ -105,3 +105,7 @@
 ## [2026-04-16] wiki | 简化 Use The Index, Luke 标题
 
 更新 `wiki/sources/use-the-index-luke*.md` 这一批来源页的 frontmatter `title`，去掉 `Use The Index, Luke` 来源名前缀，仅保留简短中文概括，避免标题重复携带来源信息。
+
+## [2026-04-16] workflow | 新增博客式写作规范
+
+更新 `AGENTS.md` 与 `CLAUDE.md`，要求所有 markdown 文档默认按个人技术博客写法撰写：采用技术博主视角组织内容，强调问题意识、直觉、判断、叙事与可读性，避免退化为中性词条式摘要；同时保留 `wiki/log.md` 作为例外，继续使用操作日志体。
