@@ -133,3 +133,7 @@
 ## [2026-04-20] wiki | 记录 SwanLab 生产迁移方案
 
 新增 `topics/swanlab-clickhouse-production-migration`，把一套面向 SwanLab 当前生产形态的 ClickHouse 迁集群方案沉淀进 wiki：明确以 `4 shards × 2 replicas` 为目标拓扑，以 `Vector` 双写兜住新增写入，以自动建表开关化避免污染目标 schema，并强调按 `projectId` 批次回灌 `7118 GiB` 级历史数据；同步更新 `index`，正文避免写入本机绝对路径。
+
+## [2026-04-20] wiki | 补充 SwanLab 迁移方案的本地验证结果
+
+更新 `topics/swanlab-clickhouse-production-migration` 与 `topics/clickhouse-single-node-to-cluster-migration`，把一次本地验证过的迁移闭环写回 wiki：用 mock 单节点源验证 `4 shards × 2 replicas + 3 Keeper` 目标集群、`Vector` 双写、`T0` 水位切分、历史回灌与副本健康检查，并补记 ClickHouse `24.3 + operator` 下 `Replicated` 数据库实验开关与 DDL 下发方式的实际注意事项。
