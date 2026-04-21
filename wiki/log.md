@@ -130,10 +130,14 @@
 
 把一次本地 ClickHouse 迁移演练沉淀回 `topics/clickhouse-single-node-to-cluster-migration`：补充“较短路径”小节，记录用本地 mock 单节点源验证 `MergeTree -> Replicated 数据库 + ReplicatedMergeTree + Distributed` 的最小闭环，以及连通性、权限、分片分布与副本健康这几个关键校验点。
 
-## [2026-04-20] wiki | 记录 SwanLab 生产迁移方案
+## [2026-04-20] wiki | 记录 ClickHouse 生产迁移方案
 
-新增 `topics/swanlab-clickhouse-production-migration`，把一套面向 SwanLab 当前生产形态的 ClickHouse 迁集群方案沉淀进 wiki：明确以 `4 shards × 2 replicas` 为目标拓扑，以 `Vector` 双写兜住新增写入，以自动建表开关化避免污染目标 schema，并强调按 `projectId` 批次回灌 `7118 GiB` 级历史数据；同步更新 `index`，正文避免写入本机绝对路径。
+新增 `topics/clickhouse-production-migration`，把一套面向当前单实例生产形态的 ClickHouse 迁集群方案沉淀进 wiki：明确以 `4 shards × 2 replicas` 为目标拓扑，以 `Vector` 双写兜住新增写入，以自动建表开关化避免污染目标 schema，并强调按 `projectId` 批次回灌 `7118 GiB` 级历史数据；同步更新 `index`，正文避免写入本机绝对路径。
 
-## [2026-04-20] wiki | 补充 SwanLab 迁移方案的本地验证结果
+## [2026-04-20] wiki | 补充生产迁移方案的本地验证结果
 
-更新 `topics/swanlab-clickhouse-production-migration` 与 `topics/clickhouse-single-node-to-cluster-migration`，把一次本地验证过的迁移闭环写回 wiki：用 mock 单节点源验证 `4 shards × 2 replicas + 3 Keeper` 目标集群、`Vector` 双写、`T0` 水位切分、历史回灌与副本健康检查，并补记 ClickHouse `24.3 + operator` 下 `Replicated` 数据库实验开关与 DDL 下发方式的实际注意事项。
+更新 `topics/clickhouse-production-migration` 与 `topics/clickhouse-single-node-to-cluster-migration`，把一次本地验证过的迁移闭环写回 wiki：用 mock 单节点源验证 `4 shards × 2 replicas + 3 Keeper` 目标集群、`Vector` 双写、`T0` 水位切分、历史回灌与副本健康检查，并补记 ClickHouse `24.3 + operator` 下 `Replicated` 数据库实验开关与 DDL 下发方式的实际注意事项。
+
+## [2026-04-21] wiki | 泛化 ClickHouse 生产迁移页面命名
+
+将原生产迁移页面重命名为 `topics/clickhouse-production-migration`，并同步清理索引、交叉引用与正文中的特定业务名，保留迁移拓扑、双写、水位切分与回灌策略这些可复用经验。

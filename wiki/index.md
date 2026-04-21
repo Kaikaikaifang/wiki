@@ -3,7 +3,7 @@ title: 内容目录
 type: index
 tags: [索引, 导航]
 source_count: 0
-updated: 2026-04-20
+updated: 2026-04-21
 ---
 
 > 每次摄入后由 LLM 更新。查询时先读此文件定位相关页面。
@@ -34,7 +34,7 @@ updated: 2026-04-20
 - [[topics/query-result-caching]] — 用 TTL、准入条件与安全边界复用昂贵 `SELECT` 结果
 - [[topics/query-shape-and-index-usage]] — `where` 子句形状如何决定索引是否真正缩小扫描范围
 - [[topics/service-db-network-latency-diagnosis]] — 用冷连接、热连接与双侧耗时拆分判断接口慢点是否在数据库链路
-- [[topics/swanlab-clickhouse-production-migration]] — 面向 SwanLab 当前单实例与 7 TiB 数据量的 ClickHouse 迁集群方案
+- [[topics/clickhouse-production-migration]] — 面向单实例与 7 TiB 数据量场景的 ClickHouse 迁集群方案
 - [[topics/sql-execution-plans]] — 把执行计划当作 SQL 性能调优的第一现场
 - [[topics/sql-indexing]] — 把索引视为开发者必须掌握的查询设计能力
 - [[topics/sql-join-performance]] — 按 join 算法选择不同索引策略，而不是机械补索引
