@@ -127,6 +127,14 @@ updated: 2026-04-21
 
 不过也正是在这一步，我踩到了一个很值得提前记住的环境细节：在 ClickHouse `24.3` 配合 operator 的本地组合里，`Replicated` 数据库引擎需要实验开关，但这个开关不能简单塞进顶层 server config；否则副本会直接因为配置层级不对而起不来。另一个细节是，这个组合下我最终是通过逐节点执行 DDL 稳定完成建库建表，而不是单纯依赖 `ON CLUSTER`。我不会把这两个细节神化成普适规律，但它们很好地提醒了我，**短路径真正的价值，就是在正式迁移前把这种版本与部署方式耦合出来的小坑尽早踩完。**
 
+而当我把目标端切到 ClickHouse `26.3` 再重跑一次后，情况又出现了一个很有代表性的变化。`Replicated` 数据库不再需要实验开关，但这并不等于“从此所有 DDL 都直接 `ON CLUSTER` 就行了”。我实测到的新版边界更细：
+
+- 创建 `Replicated` 数据库本身时，`ON CLUSTER` 仍然是合理路径；
+- 但数据库建好之后，如果继续在这个 `Replicated` 数据库里对表使用 `ON CLUSTER`，会直接报错：`ON CLUSTER is not allowed for Replicated database`；
+- 因此更稳的新版短路径是：先 `CREATE DATABASE ... ON CLUSTER ... ENGINE = Replicated`，再把表 DDL 当成一次普通初始查询，只打到一个目标 ClickHouse 实例上执行，让 `Replicated` 数据库自己同步元数据。
+
+这件事对我最大的提醒，是“避免逐节点执行 DDL”里的“节点”，其实指的是每一个 ClickHouse server 实例，也就是 `shard × replica` 展开后的每个 Pod。以 `4 shards × 2 replicas` 为例，总共有 8 个实例；旧路径里的逐节点 DDL，本质上就是把同一套表结构在这 8 个实例上重复跑一遍。到了 `26.3`，这条路径终于可以更干净地收束成“建库集群化，建表单点化，元数据复制化”。
+
 ## 迁移过程中通常需要完成哪些工作
 
 ### 1. 明确目标拓扑

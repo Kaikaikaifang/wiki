@@ -141,3 +141,7 @@
 ## [2026-04-21] wiki | 泛化 ClickHouse 生产迁移页面命名
 
 将原生产迁移页面重命名为 `topics/clickhouse-production-migration`，并同步清理索引、交叉引用与正文中的特定业务名，保留迁移拓扑、双写、水位切分与回灌策略这些可复用经验。
+
+## [2026-04-21] wiki | 同步 ClickHouse 26.3 迁移规则
+
+更新 `topics/clickhouse-production-migration` 与 `topics/clickhouse-single-node-to-cluster-migration`，补记一次面向 ClickHouse `26.3` 的本地重跑结果：`Replicated` 数据库已不再依赖实验开关，但 DDL 规则应调整为“建库时使用 `ON CLUSTER`，建表时在单个目标实例上执行一次，再由 `Replicated` 数据库同步元数据”，并记录该路径下的对账结果、版本信息与副本健康状态。
