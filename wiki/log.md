@@ -145,3 +145,7 @@
 ## [2026-04-21] wiki | 同步 ClickHouse 26.3 迁移规则
 
 更新 `topics/clickhouse-production-migration` 与 `topics/clickhouse-single-node-to-cluster-migration`，补记一次面向 ClickHouse `26.3` 的本地重跑结果：`Replicated` 数据库已不再依赖实验开关，但 DDL 规则应调整为“建库时使用 `ON CLUSTER`，建表时在单个目标实例上执行一次，再由 `Replicated` 数据库同步元数据”，并记录该路径下的对账结果、版本信息与副本健康状态。
+
+## [2026-04-21] query | 记录 Kubernetes API 组与 schema 误报
+
+新增 `topics/kubernetes-api-groups-and-schema-validation`，把一次围绕 `apiVersion: v1`、core API、API group 与 `yaml-language-server` schema 假阳性的讨论沉淀进 wiki：解释为什么 `v1` 不能为了压告警而改值，为什么 core API 在 YAML 里直接写 `v1`，以及为什么多资源 Kubernetes 文件在聚合 schema 下更容易触发 `Matches multiple schemas` 这类编辑器误报。

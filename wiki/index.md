@@ -30,6 +30,7 @@ updated: 2026-04-21
 - [[topics/llm-wiki-pattern]] — LLM 增量构建持久 wiki 的模式，替代 RAG 检索
 - [[topics/multi-agent-systems]] — 适合并行开放式任务的多智能体分工与协作模式
 - [[topics/knowledge-management]] — 知识管理的核心问题与主要范式对比
+- [[topics/kubernetes-api-groups-and-schema-validation]] — 把 `apiVersion`、core API 与编辑器 schema 假阳性放进同一个判断框架
 - [[topics/postgresql-index-ddl-locking]] — 理解 PostgreSQL 中索引创建与删除 DDL 的锁强度和线上体感
 - [[topics/query-result-caching]] — 用 TTL、准入条件与安全边界复用昂贵 `SELECT` 结果
 - [[topics/query-shape-and-index-usage]] — `where` 子句形状如何决定索引是否真正缩小扫描范围
