@@ -149,3 +149,7 @@
 ## [2026-04-21] query | 记录 Kubernetes API 组与 schema 误报
 
 新增 `topics/kubernetes-api-groups-and-schema-validation`，把一次围绕 `apiVersion: v1`、core API、API group 与 `yaml-language-server` schema 假阳性的讨论沉淀进 wiki：解释为什么 `v1` 不能为了压告警而改值，为什么 core API 在 YAML 里直接写 `v1`，以及为什么多资源 Kubernetes 文件在聚合 schema 下更容易触发 `Matches multiple schemas` 这类编辑器误报。
+
+## [2026-04-22] wiki | 记录共享集群中的 Operator 安装策略
+
+新增 `topics/clickhouse-operator-installation-on-shared-clusters`，把一次围绕 `dev-admin` 共享集群安装官方 ClickHouse Operator 的判断沉淀进 wiki：明确推荐用 Helm 安装到独立 namespace，复用已有 `cert-manager`，通过 `watchNamespaces` 收窄到目标 namespace，并把 CRD 生命周期和卸载动作视为独立的集群级决策。

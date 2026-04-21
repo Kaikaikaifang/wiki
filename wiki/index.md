@@ -18,6 +18,7 @@ updated: 2026-04-21
 - [[topics/agentic-systems]] — 从增强型 LLM 到 workflow 与自治 agent 的复杂度阶梯
 - [[topics/b-tree-indexes]] — 用叶子链表、树遍历与回表理解索引为什么会快或慢
 - [[topics/clickhouse-deployment-topologies]] — 把分片、副本、Keeper、存算分离与冷热分层放进同一部署判断框架
+- [[topics/clickhouse-operator-installation-on-shared-clusters]] — 在共享 Kubernetes 集群里安装官方 ClickHouse Operator 时，如何判断 Helm、watch 范围与 CRD 管理策略
 - [[topics/clickhouse-keeper-vs-zookeeper]] — 用“专用协调层”与“通用协调服务”的边界判断 Keeper 与 ZooKeeper
 - [[topics/clickhouse-replicated-engines-and-conversion]] — 把 `Replicated` 数据库引擎、`ReplicatedMergeTree` 与旧表迁移路径放进同一生产判断框架
 - [[topics/clickhouse-single-node-to-cluster-migration]] — 从单节点 ClickHouse 迁到多副本多分片集群时，如何判断无缝切换、引擎切换与迁移步骤
