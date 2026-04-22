@@ -79,6 +79,18 @@ updated: 2026-04-22
 
 所以如果你还在探索阶段，或者后面可能会反复调整 release，我更愿意先把 CRD 保留住，把“删 CRD”变成一个显式、审慎、单独执行的动作。
 
+## 这类安装配置应该怎么沉淀
+
+这次我后来又往前多想了一步：像 ClickHouse Operator 这种带 CRD 的控制器，真正值得长期保留到仓库里的，通常不是整份上游 CRD YAML，而是下面三类信息：
+
+- Helm chart 来源与版本；
+- values 文件；
+- CRD 生命周期策略，比如 `crd.enable=true`、`crd.keep=true`、`watchNamespaces=tenant-kaikai`。
+
+我现在更倾向把这三类东西看成“安装配置”，而把上游 CRD 原文看成“发行物内容”。两者不是一回事。前者是我以后要反复判断、升级、审计和复用的；后者如果没有离线安装或强审计要求，直接 vendoring 进仓库的收益并不高，反而容易在 chart 升级后制造漂移。
+
+这也是为什么我觉得它和 `cert-manager` 很像，但又不能简单照抄。`cert-manager` 目录真正被长期维护的，往往是 `values.yaml`、issuer、webhook 和 DNS provider 配置，而不是 CRD 原文本身。ClickHouse Operator 更适合沿用同样的思路：**记录入口、记录边界、记录生命周期，不默认复制上游生成物。**
+
 ## 一个更稳的安装姿势
 
 如果让我把这次场景浓缩成一条更稳的安装思路，它应该长这样：
@@ -93,6 +105,19 @@ updated: 2026-04-22
 
 我觉得这套顺序很重要，因为它把“安装 operator”从一个模糊的准备动作，提升成了一个**有前提、有边界、有验证出口**的集群变更。
 
+## 从安装走到真正可用，还差什么
+
+这次真正把目标集群在 `tenant-kaikai` 里拉起来后，我更明显地感受到：Operator 安装完成，其实只意味着“控制面准备好了”，离“迁移目标端真的能用”还差一段不短的路。
+
+我最终补齐的几件事是：
+
+- 把目标镜像从 `docker.io` 改到公开 ACR，避开集群里的 Docker Hub 拉取超时；
+- 把 Keeper 明确 pin 到 `26.3`，不继续用 `latest`；
+- 在目标 `podTemplate` 上加 `dedicated=high-performance:NoSchedule` 的 toleration；
+- 把 `requests` 压到共享集群可调度的下限，但保持 `4 shards × 2 replicas + 3 Keeper` 目标拓扑不变。
+
+对我来说，这一步很有提醒意义：**Operator 安装解决的是“有没有这套 API”，而不是“目标集群一定拉得起来”。** 真正的落地，还要把镜像分发、调度面、存储类和资源请求一起纳入同一条执行路径里。
+
 ## 对我的提醒
 
 这次让我更确定一件事：在共享集群里，安装 Operator 从来都不只是“把一个 controller 跑起来”。它同时意味着：
@@ -105,4 +130,4 @@ updated: 2026-04-22
 
 ---
 
-相关页面：[[topics/clickhouse-production-migration]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-deployment-topologies]]
+相关页面：[[topics/clickhouse-production-migration]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-deployment-topologies]] · [[topics/kubernetes-crd-recording-strategy]]

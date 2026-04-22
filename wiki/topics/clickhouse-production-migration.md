@@ -3,7 +3,7 @@ title: ClickHouse 生产迁移
 type: topic
 tags: [数据库, ClickHouse, 迁移, 集群, 生产环境]
 source_count: 2
-updated: 2026-04-21
+updated: 2026-04-22
 ---
 
 > 真正让我把这次迁移当成“系统工程”而不是“运维操作”的，不是 ClickHouse 本身有多复杂，而是眼前这套生产形态已经明确告诉我：这不是一次适合赌停机窗口的数据库搬家。
@@ -242,6 +242,22 @@ WHERE projectId IN ('p1', 'p2', 'p3')
 
 这些数字和源端保持一致。目标集群 8 个 ClickHouse 实例全部运行在 `26.3.9.8`，而且 8 个实例都具备 `scalar/media/log` 与对应的 `*_local` 表，所有副本继续保持 `total_replicas=2`、`active_replicas=2`、`queue_size=0`、`absolute_delay=0`。对我来说，这比单纯说“升级到新版也能跑”更重要，因为它证明了**新版并不是让迁移路径失效，而是让 DDL 纪律变得更明确。**
 
+再往前走到共享集群落地，我又多得到了一层更贴近真实环境的结论：**目标集群能不能 Ready，往往先卡在镜像分发和调度面，而不是卡在 DDL。**
+
+这次我在 `dev-admin` 里把目标集群实际建到 `tenant-kaikai`，踩到的第一个坑不是 ClickHouse 本身，而是 operator 默认探测和实例镜像都在走 `docker.io`，结果直接被 Docker Hub 超时卡住。真正让这套 `26.3` 路径跑起来的，是下面这组偏运维侧、但又极其关键的动作：
+
+- 把 `clickhouse-server:26.3` 和 `clickhouse-keeper:26.3` 镜像同步到公开 ACR；
+- 目标集群统一改用公开 ACR 路径，而不是继续依赖 `docker.io`；
+- Keeper 版本显式 pin 到 `26.3`，不再放任 `latest` 漂移；
+- 在 `podTemplate` 上增加 `dedicated=high-performance:NoSchedule` 的 toleration，把高性能节点纳入调度面；
+- 保持 `4 × 2 + 3 Keeper` 拓扑不变，但把 `requests` 压到共享集群能接受的下限。
+
+我很喜欢把这层经验单独记下来，因为它提醒我：当迁移场景从本地验证走向共享集群时，架构正确性只是第一层，后面还有一层同样真实的“集群现实”。如果镜像拉不到、节点 taint 过不去、PVC 绑定和 CPU 请求对不上，那条已经被本地验证过的漂亮迁移路径，还是会在入口处被卡死。
+
+最后这次 `tenant-kaikai` 里的目标集群确实成功 `Ready` 了，`KeeperCluster` 和 `ClickHouseCluster` 都变成了健康状态。但我并不想把这件事写得太轻松，因为调度结果也顺手暴露了另一个共享集群常见事实：**逻辑拓扑 Ready，不等于物理高可用已经成立。**
+
+这批 Pod 在共享集群里有可能集中落到同一个高性能节点上。对迁移验证来说，这已经足够，因为它证明了目标端 schema、复制、分片、镜像和调度路径都成立；但对真正的生产容灾来说，这还不是终局。我会把它理解成“目标迁移平台已经搭好”，而不是“最终生产编排已经完成”。
+
 ## 为什么这次本地验证足以支撑生产方案
 
 我不会因为本地数据量远小于生产就否认这次验证的价值。它当然不能替代生产容量压测，也不能替代云上网络、磁盘吞吐和长时间 merge 观察，但它已经验证了这次迁移最重要的结构正确性：
@@ -281,4 +297,4 @@ WHERE projectId IN ('p1', 'p2', 'p3')
 
 来源：[[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-replicated-engines-and-conversion]]
 
-相关页面：[[entities/clickhouse]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-replicated-engines-and-conversion]]
+相关页面：[[entities/clickhouse]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-operator-installation-on-shared-clusters]]

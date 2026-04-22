@@ -153,3 +153,7 @@
 ## [2026-04-22] wiki | 记录共享集群中的 Operator 安装策略
 
 新增 `topics/clickhouse-operator-installation-on-shared-clusters`，把一次围绕 `dev-admin` 共享集群安装官方 ClickHouse Operator 的判断沉淀进 wiki：明确推荐用 Helm 安装到独立 namespace，复用已有 `cert-manager`，通过 `watchNamespaces` 收窄到目标 namespace，并把 CRD 生命周期和卸载动作视为独立的集群级决策。
+
+## [2026-04-22] wiki | 同步 tenant-kaikai 目标集群重建与 CRD 记录策略
+
+更新 `topics/clickhouse-production-migration` 与 `topics/clickhouse-operator-installation-on-shared-clusters`，并新增 `topics/kubernetes-crd-recording-strategy`，把一次在 `dev-admin` 共享集群里将目标 ClickHouse 重建到 `tenant-kaikai` 的实际结果沉淀进 wiki：记录公开 ACR 镜像、`26.3` 固定版本、`high-performance` 节点 toleration、共享集群调度约束，以及“默认记录安装入口与生命周期策略，而不是直接 vendoring 上游 CRD 原文”的判断。
