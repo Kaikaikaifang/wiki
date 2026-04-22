@@ -161,3 +161,7 @@
 ## [2026-04-23] wiki | 补记 dev-admin 迁移里的 Vector 双写前置条件
 
 更新 `topics/clickhouse-production-migration`，把一次在 `dev-admin` 共享集群里的真实迁移推进结果写回 wiki：明确目标集群 `Ready` 之后不能直接倒灌，而应先在 `development` 命名空间打通 Vector 双写，再把唯一事件验证通过的时刻记为 `T0`；同时补记这次真实排障里 `media` 流未进入目标 sink 的现象，以及通过为 target sink 拆分独立 transform 恢复三张表双写一致性的做法。
+
+## [2026-04-23] wiki | 停止 remote 回灌并切换到生产级回灌思路
+
+更新 `topics/clickhouse-production-migration`，把一次在 `dev-admin` 共享集群里的真实历史回灌验证写回 wiki：记录 `remote() + INSERT SELECT` 在共享集群中先后暴露出的内存上限、磁盘扩容和中断残留问题，并明确在 `7 TiB` 级生产场景下，应将它降级为验证与补洞工具，而把正式主回灌方案切换为“对象存储中转 + 批次清单 + 并行导入 + 分层对账”的批处理架构。
