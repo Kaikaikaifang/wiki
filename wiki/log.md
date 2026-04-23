@@ -169,3 +169,7 @@
 ## [2026-04-23] wiki | 补记云盘快照在生产回灌中的正确角色
 
 更新 `topics/clickhouse-production-migration`，把一次围绕生产回灌执行清单的整理结果写回 wiki：补记 `development` 源 ClickHouse 当前本质上就是“PVC 挂载的阿里云云盘”，并进一步明确在生产环境里，云盘快照最适合作为离线历史导出源，而不是直接充当新集群迁移结果；正式主路径应是“快照克隆盘导出到对象存储，再由目标集群按批次逻辑导入”。
+
+## [2026-04-23] wiki | 补记生产回灌的可执行骨架
+
+更新 `topics/clickhouse-production-migration`，把这次继续落到 `test-migration` 里的生产级回灌骨架同步进 wiki：补记批次 manifest、单批导出 / 导入脚本和 Kubernetes Job 模板这三类最小可运行组件为什么值得先做，以及它们如何把“对象存储中转 + 批次清单 + 并行导入”从方案文字推进到可操作系统。
