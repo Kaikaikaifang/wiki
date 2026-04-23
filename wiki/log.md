@@ -173,3 +173,7 @@
 ## [2026-04-23] wiki | 补记生产回灌的可执行骨架
 
 更新 `topics/clickhouse-production-migration`，把这次继续落到 `test-migration` 里的生产级回灌骨架同步进 wiki：补记批次 manifest、单批导出 / 导入脚本和 Kubernetes Job 模板这三类最小可运行组件为什么值得先做，以及它们如何把“对象存储中转 + 批次清单 + 并行导入”从方案文字推进到可操作系统。
+
+## [2026-04-23] wiki | 补记 runner 镜像与 manifest 生成器
+
+更新 `topics/clickhouse-production-migration`，把这次继续落到 `test-migration` 里的执行入口同步进 wiki：补记为什么生产回灌除了单批导出 / 导入脚本和 Job 模板，还需要一层 runner 镜像定义以及 manifest 生成器，以及它们如何把“批次定义”和“批次执行”从手工拼装变成统一入口。
