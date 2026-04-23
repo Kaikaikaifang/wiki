@@ -177,3 +177,7 @@
 ## [2026-04-23] wiki | 补记 runner 镜像与 manifest 生成器
 
 更新 `topics/clickhouse-production-migration`，把这次继续落到 `test-migration` 里的执行入口同步进 wiki：补记为什么生产回灌除了单批导出 / 导入脚本和 Job 模板，还需要一层 runner 镜像定义以及 manifest 生成器，以及它们如何把“批次定义”和“批次执行”从手工拼装变成统一入口。
+
+## [2026-04-23] wiki | 补记生产回灌最小控制面
+
+更新 `topics/clickhouse-production-migration`，把这次继续落到 `test-migration` 里的控制面约定同步进 wiki：补记回灌 Job 依赖的最小 `ConfigMap/Secret` 命名、批次状态表 `migration_meta.backfill_batches` 的最小 schema，以及 `manifest` 生成器已经支持直接从 ClickHouse 拉项目清单，意味着这条生产回灌路径已经从执行骨架进入最小控制面阶段。
