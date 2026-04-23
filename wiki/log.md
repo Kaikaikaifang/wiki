@@ -181,3 +181,7 @@
 ## [2026-04-23] wiki | 补记生产回灌最小控制面
 
 更新 `topics/clickhouse-production-migration`，把这次继续落到 `test-migration` 里的控制面约定同步进 wiki：补记回灌 Job 依赖的最小 `ConfigMap/Secret` 命名、批次状态表 `migration_meta.backfill_batches` 的最小 schema，以及 `manifest` 生成器已经支持直接从 ClickHouse 拉项目清单，意味着这条生产回灌路径已经从执行骨架进入最小控制面阶段。
+
+## [2026-04-24] wiki | 补记生产回灌的真实批量验证结果
+
+更新 `topics/clickhouse-production-migration`，并同步把 `test-migration` 里的生产回灌文档补齐：记录这条“快照恢复源 -> OSS 中转 -> 目标 Distributed 表”主路径在 `dev-admin` 里的真实推进结果，包括 `2026-04-22` 的 `18` 个非空小时、`2026-04-19` 的 `10` 个有效小时已经完整对齐，以及 `2026-04-18` 这类连续重负载日截至当日已稳定通过前 `12` 个小时；同时固化空批次 `13 B` 过滤、导出 / 导入目录分离和 `project-list` 空列错位这几条执行纪律。
