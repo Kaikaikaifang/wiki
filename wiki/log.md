@@ -205,3 +205,7 @@
 ## [2026-04-26] query | 澄清 copier 的一致性前提与快照源角色
 
 更新 `topics/clickhouse-production-migration`，把一次围绕 `clickhouse-copier` 的讨论沉淀进 wiki：明确 README 里“source tables and partitions should not change”约束的是 copier 正在读取的那份源，而不是整个生产系统都必须停写；因此在更稳的生产时序里，应由 `T0` 之后恢复出来的只读快照源承担 copier 的历史复制，而让线上热库继续写入并通过 `Vector` 双写守住 `T0` 之后的新增数据，最后只对边界尾巴做补数与对账。
+
+## [2026-04-26] query | 更新生产资源规格与首发拓扑判断
+
+更新 `topics/clickhouse-production-migration`，把一次围绕“生产环境资源规格应该如何设计”的讨论沉淀进 wiki：在确认机器数并不受限于当前 4 台节点后，把首发生产拓扑判断从早期偏保守的 `4 shards × 2 replicas` 升级为 `6 shards × 2 replicas + 3 Keeper`，并明确推荐数据节点按 `32 vCPU / 128 GiB / 3~4 TiB SSD` 规划、Keeper 按 `4 vCPU / 16 GiB` 独立部署；同时把 spot 节点不再适合承载正式数据面，以及 `dev-admin` 应尽量保持多分片多副本逻辑拓扑这两条执行纪律一并记下。
