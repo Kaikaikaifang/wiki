@@ -201,3 +201,7 @@
 ## [2026-04-26] query | 澄清按 projectId 分片与物理落点的区别
 
 更新 `topics/clickhouse-production-migration`，把一次围绕“能否先把旧单机 `attach` 成一个 replicated shard，再让新数据继续按 `projectId` 写入集群”的讨论沉淀进 wiki：明确 shard key 决定的是未来写入路由，而不是历史数据当前的物理落点；如果旧历史只是整体挂到 shard1，那么某些按 hash 理应属于 shard2 的项目会出现“历史在 shard1、新增在 shard2”的裂缝，这意味着 `attach + replicated` 最多只能充当过渡态，不能等价成已经完成真正的按键分片。
+
+## [2026-04-26] query | 澄清 copier 的一致性前提与快照源角色
+
+更新 `topics/clickhouse-production-migration`，把一次围绕 `clickhouse-copier` 的讨论沉淀进 wiki：明确 README 里“source tables and partitions should not change”约束的是 copier 正在读取的那份源，而不是整个生产系统都必须停写；因此在更稳的生产时序里，应由 `T0` 之后恢复出来的只读快照源承担 copier 的历史复制，而让线上热库继续写入并通过 `Vector` 双写守住 `T0` 之后的新增数据，最后只对边界尾巴做补数与对账。
