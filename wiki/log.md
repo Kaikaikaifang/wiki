@@ -209,3 +209,7 @@
 ## [2026-04-26] query | 更新生产资源规格与首发拓扑判断
 
 更新 `topics/clickhouse-production-migration`，把一次围绕“生产环境资源规格应该如何设计”的讨论沉淀进 wiki：在确认机器数并不受限于当前 4 台节点后，把首发生产拓扑判断从早期偏保守的 `4 shards × 2 replicas` 升级为 `6 shards × 2 replicas + 3 Keeper`，并明确推荐数据节点按 `32 vCPU / 128 GiB / 3~4 TiB SSD` 规划、Keeper 按 `4 vCPU / 16 GiB` 独立部署；同时把 spot 节点不再适合承载正式数据面，以及 `dev-admin` 应尽量保持多分片多副本逻辑拓扑这两条执行纪律一并记下。
+
+## [2026-04-26] query | 补记 copier 的定位与 T0 双写优先级
+
+更新 `topics/clickhouse-production-migration`，把两条这轮会话里已经明确的判断继续沉淀进 wiki：第一，`clickhouse-copier` 即使支持 reshard，也更适合作为 `dev-admin` 或离线快照源上的实验工具，而不应继续作为正式生产主引擎；第二，相比“等历史复制结束到 `T1` 再开启双写”，更稳的正式时序应当把双写尽量前置到 `T0`，让快照 / copier 只负责 `T0` 之前的静态历史，避免 `T0 ~ T1` 的 gap 重新长成第二场大回灌。
