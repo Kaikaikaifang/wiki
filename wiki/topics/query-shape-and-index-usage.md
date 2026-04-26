@@ -6,8 +6,8 @@ tags:
   - 索引
   - 查询设计
   - 性能
-source_count: 4
-updated: 2026-04-16
+source_count: 5
+updated: 2026-04-26
 ---
 
 > 真正决定索引是否有用的，往往不是 DDL 那一刻建了什么，而是你在查询里把数据列写成了数据库还能不能理解的样子。
@@ -55,6 +55,12 @@ updated: 2026-04-16
 
 如果不得不用函数，function-based index 是可选项，但它适合的是少数确实稳定、确定性的表达式，而不是把所有糟糕查询都硬塞给索引。我会把它理解成“为一个稳定表达式建访问路径”，而不是“为任意坏写法兜底”。
 
+## `LIMIT` 不会自动改变查询形状
+
+[[sources/clickhouse-13-mistakes]] 提醒我，查询形状不只体现在 `where` 里，也体现在执行是否能流式结束。`LIMIT` 看起来是在减少结果行数，但如果查询必须先完成非主键排序、全量聚合或跨 shard Top-N，它就只是最后一步裁剪，不会自动减少前面的扫描和计算。
+
+这和索引主题里的判断很一致：只有当查询写法与物理顺序对齐时，数据库才有机会提前停止。否则，“只要 10 行”只是业务语义，不是执行路径。
+
 ## 部分索引
 
 对固定常量条件反复出现的查询，可以考虑 partial / filtered index。例如只索引 `processed = 'N'` 的消息，而不是把整个消息表都塞进索引。这会同时缩小索引的行数和宽度。我觉得这类设计最能体现“索引不是表的附属物，而是查询模式的物化”。
@@ -65,6 +71,6 @@ updated: 2026-04-16
 
 ---
 
-来源：[[sources/use-the-index-luke-preface]] · [[sources/use-the-index-luke-the-where-clause]] · [[sources/use-the-index-luke-execution-plans]] · [[sources/use-the-index-luke-partial-results]]
+来源：[[sources/use-the-index-luke-preface]] · [[sources/use-the-index-luke-the-where-clause]] · [[sources/use-the-index-luke-execution-plans]] · [[sources/use-the-index-luke-partial-results]] · [[sources/clickhouse-13-mistakes]]
 
-相关页面：[[topics/sql-indexing]] · [[topics/b-tree-indexes]] · [[topics/sql-execution-plans]] · [[topics/index-supported-sorting-and-pagination]]
+相关页面：[[topics/sql-indexing]] · [[topics/b-tree-indexes]] · [[topics/sql-execution-plans]] · [[topics/index-supported-sorting-and-pagination]] · [[topics/clickhouse-common-pitfalls]] · [[sources/clickhouse-13-mistakes]]

@@ -2,8 +2,8 @@
 title: ClickHouse 部署拓扑
 type: topic
 tags: [数据库, ClickHouse, 部署, 架构]
-source_count: 7
-updated: 2026-04-16
+source_count: 8
+updated: 2026-04-26
 ---
 
 > 我对 ClickHouse 部署最强烈的感受是，它逼你放弃“有没有标准架构”这种偷懒问法，转而老老实实回答自己到底想解决哪一类瓶颈。
@@ -31,6 +31,19 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 1. 单机先跑到接近容量或并发瓶颈；
 2. 需要横向扩容时增加 shard；
 3. 需要高可用时再给每个 shard 增加 replica。
+
+## 先纵向扩展，再横向扩展
+
+[[sources/clickhouse-13-mistakes]] 又补上了一个我觉得很重要的判断：ClickHouse 新手经常过早水平扩展。因为 Kubernetes 让“多节点部署”看起来很自然，很多人会直接跳到几十个节点、复杂编排和大量 shard。
+
+但 ClickHouse 本来就很擅长吃满单机资源。过滤、排序、聚合这些分析查询阶段通常可以在单机内并行化，优先纵向扩容往往更便宜、运维面更小，join 等操作也少了跨网络搬数据的成本。
+
+这不是说不要 shard，而是不要把 shard 当成默认起点。更稳的顺序是：
+
+1. 先确认单机资源是否真的成为瓶颈；
+2. 需要高可用时加副本；
+3. 容量、I/O 或并行度超过单机上限时再加 shard；
+4. 引入 shard 后，重新评估跨 shard 聚合、Top-N、写入路由和 Keeper 压力。
 
 ## Keeper、`Distributed` 与 `ON CLUSTER` 的角色分工
 
@@ -101,8 +114,8 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 
 ## 一个实用的部署判断框架
 
-- **先加副本**：当核心诉求是高可用、节点故障自动接管、避免单节点损坏导致服务中断。
-- **先加分片**：当单机已经扛不住容量、I/O 或并行查询压力。
+- **先纵向扩容或加副本**：当单机资源仍可提升，或核心诉求是高可用、节点故障自动接管、避免单节点损坏导致服务中断。
+- **再加分片**：当单机已经扛不住容量、I/O 或并行查询压力。
 - **考虑存算分离**：当冷数据很多、本地盘成本高、需要把容量层转移到对象存储。
 - **加冷热分层**：当远端对象存储已经引入，但又需要本地缓存保证热工作集性能。
 - **慎用多地域**：当跨地域需求是真实存在的容灾需求，而不是模糊的“全球部署更高级”。
@@ -115,6 +128,6 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 
 ---
 
-来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]]
+来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]]
 
-相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]]
+相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]]

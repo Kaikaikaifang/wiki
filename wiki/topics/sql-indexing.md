@@ -6,8 +6,8 @@ tags:
   - 索引
   - 数据库
   - 性能
-source_count: 9
-updated: 2026-04-16
+source_count: 10
+updated: 2026-04-26
 ---
 
 > 我越来越不喜欢把“索引优化”说成数据库专家的黑魔法，因为它本质上更像应用开发者是否真正理解自己在怎么访问数据。
@@ -48,12 +48,18 @@ Markus Winand 把索引的价值分成三层。我很喜欢这种讲法，因为
 
 这份来源反复强调：很多所谓“可扩展性”讨论，其实在回避索引设计问题。横向扩展能提升吞吐，但**不能神奇地缩短单条低效查询的响应时间**。如果查询把大量无关索引项、表块和排序步骤都卷了进来，硬件只能缓解，不能从根上修正访问路径。我很认同这一点，因为它把“先加资源”从默认反应，重新拉回到了“先理解访问路径”。
 
+## ClickHouse 的主键提醒我不要套用旧直觉
+
+[[sources/clickhouse-13-mistakes]] 让我看到同一个主题在 OLAP 系统里的变体：ClickHouse 的 primary key 不是 B-tree 式点查入口，而是依赖 `ORDER BY` 物理排序的稀疏索引。它的核心价值是让系统少扫 granule、提升压缩效果，而不是为每一行提供精确定位路径。
+
+这让我更确定一件事：所谓“索引能力”不能脱离存储引擎谈。B-tree、稀疏主键、data skipping index 都是在为查询提供访问路径，但它们服务的物理模型完全不同。把 OLTP 的主键直觉直接搬到 ClickHouse，会让人高估点查和 `LIMIT`，低估排序键设计的重要性。
+
 ## 一个实用判断句
 
 如果一个 SQL 查询很慢，先不要问“数据库为什么这么慢”，而要先问：**我的查询有没有给数据库一条可被 B-tree 高效利用的路径？**
 
 ---
 
-来源：[[sources/use-the-index-luke-preface]] · [[sources/use-the-index-luke-anatomy-of-an-index]] · [[sources/use-the-index-luke-the-where-clause]] · [[sources/use-the-index-luke-testing-and-scalability]] · [[sources/use-the-index-luke-clustering-data]] · [[sources/use-the-index-luke-sorting-and-grouping]] · [[sources/use-the-index-luke-partial-results]] · [[sources/use-the-index-luke-modifying-data]] · [[sources/use-the-index-luke-myth-directory]]
+来源：[[sources/use-the-index-luke-preface]] · [[sources/use-the-index-luke-anatomy-of-an-index]] · [[sources/use-the-index-luke-the-where-clause]] · [[sources/use-the-index-luke-testing-and-scalability]] · [[sources/use-the-index-luke-clustering-data]] · [[sources/use-the-index-luke-sorting-and-grouping]] · [[sources/use-the-index-luke-partial-results]] · [[sources/use-the-index-luke-modifying-data]] · [[sources/use-the-index-luke-myth-directory]] · [[sources/clickhouse-13-mistakes]]
 
-相关页面：[[topics/b-tree-indexes]] · [[topics/query-shape-and-index-usage]] · [[topics/sql-execution-plans]] · [[topics/index-maintenance-tradeoffs]] · [[topics/service-db-network-latency-diagnosis]] · [[entities/markus-winand]]
+相关页面：[[topics/b-tree-indexes]] · [[topics/query-shape-and-index-usage]] · [[topics/sql-execution-plans]] · [[topics/index-maintenance-tradeoffs]] · [[topics/service-db-network-latency-diagnosis]] · [[topics/clickhouse-common-pitfalls]] · [[entities/markus-winand]] · [[sources/clickhouse-13-mistakes]]

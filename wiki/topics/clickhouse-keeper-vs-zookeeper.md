@@ -2,8 +2,8 @@
 title: ClickHouse Keeper 与 ZooKeeper
 type: topic
 tags: [数据库, ClickHouse, Keeper, ZooKeeper, 高可用]
-source_count: 3
-updated: 2026-04-16
+source_count: 4
+updated: 2026-04-26
 ---
 
 > 我现在越来越不把这个问题理解成“Keeper 能不能替代 ZooKeeper”，而更愿意把它看成一次关于组织边界的选择：你要的是 ClickHouse 专用协调层，还是平台级通用协调服务。
@@ -62,6 +62,12 @@ updated: 2026-04-16
 3. 你的现网剧本、监控体系和故障处理经验高度围绕 ZooKeeper 构建。
 4. 迁移窗口有限，当前没有足够收益支撑一次协调层切换。
 
+## 只读表是协调层问题的信号
+
+[[sources/clickhouse-13-mistakes]] 里提到的 readonly tables 给这个主题补了一个很实用的故障视角：在自管复制环境里，如果节点失去和协调服务的连接，它可能无法继续参与复制，并拒绝写入。
+
+这意味着 Keeper / ZooKeeper 的资源不足、混部抢资源或网络不稳定，最后可能不是以“协调层报警”这种清晰形式出现，而是以 ClickHouse 表突然只读的方式暴露。对我来说，这强化了一个判断：协调层不是数据库外面的旁路组件，而是复制写路径的一部分。
+
 ## 使用建议
 
 ### 如果你选 Keeper
@@ -89,6 +95,6 @@ updated: 2026-04-16
 
 ---
 
-来源：[[sources/clickhouse-keeper]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-manage-and-deploy]]
+来源：[[sources/clickhouse-keeper]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-13-mistakes]]
 
-相关页面：[[topics/clickhouse-deployment-topologies]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-keeper]]
+相关页面：[[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-common-pitfalls]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-13-mistakes]]

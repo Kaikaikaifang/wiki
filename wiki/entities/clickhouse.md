@@ -2,8 +2,8 @@
 title: ClickHouse 数据库
 type: entity
 tags: [数据库, ClickHouse, OLAP, 列式存储]
-source_count: 12
-updated: 2026-04-16
+source_count: 13
+updated: 2026-04-26
 ---
 
 > 我对 ClickHouse 的兴趣，已经不再只是“它是一个跑得很快的分析数据库”，而是它把数据库工程里很多原本被拆开的决策重新摆到了同一张桌面上。
@@ -17,6 +17,7 @@ updated: 2026-04-16
 - [[sources/clickhouse-separation-storage-compute]] 与 [[sources/clickhouse-external-disks-for-storing-data]] 讨论**如何让存储介质、成本与冷热数据分层进入架构设计**；
 - [[sources/clickhouse-keeper]] 则把问题进一步推进到**协调层到底该如何选型**；
 - [[sources/clickhouse-operator-introduction]]、[[sources/clickhouse-replicated-table-engines]] 与 [[sources/clickhouse-attach-as-replicated]] 则把问题继续推进到**生产集群到底该在什么时候选 replicated，引擎选错后又如何迁移**。
+- [[sources/clickhouse-13-mistakes]] 则把这些主题拉回到入门阶段最容易被忽略的物理约束：part 合并、稀疏主键、`LIMIT`、物化视图、Keeper 和内存治理。
 
 这让我把“数据库性能”从单一 SQL 优化问题，拆成至少三类工程问题：
 
@@ -32,6 +33,7 @@ updated: 2026-04-16
 - **复制也分层**：数据库层的 `Replicated` 解决 schema 同步，表层的 `ReplicatedMergeTree` 解决数据副本。
 - **存储策略可组合**：本地盘、对象存储、cache disk、`storage_policy` 可以按工作负载拼出不同拓扑。
 - **安全与运维不是附属项**：用户隔离、监控接口、分布式 DDL、网络与升级都被纳入一组完整运维能力。
+- **性能来自顺着物理模型设计**：批量写入、低基数分区、合适的 `ORDER BY`、克制使用 mutations 和物化视图，都是让后台 merge、Keeper 和内存池不过载的前提。
 
 这些特征说明 ClickHouse 不是只追求“单条查询快”，而是在构造一台围绕分析工作负载设计的分布式机器。我很喜欢这种系统气质，因为它迫使人停止把数据库仅仅看成一个执行 SQL 的黑盒。
 
@@ -43,6 +45,6 @@ updated: 2026-04-16
 
 ---
 
-来源：[[sources/clickhouse-query-cache]] · [[sources/introducing-the-clickhouse-query-cache]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/altinity-converting-mergetree-to-replicated]] · [[sources/clickhouse-replicated-table-engines]] · [[sources/clickhouse-attach-as-replicated]]
+来源：[[sources/clickhouse-query-cache]] · [[sources/introducing-the-clickhouse-query-cache]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/altinity-converting-mergetree-to-replicated]] · [[sources/clickhouse-replicated-table-engines]] · [[sources/clickhouse-attach-as-replicated]] · [[sources/clickhouse-13-mistakes]]
 
-相关页面：[[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/sql-indexing]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-query-cache]] · [[sources/introducing-the-clickhouse-query-cache]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-replicated-table-engines]]
+相关页面：[[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[topics/sql-indexing]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-query-cache]] · [[sources/introducing-the-clickhouse-query-cache]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-replicated-table-engines]] · [[sources/clickhouse-13-mistakes]]

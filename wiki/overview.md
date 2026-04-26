@@ -2,8 +2,8 @@
 title: 整体综述
 type: overview
 tags: [方法论, 知识管理]
-source_count: 18
-updated: 2026-04-16
+source_count: 19
+updated: 2026-04-26
 ---
 
 这份 wiki 越往后写，我越清楚它不是“资料仓库”，而更像一条不断长出来的思考主线。起点当然是 [[topics/llm-wiki-pattern]]：Karpathy 提醒我，真正有复利的不是一次次对着原始资料发问，而是把理解编译进一个会持续演化的知识系统。
@@ -32,6 +32,8 @@ updated: 2026-04-16
 
 随后归档的 [[topics/clickhouse-single-node-to-cluster-migration]]，则把这些知识进一步落到一个更贴近实战的问题上：当现网还是单节点 ClickHouse 时，迁到多副本多分片集群到底能不能“无缝切换”，以及表引擎切换应不应该和集群迁移绑定在同一次工程里。这个页面把“可以用 `MergeTree`”与“适不适合多副本目标”明确拆开，也把业务侧平滑切换与数据库内部透明升级区分开了。
 
+这次摄入的 [[sources/clickhouse-13-mistakes]] 则把 ClickHouse 主线从“功能与拓扑怎么选”拉回到更基础但更容易出事故的地方：写入 part、partition key、稀疏主键、`LIMIT`、物化视图、Keeper 和内存限制。它新增了 [[topics/clickhouse-common-pitfalls]]，提醒我 ClickHouse 的很多问题不是单点配置错误，而是没有顺着 OLAP 物理模型设计系统。
+
 ## 当前关注
 
 如果要用一句更个人的话来概括，这一阶段我最关心的不是“又学了哪些零散知识点”，而是能不能把这些主题收敛成几套稳定的判断框架。下面这些点，都是我觉得接下来值得继续深挖的方向。
@@ -48,6 +50,7 @@ updated: 2026-04-16
 - 理解 ClickHouse 中 Keeper 与 ZooKeeper 的适用边界，以及协调层选型如何影响生产复杂度
 - 理解 ClickHouse 中 `Replicated` 数据库引擎与 `ReplicatedMergeTree` 的分工，以及旧表转 replicated 的风险边界
 - 理解单节点 ClickHouse 迁到集群时，哪些变化属于拓扑升级，哪些变化属于表级迁移工程
+- 理解 ClickHouse 常见误区背后的物理约束：part 合并、稀疏主键、Keeper 协调与内存治理
 
 ## 演化轨迹
 
@@ -65,7 +68,8 @@ updated: 2026-04-16
 - 2026-04-16：摄入 ClickHouse Keeper 文档，新增 Keeper 与 ZooKeeper 的协调层选型主题
 - 2026-04-16：摄入 ClickHouse replicated 引擎与旧表转换文档，新增生产复制与迁移主题
 - 2026-04-16：归档单节点 ClickHouse 迁移到集群的问答，补充无缝切换与表引擎切换的实操判断
+- 2026-04-26：摄入 ClickHouse 入门 13 个误区，新增常见误区与物理模型检查表
 
 ---
 
-相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]]
+相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]]

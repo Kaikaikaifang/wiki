@@ -17,6 +17,7 @@ updated: 2026-04-26
 - [[topics/agent-computer-interface]] — 面向模型而非人类的工具接口设计原则
 - [[topics/agentic-systems]] — 从增强型 LLM 到 workflow 与自治 agent 的复杂度阶梯
 - [[topics/b-tree-indexes]] — 用叶子链表、树遍历与回表理解索引为什么会快或慢
+- [[topics/clickhouse-common-pitfalls]] — 用 part、主键、Keeper 与内存模型理解 ClickHouse 常见入门误区
 - [[topics/clickhouse-deployment-topologies]] — 把分片、副本、Keeper、存算分离与冷热分层放进同一部署判断框架
 - [[topics/clickhouse-operator-installation-on-shared-clusters]] — 在共享 Kubernetes 集群里安装官方 ClickHouse Operator 时，如何判断 Helm、watch 范围与 CRD 管理策略
 - [[topics/clickhouse-keeper-vs-zookeeper]] — 用“专用协调层”与“通用协调服务”的边界判断 Keeper 与 ZooKeeper
@@ -58,6 +59,7 @@ updated: 2026-04-26
 
 - [[sources/building-effective-ai-agents]] — Anthropic 的 agent 工程文章（2026-04-13，网络文章）
 - [[sources/altinity-converting-mergetree-to-replicated]] — Altinity 关于把 `MergeTree` 转为 `ReplicatedMergeTree` 的实务路线图（2026-04-16，网络文章）
+- [[sources/clickhouse-13-mistakes]] — ClickHouse 官方总结的 13 个入门常见误区（2026-04-26，网络文章）
 - [[sources/clickhouse-attach-as-replicated]] — ClickHouse `ATTACH ... AS REPLICATED` 文档，强调本地数据与复制元数据分离（2026-04-16，网络文章）
 - [[sources/clickhouse-external-disks-for-storing-data]] — ClickHouse 外部存储与文件缓存文档（2026-04-16，网络文章）
 - [[sources/clickhouse-keeper]] — ClickHouse Keeper 文档，聚焦配置、兼容边界与迁移要点（2026-04-16，网络文章）
