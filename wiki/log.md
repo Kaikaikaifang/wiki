@@ -193,3 +193,11 @@
 ## [2026-04-26] wiki | 补记生产量级回灌为何还需继续升级
 
 更新 `topics/clickhouse-production-migration`，并同步把 `test-migration` 里的新文档补齐：明确“快照恢复源 -> OSS -> 小时级批次 -> 目标导入”已经被验证可行，但还不足以直接支撑 `scalar 2973.95 亿`、`log 1287.73 亿` 这一档生产历史数据的最终自动化回灌；同时把两条正式生产路径沉淀下来，一条是“热数据优先切流，深历史后台慢迁”，另一条是“若必须全历史先入新集群，则升级成 shard-aware 回灌平台”，并把最优先的三项升级固定为按 shard 直写 `*_local`、多快照克隆并行导出和“日期 x shard + 自动 split”的主批次模型。
+
+## [2026-04-26] ingest | ClickHouse 入门 13 个误区
+
+摄入 ClickHouse 官方文章 `Getting started with ClickHouse? 13 mistakes and how to avoid them`，将剪藏归档到 `raw/articles/clickhouse-13-mistakes.md`，新增 `sources/clickhouse-13-mistakes` 与 `topics/clickhouse-common-pitfalls`，并更新 ClickHouse 实体、部署拓扑、Keeper 选型、SQL 索引、查询形状和 join 性能页面。核心沉淀是：ClickHouse 常见入门事故背后不是单个配置问题，而是没有顺着 part 合并、稀疏主键、Keeper 协调和内存治理这些物理约束设计系统。
+
+## [2026-04-26] query | 澄清按 projectId 分片与物理落点的区别
+
+更新 `topics/clickhouse-production-migration`，把一次围绕“能否先把旧单机 `attach` 成一个 replicated shard，再让新数据继续按 `projectId` 写入集群”的讨论沉淀进 wiki：明确 shard key 决定的是未来写入路由，而不是历史数据当前的物理落点；如果旧历史只是整体挂到 shard1，那么某些按 hash 理应属于 shard2 的项目会出现“历史在 shard1、新增在 shard2”的裂缝，这意味着 `attach + replicated` 最多只能充当过渡态，不能等价成已经完成真正的按键分片。
