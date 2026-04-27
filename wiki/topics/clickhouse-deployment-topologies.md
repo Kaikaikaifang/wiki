@@ -2,8 +2,8 @@
 title: ClickHouse 部署拓扑
 type: topic
 tags: [数据库, ClickHouse, 部署, 架构]
-source_count: 8
-updated: 2026-04-26
+source_count: 9
+updated: 2026-04-27
 ---
 
 > 我对 ClickHouse 部署最强烈的感受是，它逼你放弃“有没有标准架构”这种偷懒问法，转而老老实实回答自己到底想解决哪一类瓶颈。
@@ -81,6 +81,8 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 
 这意味着“用了 Operator”不等于“复制问题已经自动解决”。如果目标是副本级高可用，那么数据库层和表层都要选对 replicated 路径。
 
+[[sources/oneuptime-replicated-replacingmergetree]] 还把表层 replicated 的操作面补得更具体：每个副本需要通过 `{shard}`、`{replica}` 这类宏落到稳定的 Keeper 路径上，运行后还要通过 `system.replicas` 观察 `absolute_delay`、`queue_size`、`parts_to_check` 等状态。也就是说，表引擎选择不是 DDL 结束时就完成了，复制队列和合并健康度会持续决定这张表是否真的处在高可用状态。
+
 ## 存算分离是另一条独立维度
 
 [[sources/clickhouse-separation-storage-compute]] 说明，ClickHouse 可以把 `MergeTree` 数据放在 S3 等对象存储上，让计算和存储独立扩缩容。这个决策和“要不要分片”并不是同一个问题：
@@ -128,6 +130,6 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 
 ---
 
-来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]]
+来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]]
 
-相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]]
+相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]]

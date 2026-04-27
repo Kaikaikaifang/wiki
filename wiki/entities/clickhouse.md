@@ -2,7 +2,7 @@
 title: ClickHouse 数据库
 type: entity
 tags: [数据库, ClickHouse, OLAP, 列式存储]
-source_count: 14
+source_count: 15
 updated: 2026-04-27
 ---
 
@@ -19,6 +19,7 @@ updated: 2026-04-27
 - [[sources/clickhouse-operator-introduction]]、[[sources/clickhouse-replicated-table-engines]] 与 [[sources/clickhouse-attach-as-replicated]] 则把问题继续推进到**生产集群到底该在什么时候选 replicated，引擎选错后又如何迁移**。
 - [[sources/clickhouse-13-mistakes]] 则把这些主题拉回到入门阶段最容易被忽略的物理约束：part 合并、稀疏主键、`LIMIT`、物化视图、Keeper 和内存治理。
 - [[sources/clickhouse-issue-20867]] 用一个小 issue 补上了 `ReplacingMergeTree` 家族的真实边界：表内 replacement、version 列和 replicated insert deduplication 是三层不同机制。
+- [[sources/oneuptime-replicated-replacingmergetree]] 则从教程角度补齐了 `ReplicatedReplacingMergeTree` 的标准用法：identity、version、复制宏、`FINAL` 和副本健康检查要一起设计。
 
 这让我把“数据库性能”从单一 SQL 优化问题，拆成至少三类工程问题：
 
@@ -47,6 +48,6 @@ updated: 2026-04-27
 
 ---
 
-来源：[[sources/clickhouse-query-cache]] · [[sources/introducing-the-clickhouse-query-cache]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/altinity-converting-mergetree-to-replicated]] · [[sources/clickhouse-replicated-table-engines]] · [[sources/clickhouse-attach-as-replicated]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-issue-20867]]
+来源：[[sources/clickhouse-query-cache]] · [[sources/introducing-the-clickhouse-query-cache]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/altinity-converting-mergetree-to-replicated]] · [[sources/clickhouse-replicated-table-engines]] · [[sources/clickhouse-attach-as-replicated]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-issue-20867]] · [[sources/oneuptime-replicated-replacingmergetree]]
 
-相关页面：[[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[topics/sql-indexing]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-query-cache]] · [[sources/introducing-the-clickhouse-query-cache]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-replicated-table-engines]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-issue-20867]]
+相关页面：[[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[topics/sql-indexing]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-query-cache]] · [[sources/introducing-the-clickhouse-query-cache]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-replicated-table-engines]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-issue-20867]] · [[sources/oneuptime-replicated-replacingmergetree]]

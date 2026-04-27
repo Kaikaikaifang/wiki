@@ -74,6 +74,7 @@ updated: 2026-04-27
 - [[sources/how-we-built-our-multi-agent-research-system]] — Anthropic 关于 Research 多智能体系统的复盘（2026-04-13，网络文章）
 - [[sources/introducing-the-clickhouse-query-cache]] — ClickHouse Query Cache 的设计与早期使用解读（2023-02-09，网络文章）
 - [[sources/llm-wiki]] — LLM Wiki 模式论文（Karpathy，2026-04-13，网络文章）
+- [[sources/oneuptime-replicated-replacingmergetree]] — OneUptime 关于 `ReplicatedReplacingMergeTree` 标准建模、`FINAL` 与副本健康检查的教程（2026-03-31，网络文章）
 - [[sources/qmd]] — QMD README（tobi/qmd，2026-04-13，项目文档）
 - [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]] — Anthropic 关于 Managed Agents 运行时架构的文章（2026-04-13，网络文章）
 - [[sources/use-the-index-luke-anatomy-of-an-index]] — Use The Index, Luke 的索引结构章节（2026-04-14，书籍章节）

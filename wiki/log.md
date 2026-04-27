@@ -221,3 +221,7 @@
 ## [2026-04-27] ingest | ClickHouse Issue 20867
 
 摄入 GitHub issue `ReplicatedReplacingMergeTree replaces only when the new value is bigger`，新增 `sources/clickhouse-issue-20867` 并归档到 `raw/articles/clickhouse-issue-20867.md`；同步更新 ClickHouse 常见误区、复制引擎与实体页。核心沉淀是：`ReplacingMergeTree` 的 replacement、version 列与 replicated insert deduplication 是三层不同机制，做每日快照或最后状态表时必须拆开设计业务 key、版本信号和插入唯一性。
+
+## [2026-04-27] ingest | OneUptime ReplicatedReplacingMergeTree 教程
+
+摄入 OneUptime 文章 `How to Use ReplicatedReplacingMergeTree in ClickHouse`，新增 `sources/oneuptime-replicated-replacingmergetree` 并归档到 `raw/articles/oneuptime-replicated-replacingmergetree.md`；同步更新 ClickHouse 复制引擎、常见误区、部署拓扑与实体页。核心沉淀是：`ReplicatedReplacingMergeTree` 的标准用法应把 `ORDER BY` 作为逻辑身份、version 作为新旧顺序、Keeper 宏与 `system.replicas` 作为复制运行面，而 `FINAL` / `OPTIMIZE FINAL` 只是显式支付成本换取去重可见性或维护收敛。
