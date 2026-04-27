@@ -229,3 +229,7 @@
 ## [2026-04-27] workflow | 修正 OneUptime 剪藏归档
 
 将仍停留在 `Clippings/` 的 `How to Use ReplicatedReplacingMergeTree in ClickHouse.md` 移动并覆盖到 `raw/articles/oneuptime-replicated-replacingmergetree.md`，让本次摄入的原始资料回到真实 Obsidian Web Clipper 剪藏，而不是网页抓取摘要。
+
+## [2026-04-27] query | 补记 clickhouse-copier 验证失败结论
+
+更新 `topics/clickhouse-production-migration`，把这轮 `dev-admin` 上的 `clickhouse-copier` 验证结论正式沉淀下来：`final` 版本工具虽然能连上静态源、Keeper 和目标集群，也能走到 piece 表创建和少量写入阶段，但它会与 `Replicated` 数据库 DDL 语义冲突，并在 `24.3` 工具到 `26.3` 目标端链路上继续暴露协议兼容问题，因此不再作为正式生产历史回灌主路径候选。
