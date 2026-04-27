@@ -1,38 +1,22 @@
 ---
 title: "How to Use ReplicatedReplacingMergeTree in ClickHouse"
 source: "https://oneuptime.com/blog/post/2026-03-31-clickhouse-replicated-replacingmergetree/view"
-author: Nawaz Dhandala
+author:
+  - "[[Nawaz Dhandala]]"
 published: 2026-03-31
 created: 2026-04-27
-description: "OneUptime tutorial on using ReplicatedReplacingMergeTree for replicated upsert-like tables in ClickHouse."
+description: "Learn how to use ReplicatedReplacingMergeTree in ClickHouse to deduplicate rows by primary key across replicated nodes, keeping only the latest version of each record."
 tags:
   - "clippings"
-  - "clickhouse"
-  - "tutorial"
+---
 ---
 
-## Metadata
+`ReplicatedReplacingMergeTree` combines `ReplacingMergeTree` semantics with ClickHouse replication. It deduplicates rows that share the same `ORDER BY` key during background merges, keeping only the row with the highest version value (or the last inserted row when no version column is specified). Replication ensures that inserts and merges are synchronized across all replicas via ZooKeeper or ClickHouse Keeper. Use it for mutable datasets - like user profiles, order statuses, or product inventories - that need high availability.
 
-- Site: OneUptime
-- Title: `How to Use ReplicatedReplacingMergeTree in ClickHouse`
-- Author: Nawaz Dhandala
-- Published: `2026-03-31`
-- URL: `https://oneuptime.com/blog/post/2026-03-31-clickhouse-replicated-replacingmergetree/view`
-
-## Captured Summary
-
-The article explains `ReplicatedReplacingMergeTree` as the replicated counterpart of `ReplacingMergeTree`. It combines two ideas:
-
-- rows with the same `ORDER BY` key are eventually deduplicated during background merges;
-- data is replicated across replicas using ZooKeeper or ClickHouse Keeper.
-
-The suggested use cases are mutable analytical datasets that still need high availability, such as user profiles, order status, or product inventory. The key modeling idea is to use `ORDER BY` as the deduplication identity and a separate version column to decide which row wins.
-
-## Macros and Table Shape
-
-The article starts with replica macros, usually placed in a ClickHouse server config file:
+## Prerequisites: Macros Configuration
 
 ```xml
+<!-- /etc/clickhouse-server/config.d/macros.xml -->
 <clickhouse>
   <macros>
     <shard>01</shard>
@@ -41,62 +25,203 @@ The article starts with replica macros, usually placed in a ClickHouse server co
 </clickhouse>
 ```
 
-It then shows a replicated replacing table shaped roughly like:
+## Creating a ReplicatedReplacingMergeTree Table
 
 ```sql
+-- Run on each replica
 CREATE TABLE user_profiles
 (
-    user_id UInt64,
-    username String,
-    email String,
-    plan LowCardinality(String),
-    country LowCardinality(String),
-    updated_at DateTime,
-    version UInt64
+    user_id     UInt64,
+    username    String,
+    email       String,
+    plan        LowCardinality(String),
+    country     LowCardinality(String),
+    updated_at  DateTime,
+    version     UInt64          -- used as the version column for replacement
 )
 ENGINE = ReplicatedReplacingMergeTree(
     '/clickhouse/tables/{shard}/user_profiles',
     '{replica}',
-    version
+    version             -- rows with higher version win during merge
 )
 PARTITION BY toYYYYMM(updated_at)
-ORDER BY user_id;
+ORDER BY user_id;       -- ORDER BY key determines which rows deduplicate together
 ```
 
-The article emphasizes that `ORDER BY user_id` controls which rows are considered duplicates, while `version` controls which duplicate survives after a merge.
-
-## Update and Read Pattern
-
-To update a logical row, insert a new row with the same `ORDER BY` key and a higher `version`. Until background merges run, both physical rows may be present.
-
-For immediate deduplicated reads, the article uses:
+## Inserting Initial Data
 
 ```sql
-SELECT ...
+INSERT INTO user_profiles VALUES
+    (1001, 'alice', 'alice@example.com', 'free',    'US', '2024-06-01 10:00:00', 1),
+    (1002, 'bob',   'bob@example.com',   'pro',     'DE', '2024-06-01 10:00:00', 1),
+    (1003, 'carol', 'carol@example.com', 'premium', 'JP', '2024-06-01 10:00:00', 1);
+```
+
+## Upserting an Updated Row
+
+Insert a new row with the same `ORDER BY` key and a higher version to replace the old one.
+
+```sql
+-- Alice upgraded her plan and changed her email
+INSERT INTO user_profiles VALUES
+    (1001, 'alice', 'alice_new@example.com', 'premium', 'US', '2024-06-15 09:00:00', 2);
+```
+
+Both rows exist until a background merge occurs. During the merge, the row with `version = 2` replaces `version = 1`.
+
+## Reading With FINAL to See Deduplicated Data
+
+Use `FINAL` to force deduplication at query time, even before background merges run.
+
+```sql
+SELECT
+    user_id,
+    username,
+    email,
+    plan,
+    updated_at,
+    version
 FROM user_profiles FINAL
 ORDER BY user_id;
 ```
+```
+user_id  username  email                  plan     updated_at            version
+1001     alice     alice_new@example.com  premium  2024-06-15 09:00:00   2
+1002     bob       bob@example.com        pro      2024-06-01 10:00:00   1
+1003     carol     carol@example.com      premium  2024-06-01 10:00:00   1
+```
 
-For bulk updates, it sketches an insert-select pattern that reads the current state using `FINAL`, joins with an update source, and writes rows with `version + 1`.
+## Bulk Update Pattern
 
-## Operational Checks
+```sql
+-- Simulate a batch update of subscription statuses
+INSERT INTO user_profiles
+SELECT
+    user_id,
+    username,
+    email,
+    new_plan          AS plan,
+    country,
+    now()             AS updated_at,
+    version + 1       AS version
+FROM (
+    SELECT
+        p.user_id,
+        p.username,
+        p.email,
+        s.new_plan,
+        p.country,
+        p.version
+    FROM user_profiles FINAL AS p
+    JOIN plan_upgrades AS s ON p.user_id = s.user_id
+    WHERE s.effective_date = today()
+);
+```
 
-The article includes several operational patterns:
+## Without a Version Column
 
-- query `system.replicas` to inspect `replica_name`, `is_leader`, `absolute_delay`, `queue_size`, and `parts_to_check`;
-- use `OPTIMIZE TABLE ... PARTITION ... FINAL` to force eager deduplication for a partition;
-- use `FINAL` or a deduplication-aware query when counting unique logical rows before merges have caught up;
-- expose a `Distributed` table over local replicated tables for cluster-wide querying.
+If no version column is provided, ClickHouse keeps the last physically inserted row among duplicates.
 
-## Limitations Captured
+```sql
+CREATE TABLE order_statuses
+(
+    order_id   UInt64,
+    status     LowCardinality(String),
+    updated_at DateTime
+)
+ENGINE = ReplicatedReplacingMergeTree(
+    '/clickhouse/tables/{shard}/order_statuses',
+    '{replica}'
+    -- no version column: last insert wins
+)
+ORDER BY order_id;
 
-The article highlights four main limitations:
+INSERT INTO order_statuses VALUES (5001, 'pending',   '2024-06-15 10:00:00');
+INSERT INTO order_statuses VALUES (5001, 'shipped',   '2024-06-15 10:30:00');
+INSERT INTO order_statuses VALUES (5001, 'delivered', '2024-06-15 18:00:00');
 
-- `FINAL` has a read-time performance cost;
-- deduplication is eventual until background merges run;
-- replicated tables require ZooKeeper or ClickHouse Keeper;
-- the `ORDER BY` key is a table-design decision and cannot be casually changed after creation.
+-- After merge, only the last insert per order_id remains
+SELECT * FROM order_statuses FINAL WHERE order_id = 5001;
+```
+```
+order_id  status     updated_at
+5001      delivered  2024-06-15 18:00:00
+```
 
-## Captured Lesson
+## Checking Replication Health
 
-The tutorial is useful as a straightforward happy-path introduction. Read together with the ClickHouse issue on `ReplicatedReplacingMergeTree`, the practical rule becomes sharper: the standard pattern is `ORDER BY` for identity, `version` for recency, Keeper for replication, and `FINAL` only when the query needs a deduplicated view before merges finish.
+```sql
+SELECT
+    replica_name,
+    is_leader,
+    absolute_delay AS lag_seconds,
+    queue_size,
+    parts_to_check
+FROM system.replicas
+WHERE table = 'user_profiles';
+```
+```
+replica_name  is_leader  lag_seconds  queue_size  parts_to_check
+replica-01    1          0            0           0
+replica-02    0          0            0           0
+```
+
+## Forcing a Merge to Deduplicate
+
+```sql
+-- Deduplicate all parts in the June 2024 partition
+OPTIMIZE TABLE user_profiles PARTITION '202406' FINAL;
+```
+
+After this, duplicate rows within the partition are gone and `FINAL` in queries becomes a no-op for that partition.
+
+## Counting Actual Unique Users
+
+Without `FINAL`, a count may include duplicates. Always use `FINAL` or a deduplication-aware query.
+
+```sql
+-- Correct: deduplicated count
+SELECT count() FROM user_profiles FINAL;
+
+-- Wrong (may double-count before merge):
+SELECT count() FROM user_profiles;
+```
+
+## Pairing With a Distributed Table
+
+```sql
+CREATE TABLE user_profiles_dist
+AS user_profiles
+ENGINE = Distributed(
+    analytics_cluster,
+    default,
+    user_profiles,
+    user_id
+);
+
+-- Cross-shard deduplicated query
+SELECT count() FROM user_profiles_dist FINAL;
+```
+
+## Limitations
+
+- `FINAL` has a performance cost - it deduplicates at read time before merges happen.
+- Deduplication is eventual: duplicate rows exist briefly until a background merge runs.
+- Requires ZooKeeper/ClickHouse Keeper.
+- `ORDER BY` key cannot be changed after table creation.
+
+## Summary
+
+`ReplicatedReplacingMergeTree` is the replicated version of `ReplacingMergeTree`. It deduplicates rows by `ORDER BY` key (keeping the highest version) during background merges, and replicates all data and merge operations for high availability. Use `FINAL` in queries for immediately consistent reads, and `OPTIMIZE ... FINAL` to eagerly deduplicate a partition.
+
+@nawazdhandala • Mar 31, 2026 •
+
+Nawaz is building OneUptime with a passion for engineering reliable systems and improving observability.
+
+[GitHub](https://github.com/nawazdhandala)
+
+### Improve this Blog Post
+
+All our blog posts are open source. Found a typo, want to add more detail, or have a better explanation? Anyone can contribute and make this post better for everyone.
+
+[Edit this Post on GitHub](https://github.com/oneuptime/blog/tree/master/posts/2026-03-31-clickhouse-replicated-replacingmergetree) [Contributing Guidelines](https://github.com/oneuptime/blog)

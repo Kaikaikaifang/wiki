@@ -225,3 +225,7 @@
 ## [2026-04-27] ingest | OneUptime ReplicatedReplacingMergeTree 教程
 
 摄入 OneUptime 文章 `How to Use ReplicatedReplacingMergeTree in ClickHouse`，新增 `sources/oneuptime-replicated-replacingmergetree` 并归档到 `raw/articles/oneuptime-replicated-replacingmergetree.md`；同步更新 ClickHouse 复制引擎、常见误区、部署拓扑与实体页。核心沉淀是：`ReplicatedReplacingMergeTree` 的标准用法应把 `ORDER BY` 作为逻辑身份、version 作为新旧顺序、Keeper 宏与 `system.replicas` 作为复制运行面，而 `FINAL` / `OPTIMIZE FINAL` 只是显式支付成本换取去重可见性或维护收敛。
+
+## [2026-04-27] workflow | 修正 OneUptime 剪藏归档
+
+将仍停留在 `Clippings/` 的 `How to Use ReplicatedReplacingMergeTree in ClickHouse.md` 移动并覆盖到 `raw/articles/oneuptime-replicated-replacingmergetree.md`，让本次摄入的原始资料回到真实 Obsidian Web Clipper 剪藏，而不是网页抓取摘要。
