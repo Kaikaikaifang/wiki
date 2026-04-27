@@ -241,3 +241,7 @@
 ## [2026-04-27] query | 统一三张表的回灌方案
 
 更新 `topics/clickhouse-production-migration`，把 `scalar`、`log`、`media` 从“分表治理”调整为统一回灌方案：三张表共享同一个控制面、批次模型、状态机、重试、split、对账和完成判定，只在并发、split 阈值、导入配额等参数上体现数据量差异，避免生产迁移时维护三套执行纪律。
+
+## [2026-04-27] query | 移除生产回灌里的草图口径
+
+更新 `topics/clickhouse-production-migration`，明确所有回灌方案设计都必须面向生产执行，不保留手写取模 shard 路由等草图口径；目标 shard 必须来自目标 `Distributed` 表真实 sharding key、`system.clusters` 的 shard 顺序与 weight，或者直接交给 `Distributed` 表路由，只有通过等价性验证后才允许直写 `*_local`。
