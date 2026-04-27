@@ -237,3 +237,7 @@
 ## [2026-04-27] wiki | 精简 ClickHouse 生产迁移页
 
 整理 `topics/clickhouse-production-migration`，把连续追加形成的本地验证、`remote()` 试验、OSS 回灌骨架、copier 讨论和生产资源判断收敛成当前有效主线：`6 x 2 + 3 Keeper` 目标拓扑、`T0` 双写前置、静态源到对象存储再导入的历史回灌、shard-aware 生产升级，以及被降级为验证或实验工具的 `remote()`、`clickhouse-copier` 和 `ATTACH` 路线。
+
+## [2026-04-27] query | 统一三张表的回灌方案
+
+更新 `topics/clickhouse-production-migration`，把 `scalar`、`log`、`media` 从“分表治理”调整为统一回灌方案：三张表共享同一个控制面、批次模型、状态机、重试、split、对账和完成判定，只在并发、split 阈值、导入配额等参数上体现数据量差异，避免生产迁移时维护三套执行纪律。
