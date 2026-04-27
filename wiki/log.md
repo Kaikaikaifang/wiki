@@ -249,3 +249,7 @@
 ## [2026-04-27] query | 明确全量历史闭环与冷热分层
 
 更新 `topics/clickhouse-production-migration`，把生产切流门槛收紧为历史数据完全回灌并对账后新集群才有资格接管流量；同时取消 `archive-only` 分叉，改为全量历史进入新集群，再通过 ClickHouse 冷热分层、对象存储和缓存策略降低长期存储成本，PostgreSQL 已删除项目 / 实验清单只作为冷数据占比评估与迁移后抽样观测输入。
+
+## [2026-04-27] query | 澄清 OSS 中转与冷热分层顺序
+
+更新 `topics/clickhouse-production-migration`，明确回灌阶段的 OSS 是中转层而不是冷层本身：历史数据仍然先从静态源导出到 OSS，再由导入任务按批写入目标 ClickHouse 集群；冷热分层的数据沉积是导入后的后续过程，由目标表 storage policy、分区 / TTL、后台移动和访问热度共同决定。
