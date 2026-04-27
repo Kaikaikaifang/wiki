@@ -245,3 +245,7 @@
 ## [2026-04-27] query | 移除生产回灌里的草图口径
 
 更新 `topics/clickhouse-production-migration`，明确所有回灌方案设计都必须面向生产执行，不保留手写取模 shard 路由等草图口径；目标 shard 必须来自目标 `Distributed` 表真实 sharding key、`system.clusters` 的 shard 顺序与 weight，或者直接交给 `Distributed` 表路由，只有通过等价性验证后才允许直写 `*_local`。
+
+## [2026-04-27] query | 明确全量历史闭环与冷热分层
+
+更新 `topics/clickhouse-production-migration`，把生产切流门槛收紧为历史数据完全回灌并对账后新集群才有资格接管流量；同时取消 `archive-only` 分叉，改为全量历史进入新集群，再通过 ClickHouse 冷热分层、对象存储和缓存策略降低长期存储成本，PostgreSQL 已删除项目 / 实验清单只作为冷数据占比评估与迁移后抽样观测输入。
