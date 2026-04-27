@@ -253,3 +253,7 @@
 ## [2026-04-27] query | 澄清 OSS 中转与冷热分层顺序
 
 更新 `topics/clickhouse-production-migration`，明确回灌阶段的 OSS 是中转层而不是冷层本身：历史数据仍然先从静态源导出到 OSS，再由导入任务按批写入目标 ClickHouse 集群；冷热分层的数据沉积是导入后的后续过程，由目标表 storage policy、分区 / TTL、后台移动和访问热度共同决定。
+
+## [2026-04-27] query | 评估 scalar 与 media 去重引擎
+
+更新 `topics/clickhouse-production-migration`，把 `scalar_local` 和 `media_local` 切换为 `ReplicatedReplacingMergeTree` 的生产判断写入目标 schema 设计：它可用于同一实验、同一指标、同一 `step` 的重复打点收敛，但必须先定义业务去重 key 与 version 列，并明确这是后台 merge 收敛语义，不是实时唯一约束；`log` 不跟随切换。

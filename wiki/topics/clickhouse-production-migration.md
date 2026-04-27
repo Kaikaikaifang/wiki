@@ -2,7 +2,7 @@
 title: ClickHouse 生产迁移
 type: topic
 tags: [数据库, ClickHouse, 迁移, 集群, 生产环境]
-source_count: 2
+source_count: 4
 updated: 2026-04-27
 ---
 
@@ -41,15 +41,38 @@ updated: 2026-04-27
 
 - 数据库使用 `Replicated` 数据库引擎；
 - 本地表命名为 `scalar_local`、`media_local`、`log_local`；
-- 本地表使用 `ReplicatedMergeTree`；
+- `log_local` 使用 `ReplicatedMergeTree`；
+- `scalar_local` 和 `media_local` 可以评估切换为 `ReplicatedReplacingMergeTree`，用于收敛重复打点；
 - 对外继续保留 `app.scalar`、`app.media`、`app.log`；
 - 这三个逻辑表在目标侧改成 `Distributed` 表；
 - 分片键优先使用 `cityHash64(projectId)`；
 - 分区键优先按 `createdAt` 做月分区。
 
-这里我最看重的是“逻辑表名不变”。应用和写入链路已经绑定这些表名，如果迁移时顺手改访问模型，风险会从数据库层外溢到应用层、配置层和观测层。更稳的做法是让业务继续使用熟悉的逻辑表名，只把背后的物理实现换成 `Distributed -> ReplicatedMergeTree`。
+这里我最看重的是“逻辑表名不变”。应用和写入链路已经绑定这些表名，如果迁移时顺手改访问模型，风险会从数据库层外溢到应用层、配置层和观测层。更稳的做法是让业务继续使用熟悉的逻辑表名，只把背后的物理实现换成 `Distributed -> ReplicatedMergeTree / ReplicatedReplacingMergeTree`。
 
 分片键优先围绕 `projectId`，不是因为它在概念上好看，而是因为当前查询大多先按 `projectId + experimentId` 收敛，再做聚合、取最新值、拉日志或拼媒体。`projectId` 是读路径的第一层边界。以后如果少数超大项目把某个 shard 压成热点，再考虑升级成 `cityHash64(projectId, experimentId)`，但迁移阶段我不想为了“分布更漂亮”提前牺牲查询局部性。
+
+## `scalar` 和 `media` 的去重引擎
+
+`scalar` 和 `media` 可以考虑在目标侧直接使用 `ReplicatedReplacingMergeTree`，动机是解决重复打点：同一个实验、同一个指标、同一个 `step` 被重复写入时，目标表最终只保留一条有效记录。这个判断只适用于 `scalar` / `media` 这类有明确业务身份的事实表，不应该顺手扩展到 `log`。日志的重复通常更像真实事件流问题，贸然折叠会改变排障和审计语义。
+
+这里最关键的是把“去重身份”和“版本信号”提前设计清楚。`ORDER BY` 不能只照着查询过滤列堆字段，它在 `ReplacingMergeTree` 里同时承担“哪些行代表同一个逻辑对象”的身份定义。对重复打点场景，我会把去重 key 理解成类似：
+
+- `projectId`
+- `experimentId`
+- `metric` / `metricName`
+- `step`
+- 必要时再加能区分数据类型、series、variant 或 media 维度的业务字段
+
+version 列则必须表达确定的新旧顺序，例如高精度 `createdAt`、采集端单调版本，或服务端生成的 ingestion version。不能把低精度时间同时放进 `ORDER BY` 和 version，也不能让一个没有单调含义的业务字段决定谁留下。
+
+这件事要带着两个 ClickHouse 边界来做。
+
+第一，`ReplicatedReplacingMergeTree` 的表内 replacement 是后台 merge 收敛语义，不是写入时唯一约束。重复行在一段时间内可能同时存在；需要强一致去重视图的查询，要显式使用 `FINAL`，或者由上层读模型 / 物化结果承担去重成本。把 `FINAL` 当默认大范围查询开关，通常会把写入侧省下来的复杂度转嫁到查询侧。
+
+第二，replicated insert deduplication 和业务行级去重不是一回事。前者跳过的是重复 insert block，服务的是重试幂等；后者按 `ORDER BY` 身份折叠表内多行。重复打点如果来自不同 block、不同时间或不同 producer，不能指望复制层自动理解业务重复。
+
+所以这个引擎切换可以进入目标 schema 设计，但必须作为生产 schema 决策一次性固定下来，而不是回灌到一半再改。回灌对账也要同步改口径：对 `scalar` / `media`，除了原始导入行数，还要验证去重 key 级别的最终记录数和关键聚合；否则会出现“源端重复行完整导入了，但目标最终语义到底对不对”说不清的状态。
 
 但有一个生产边界不能模糊：**回灌系统不能自己发明 shard 路由规则。** `cityHash64(projectId) % shard_count` 这类手写推导不进入方案设计、脚本、manifest 或执行手册。真实的目标 shard 必须来自目标 `Distributed` 表的实际 sharding key、`system.clusters` 里的 shard 顺序与 weight，或者更简单地交给目标 `Distributed` 表自己路由。
 
@@ -241,10 +264,10 @@ updated: 2026-04-27
 
 这次最值得我记住的，不是某个 ClickHouse 参数，而是规模改变了问题性质。到了 `7 TiB` 和千亿行级别，迁移就不再是 DDL 设计题，而是跨越表结构、写入入口、静态历史源、批次控制面、资源余量和切换纪律的联合工程。
 
-我会继续坚持一个原则：不要把版本升级、分片重构、去重语义调整和迁集群塞进同一个窗口。迁移本身已经足够难，真正应该追求的是主路径短、状态可恢复、每一步都能独立对账。
+我会继续坚持一个原则：不要在迁移执行过程中临时追加新的语义变更。`scalar` / `media` 如果要切到 `ReplicatedReplacingMergeTree`，它必须在目标 schema 预建阶段就完成 key、version、查询口径和对账口径设计；一旦进入正式回灌，就不要再边迁边改引擎语义。迁移本身已经足够难，真正应该追求的是主路径短、状态可恢复、每一步都能独立对账。
 
 ---
 
-来源：[[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-replicated-engines-and-conversion]]
+来源：[[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-issue-20867]]
 
 相关页面：[[entities/clickhouse]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-operator-installation-on-shared-clusters]] · [[topics/clickhouse-common-pitfalls]]
