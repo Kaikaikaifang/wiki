@@ -233,3 +233,7 @@
 ## [2026-04-27] query | 补记 clickhouse-copier 验证失败结论
 
 更新 `topics/clickhouse-production-migration`，把这轮 `dev-admin` 上的 `clickhouse-copier` 验证结论正式沉淀下来：`final` 版本工具虽然能连上静态源、Keeper 和目标集群，也能走到 piece 表创建和少量写入阶段，但它会与 `Replicated` 数据库 DDL 语义冲突，并在 `24.3` 工具到 `26.3` 目标端链路上继续暴露协议兼容问题，因此不再作为正式生产历史回灌主路径候选。
+
+## [2026-04-27] wiki | 精简 ClickHouse 生产迁移页
+
+整理 `topics/clickhouse-production-migration`，把连续追加形成的本地验证、`remote()` 试验、OSS 回灌骨架、copier 讨论和生产资源判断收敛成当前有效主线：`6 x 2 + 3 Keeper` 目标拓扑、`T0` 双写前置、静态源到对象存储再导入的历史回灌、shard-aware 生产升级，以及被降级为验证或实验工具的 `remote()`、`clickhouse-copier` 和 `ATTACH` 路线。
