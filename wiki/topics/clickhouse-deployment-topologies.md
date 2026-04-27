@@ -2,7 +2,7 @@
 title: ClickHouse 部署拓扑
 type: topic
 tags: [数据库, ClickHouse, 部署, 架构]
-source_count: 9
+source_count: 10
 updated: 2026-04-27
 ---
 
@@ -102,6 +102,12 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 
 所以，ClickHouse 的冷热分层并不是传统意义上强约束的多层存储产品，更像“把容量层和性能层手工拼起来”的可组合架构。
 
+[[sources/clickhouse-cold-hot-storage]] 把这组原语落到了更具体的 Kubernetes 实施面：本地 `default` disk 作为热层，阿里云 OSS 作为 `cold_oss`，外面再包一层 `cache` 类型的 `s3_cache`，最后用 `hot_cold_policy` 暴露给表。表侧不是“直接知道 OSS”，而是通过 `MODIFY SETTING storage_policy = 'hot_cold_policy'` 和基于业务时间字段的 TTL move，把旧 part 迁到 cold volume。
+
+这里我会额外记住三个生产细节。第一，OSS S3 兼容 endpoint 要使用 virtual hosted style，让 bucket 出现在域名里；第二，`perform_ttl_move_on_insert=false` 可以避免命中 TTL 的历史 part 在 INSERT 路径上直接写入慢冷层；第三，是否真的迁移成功要看 `system.disks`、`system.storage_policies` 和 `system.parts.disk_name`，不能只看 DDL 是否执行成功。
+
+这篇实践笔记里的性能测试也给了一个很朴素的判断：冷数据首次从 OSS 读取明显慢于热盘，但二次查询命中本地 cache 后会接近热数据体感。冷热分层的目标不是让冷层无成本地等同热层，而是在容量成本下降的同时，让被再次访问的冷数据有机会回到可接受速度。
+
 ## 多地域复制是网络预算问题
 
 [[sources/clickhouse-multi-region-replication]] 给出一个非常实用的边界：跨地域复制是支持的，但地域间时延应保持在两位数毫秒。否则，写路径会因为共识和复制而明显变慢。
@@ -130,6 +136,6 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 
 ---
 
-来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]]
+来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]]
 
-相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]]
+相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]]

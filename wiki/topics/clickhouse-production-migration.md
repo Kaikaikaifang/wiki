@@ -2,7 +2,7 @@
 title: ClickHouse 生产迁移
 type: topic
 tags: [数据库, ClickHouse, 迁移, 集群, 生产环境]
-source_count: 4
+source_count: 5
 updated: 2026-04-27
 ---
 
@@ -184,6 +184,16 @@ version 列则必须表达确定的新旧顺序，例如高精度 `createdAt`、
 
 这里还要避免一个误解：ClickHouse 不会天然因为某个项目在 PostgreSQL 里被删除，就自动知道这批历史数据应该进冷层。冷热分层必须通过生产可验证的存储策略来表达。最简单的起点，是按时间和分区让旧数据逐步落到冷层；删除资源因为长期不再被访问，即使仍在新集群可查询，也会自然停留在对象存储 / 冷层，不再持续占用宝贵热盘或缓存。
 
+[[sources/clickhouse-cold-hot-storage]] 给了这件事一个更接近执行手册的版本：目标表可以先挂上包含本地热盘、OSS 冷盘和 cache disk 的 storage policy，再用业务时间字段上的 TTL move 把旧 part 推到 cold volume。这里的重点不是照抄某个 `app.log` 示例，而是把几条生产检查固定下来：
+
+- OSS endpoint 必须按云厂商要求使用可工作的 S3 兼容形式；
+- `system.disks` 和 `system.storage_policies` 要能看到冷盘、缓存盘和策略；
+- 表要显式 `MODIFY SETTING storage_policy`，不能只把配置文件挂进容器；
+- TTL move 的落点要通过 `system.parts.disk_name` 验证；
+- 冷数据首次查询、缓存后查询、热数据查询都要分别压测。
+
+这也补强了我对迁移顺序的判断：冷热分层是导入后数据沉积和长期成本治理机制，不是回灌控制面的替代品。它可以让全量历史进入新集群后逐步沉到 OSS，但不能用来绕开“所有历史批次都导入、对账、验证”的切流门槛。
+
 因此正式生产路径不再有“热数据先切、深历史后台慢迁”，也不引入 `archive-only` 分叉，而是直接升级成统一的生产级回灌平台：
 
 - 多快照克隆并行导出；
@@ -268,6 +278,6 @@ version 列则必须表达确定的新旧顺序，例如高精度 `createdAt`、
 
 ---
 
-来源：[[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-issue-20867]]
+来源：[[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-issue-20867]] · [[sources/clickhouse-cold-hot-storage]]
 
-相关页面：[[entities/clickhouse]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-operator-installation-on-shared-clusters]] · [[topics/clickhouse-common-pitfalls]]
+相关页面：[[entities/clickhouse]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-operator-installation-on-shared-clusters]] · [[topics/clickhouse-common-pitfalls]] · [[sources/clickhouse-cold-hot-storage]]

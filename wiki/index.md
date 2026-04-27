@@ -61,6 +61,7 @@ updated: 2026-04-27
 - [[sources/altinity-converting-mergetree-to-replicated]] — Altinity 关于把 `MergeTree` 转为 `ReplicatedMergeTree` 的实务路线图（2026-04-16，网络文章）
 - [[sources/clickhouse-13-mistakes]] — ClickHouse 官方总结的 13 个入门常见误区（2026-04-26，网络文章）
 - [[sources/clickhouse-attach-as-replicated]] — ClickHouse `ATTACH ... AS REPLICATED` 文档，强调本地数据与复制元数据分离（2026-04-16，网络文章）
+- [[sources/clickhouse-cold-hot-storage]] — ClickHouse 在 Kubernetes 中用阿里云 OSS、cache disk 与 TTL move 实现冷热分层的实践笔记（2026-04-27，网络文章）
 - [[sources/clickhouse-external-disks-for-storing-data]] — ClickHouse 外部存储与文件缓存文档（2026-04-16，网络文章）
 - [[sources/clickhouse-issue-20867]] — ClickHouse issue 讨论 `ReplicatedReplacingMergeTree` 中 replacement、version 列与 insert deduplication 的边界（2021-02-18，GitHub issue）
 - [[sources/clickhouse-keeper]] — ClickHouse Keeper 文档，聚焦配置、兼容边界与迁移要点（2026-04-16，网络文章）

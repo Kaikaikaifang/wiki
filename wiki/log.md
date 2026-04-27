@@ -257,3 +257,7 @@
 ## [2026-04-27] query | 评估 scalar 与 media 去重引擎
 
 更新 `topics/clickhouse-production-migration`，把 `scalar_local` 和 `media_local` 切换为 `ReplicatedReplacingMergeTree` 的生产判断写入目标 schema 设计：它可用于同一实验、同一指标、同一 `step` 的重复打点收敛，但必须先定义业务去重 key 与 version 列，并明确这是后台 merge 收敛语义，不是实时唯一约束；`log` 不跟随切换。
+
+## [2026-04-27] ingest | ClickHouse 冷热分层实战
+
+摄入 `clickhouse-cold-hot-storage` 剪藏，新增 `sources/clickhouse-cold-hot-storage` 并归档到 `raw/articles/clickhouse-cold-hot-storage.md`；同步更新 ClickHouse 部署拓扑、生产迁移、实体页与整体综述。核心沉淀是：冷热分层不是单纯配置 S3，而是要把 OSS virtual hosted endpoint、Secret 注入、cache disk、storage policy、TTL move、`system.parts.disk_name` 与冷 / 热查询体感一起验证；在生产迁移里，它应作为全量历史导入后的长期成本治理机制，而不是替代回灌与对账的捷径。
