@@ -30,6 +30,7 @@ updated: 2026-04-27
 - 数据节点和 Keeper 都不使用 spot / 抢占式节点
 - 写入迁移使用 `Vector` 双写，双写验证通过的时刻记为 `T0`
 - 目标 schema 由迁移 DDL 预建，应用自动建表必须关闭
+- 当前生产资源配置入口收敛到 `/Users/kaikai/projects/test/test-migration/production-v3`
 
 早期我曾把 `4 shards x 2 replicas` 视为合理起点，但那是在“机器数可能受限”的前提下。现在既然生产资源可以按迁移目标重新规划，`6 x 2` 更符合未来一两年的稳定运行：它把单 shard 单副本的数据量压到约 `1186 GiB`，给 merge、回灌临时放大、热点项目倾斜和后续增长留出余量，也降低了上线不久再次 reshard 的概率。
 
@@ -42,7 +43,7 @@ updated: 2026-04-27
 - 数据库使用 `Replicated` 数据库引擎；
 - 本地表命名为 `scalar_local`、`media_local`、`log_local`；
 - `log_local` 使用 `ReplicatedMergeTree`；
-- `scalar_local` 和 `media_local` 可以评估切换为 `ReplicatedReplacingMergeTree`，用于收敛重复打点；
+- `scalar_local` 和 `media_local` 使用 `ReplicatedReplacingMergeTree`，用于收敛重复打点；
 - 对外继续保留 `app.scalar`、`app.media`、`app.log`；
 - 这三个逻辑表在目标侧改成 `Distributed` 表；
 - 分片键优先使用 `cityHash64(projectId)`；
@@ -184,7 +185,13 @@ version 列则必须表达确定的新旧顺序，例如高精度 `createdAt`、
 
 这里还要避免一个误解：ClickHouse 不会天然因为某个项目在 PostgreSQL 里被删除，就自动知道这批历史数据应该进冷层。冷热分层必须通过生产可验证的存储策略来表达。最简单的起点，是按时间和分区让旧数据逐步落到冷层；删除资源因为长期不再被访问，即使仍在新集群可查询，也会自然停留在对象存储 / 冷层，不再持续占用宝贵热盘或缓存。
 
-[[sources/clickhouse-cold-hot-storage]] 给了这件事一个更接近执行手册的版本：目标表可以先挂上包含本地热盘、OSS 冷盘和 cache disk 的 storage policy，再用业务时间字段上的 TTL move 把旧 part 推到 cold volume。这里的重点不是照抄某个 `app.log` 示例，而是把几条生产检查固定下来：
+[[sources/clickhouse-cold-hot-storage]] 给了这件事一个更接近执行手册的版本：目标表可以先挂上包含本地热盘、OSS 冷盘和 cache disk 的 storage policy，再用业务时间字段上的 TTL move 把旧 part 推到 cold volume。`production-v3` 里我已经把这层固化成 `00-hot-cold-storage.example.yaml`：`default` disk 做热层，OSS 做 `cold_oss`，外面包一层 `s3_cache`，再暴露为 `hot_cold_policy`。
+
+TTL 窗口也应该跟着生产项目生命周期数据更新，而不是继续沿用保守的 `180d`。这批统计里，总项目数 `139,067`；单实验项目占 `25.86%`，多实验但生命周期 `<1d` 占 `34.54%`，两者合计 `60.40%`；生命周期 `<=7d` 的项目占 `77.92%`；生命周期 `>30d` 只剩 `10.10%`，`>90d` 是 `3.58%`，`>180d` 是 `1.03%`，`>=365d` 只有 `43` 个项目。基于这组分布，我现在把首版生产 TTL 定为 `createdAt + 30 DAY TO VOLUME 'cold'`，并且不设置删除 TTL。
+
+我没有直接压到 `7d`，因为项目生命周期不是查询访问热度。`30d` 已经覆盖接近 `90%` 项目的完整生命周期，同时能把绝大部分长尾历史从热盘移走；它比 `180d` 更符合成本目标，又比 `7d` 更稳。后续如果查询日志证明 `media` 或 `log` 的冷访问更低，可以单独把这些表收紧到 `7d` 或 `14d`，但首版迁移不应该把三张表拆成三套 TTL 纪律。
+
+这里的重点不是照抄某个 `app.log` 示例，而是把几条生产检查固定下来：
 
 - OSS endpoint 必须按云厂商要求使用可工作的 S3 兼容形式；
 - `system.disks` 和 `system.storage_policies` 要能看到冷盘、缓存盘和策略；
@@ -204,6 +211,8 @@ version 列则必须表达确定的新旧顺序，例如高精度 `createdAt`、
 - 调度器按表和 shard 做配额、退避和重试。
 
 我现在会把这三项作为最优先升级：生产路由规则固化与验证、多快照克隆并行导出、基于真实 shard 维度的自动 split。它们共同把当前已经验证可行的数据管道，升级成能承受生产窗口的统一执行系统。
+
+`production-v3` 资源包把这条主线压成了当前最小可执行形态：目标集群 manifest、冷热分层配置、目标 schema、`Vector` 双写占位、从 `VolumeSnapshot` 克隆出的静态源 ClickHouse、统一回灌 runtime、runner / verifier 入口，以及最小状态表。这里最重要的边界是：静态源来自 `T0` 附近快照恢复出的临时 ClickHouse，供导出任务读取；它不是最终迁移结果，也不承担线上写入。回灌默认写 `Distributed` 表，只有 `route_equivalence_checks` 证明 planner 与 ClickHouse 实际路由一致后，才允许开启直写 `*_local`。
 
 ## 被降级的路线
 
@@ -252,7 +261,7 @@ version 列则必须表达确定的新旧顺序，例如高精度 `createdAt`、
 我会把正式迁移排成八段：
 
 1. 准备目标集群：搭建目标拓扑，预建 `Replicated` 数据库、`*_local` 表和 `Distributed` 逻辑表。
-2. 配置冷热分层：为目标表确认 storage policy、热盘 / 冷层容量和对象存储路径；这一步只准备导入后的数据沉积规则，不改变“先导出至 OSS 中转，再按批导入集群”的回灌顺序。
+2. 配置冷热分层：为目标表确认 storage policy、热盘 / 冷层容量和对象存储路径；首版 TTL 使用 `createdAt + 30 DAY TO VOLUME 'cold'`，这一步只准备导入后的数据沉积规则，不改变“先导出至 OSS 中转，再按批导入集群”的回灌顺序。
 3. 改应用和写入管道：发布 `database.auto_create_tables`，目标环境关闭自动建表，为 `Vector` 增加目标 sink。
 4. 冻结 `T0`：正式开启双写，发送唯一事件，确认三张表在新旧两边都可见。
 5. 回灌全量历史：使用静态源和 OSS 中转处理 `T0` 之前的数据，所有批次按行导入新集群，批次状态、重试和对账全部落表。

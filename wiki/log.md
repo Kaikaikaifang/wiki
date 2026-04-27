@@ -261,3 +261,7 @@
 ## [2026-04-27] ingest | ClickHouse 冷热分层实战
 
 摄入 `clickhouse-cold-hot-storage` 剪藏，新增 `sources/clickhouse-cold-hot-storage` 并归档到 `raw/articles/clickhouse-cold-hot-storage.md`；同步更新 ClickHouse 部署拓扑、生产迁移、实体页与整体综述。核心沉淀是：冷热分层不是单纯配置 S3，而是要把 OSS virtual hosted endpoint、Secret 注入、cache disk、storage policy、TTL move、`system.parts.disk_name` 与冷 / 热查询体感一起验证；在生产迁移里，它应作为全量历史导入后的长期成本治理机制，而不是替代回灌与对账的捷径。
+
+## [2026-04-27] query | 更新 ClickHouse production-v3 迁移资源口径
+
+更新 `topics/clickhouse-production-migration`，把 `/Users/kaikai/projects/test/test-migration/production-v3` 的当前资源设计沉淀为正式执行口径：`6 x 2 + 3 Keeper` 目标集群、`Vector` T0 双写、`VolumeSnapshot` 恢复只读静态源、OSS 中转回灌、统一 runner / verifier、冷热分层配置与状态表。根据生产项目生命周期统计，把首版冷热 TTL 从 `180d` 收紧为 `createdAt + 30 DAY TO VOLUME 'cold'`，不设置删除 TTL，后续再由查询日志决定是否对 `media` 或 `log` 单独收紧。
