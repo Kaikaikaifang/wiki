@@ -217,3 +217,7 @@
 ## [2026-04-26] wiki | 新建精简版生产迁移目录
 
 更新 `topics/clickhouse-production-migration`，并同步整理迁移资料目录：不再继续把新的正式迁移判断耦合在旧的本地验证、`remote()` 试验和 OSS 批次骨架材料上，而是单独拆出一套精简版正式路径，只保留一条主时序 `T0 双写 + 静态快照源 + 历史回灌 + 小尾巴补数`，以及配套的顺序执行文档、目标集群示例 manifest、双写配置示例和最小脚本入口。
+
+## [2026-04-27] ingest | ClickHouse Issue 20867
+
+摄入 GitHub issue `ReplicatedReplacingMergeTree replaces only when the new value is bigger`，新增 `sources/clickhouse-issue-20867` 并归档到 `raw/articles/clickhouse-issue-20867.md`；同步更新 ClickHouse 常见误区、复制引擎与实体页。核心沉淀是：`ReplacingMergeTree` 的 replacement、version 列与 replicated insert deduplication 是三层不同机制，做每日快照或最后状态表时必须拆开设计业务 key、版本信号和插入唯一性。
