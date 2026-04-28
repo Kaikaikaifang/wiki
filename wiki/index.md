@@ -25,6 +25,7 @@ updated: 2026-04-28
 - [[topics/clickhouse-single-node-to-cluster-migration]] — 从单节点 ClickHouse 迁到多副本多分片集群时，如何判断无缝切换、引擎切换与迁移步骤
 - [[topics/ddl-vs-dml]] — 用“改结构”和“改数据”的区别理解 `ON CLUSTER` 为什么只管 DDL
 - [[topics/hybrid-retrieval]] — 组合 BM25、向量检索、查询扩展与重排的检索范式
+- [[topics/hdfs-and-oss-hdfs]] — 从 NameNode / DataNode 到 OSS-HDFS，理解 HDFS 语义如何被对象存储承接
 - [[topics/index-maintenance-tradeoffs]] — 索引提升读取性能时带来的写入维护成本与过度索引问题
 - [[topics/index-supported-sorting-and-pagination]] — 利用索引支撑排序、Top-N 与 seek 分页
 - [[topics/local-first-search]] — 在本机完成索引与检索，保留 markdown 文件为事实来源
@@ -50,9 +51,11 @@ updated: 2026-04-28
 - [[entities/andrej-karpathy]] — AI 研究者，LLM Wiki 模式提出者
 - [[entities/clickhouse]] — 面向 OLAP 的列式数据库，强调分析查询性能与可观测性
 - [[entities/clickhouse-keeper]] — ClickHouse 的原生协调服务，面向复制与分布式 DDL
+- [[entities/hdfs]] — Hadoop 生态里的分布式文件系统，用 block、副本和 NameNode / DataNode 组织大数据存储
 - [[entities/kubernetes]] — 以声明式 API、调度器和控制器构成的容器编排系统
 - [[entities/managed-agents]] — Anthropic 的托管式长程 agent 运行时产品
 - [[entities/markus-winand]] — 以 SQL 索引与执行计划教学著称的数据库作者
+- [[entities/oss-hdfs]] — 阿里云 OSS 上兼容 HDFS 接口的数据湖存储服务
 - [[entities/qmd]] — 面向 markdown 与 agent 工作流的本地搜索引擎
 - [[entities/vannevar-bush]] — 1945 年 Memex 构想提出者，LLM Wiki 的精神先驱
 - [[entities/zookeeper]] — 经典分布式协调服务，在 ClickHouse 里主要作为 Keeper 的对照基线
@@ -61,6 +64,8 @@ updated: 2026-04-28
 
 - [[sources/building-effective-ai-agents]] — Anthropic 的 agent 工程文章（2026-04-13，网络文章）
 - [[sources/ack-node-scaling]] — 阿里云 ACK 关于节点自动伸缩与节点即时弹性的概览（2026-04-28，网络文章）
+- [[sources/aliyun-oss-hdfs-notice]] — 阿里云 OSS-HDFS 使用前须知，强调 `.dlsdata/` 内部目录和 OSS 功能冲突风险（2026-04-28，网络文章）
+- [[sources/aliyun-oss-hdfs-overview]] — 阿里云 OSS-HDFS / JindoFS 服务概览，说明 HDFS 接口如何接入对象存储数据湖（2026-04-28，网络文章）
 - [[sources/altinity-converting-mergetree-to-replicated]] — Altinity 关于把 `MergeTree` 转为 `ReplicatedMergeTree` 的实务路线图（2026-04-16，网络文章）
 - [[sources/clickhouse-13-mistakes]] — ClickHouse 官方总结的 13 个入门常见误区（2026-04-26，网络文章）
 - [[sources/clickhouse-attach-as-replicated]] — ClickHouse `ATTACH ... AS REPLICATED` 文档，强调本地数据与复制元数据分离（2026-04-16，网络文章）
@@ -75,6 +80,7 @@ updated: 2026-04-28
 - [[sources/clickhouse-replicated-table-engines]] — ClickHouse 复制引擎文档，说明从 `MergeTree` 迁移到 `ReplicatedMergeTree` 的官方路径（2026-04-16，网络文章）
 - [[sources/clickhouse-replication-and-scaling]] — ClickHouse 分片与多副本集群示例（2026-04-16，网络文章）
 - [[sources/clickhouse-separation-storage-compute]] — ClickHouse 存算分离与 S3 架构指南（2026-04-16，网络文章）
+- [[sources/databricks-what-is-hdfs]] — Databricks 对 HDFS 的基础介绍，聚焦 block、副本、NameNode 与 DataNode（2021-12-08，网络文章）
 - [[sources/how-we-built-our-multi-agent-research-system]] — Anthropic 关于 Research 多智能体系统的复盘（2026-04-13，网络文章）
 - [[sources/introducing-the-clickhouse-query-cache]] — ClickHouse Query Cache 的设计与早期使用解读（2023-02-09，网络文章）
 - [[sources/kubernetes-autoscaling-workloads]] — Kubernetes 官方关于 HPA、VPA、KEDA 与工作负载伸缩的概念页（2025-11-23，网络文章）

@@ -269,3 +269,7 @@
 ## [2026-04-28] ingest | Kubernetes 弹性伸缩
 
 摄入 `Autoscaling Workloads` 与 ACK `节点伸缩` 两篇剪藏，新增 `sources/kubernetes-autoscaling-workloads`、`sources/ack-node-scaling`、`topics/kubernetes-autoscaling` 与 `entities/kubernetes`，并归档原文到 `raw/articles/`。核心沉淀是：Kubernetes 弹性伸缩必须分成 workload 层和 node 层理解；HPA、VPA、KEDA 改变副本或 Pod 资源，节点伸缩则围绕不可调度 Pod、节点池、调度约束、PDB 和云厂商库存补容量。
+
+## [2026-04-28] ingest | HDFS 与 OSS-HDFS
+
+摄入 clippings 中 HDFS 相关 3 篇来源，新增 `sources/databricks-what-is-hdfs`、`sources/aliyun-oss-hdfs-overview`、`sources/aliyun-oss-hdfs-notice`、`topics/hdfs-and-oss-hdfs`、`entities/hdfs` 与 `entities/oss-hdfs`，并归档到 `raw/articles/`。核心沉淀是：传统 HDFS 用 NameNode / DataNode、block 和副本解决本地集群时代的大文件存储；OSS-HDFS 保留 HDFS 接口语义并接入 OSS 对象存储，但 `.dlsdata/` 内部目录、生命周期、版本控制、Bucket Policy 和 RAM 角色都成为新的生产边界。
