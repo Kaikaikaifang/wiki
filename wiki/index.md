@@ -18,6 +18,7 @@ updated: 2026-04-28
 - [[topics/agentic-systems]] — 从增强型 LLM 到 workflow 与自治 agent 的复杂度阶梯
 - [[topics/b-tree-indexes]] — 用叶子链表、树遍历与回表理解索引为什么会快或慢
 - [[topics/clickhouse-common-pitfalls]] — 用 part、主键、Keeper 与内存模型理解 ClickHouse 常见入门误区
+- [[topics/clickhouse-data-export]] — 用导出通道、文件格式和下游消费者理解 ClickHouse 数据导出方案
 - [[topics/clickhouse-deployment-topologies]] — 把分片、副本、Keeper、存算分离与冷热分层放进同一部署判断框架
 - [[topics/clickhouse-operator-installation-on-shared-clusters]] — 在共享 Kubernetes 集群里安装官方 ClickHouse Operator 时，如何判断 Helm、watch 范围与 CRD 管理策略
 - [[topics/clickhouse-keeper-vs-zookeeper]] — 用“专用协调层”与“通用协调服务”的边界判断 Keeper 与 ZooKeeper
@@ -92,6 +93,7 @@ updated: 2026-04-28
 - [[sources/llm-wiki]] — LLM Wiki 模式论文（Karpathy，2026-04-13，网络文章）
 - [[sources/move-on-to-esm-only]] — Anthony Fu 关于 ESM-only 时机、dual format 成本与 Node.js `require(ESM)` 的生态判断（2026-04-28，网络文章）
 - [[sources/oneuptime-replicated-replacingmergetree]] — OneUptime 关于 `ReplicatedReplacingMergeTree` 标准建模、`FINAL` 与副本健康检查的教程（2026-03-31，网络文章）
+- [[sources/oneuptime-clickhouse-export-file-formats]] — OneUptime 关于 ClickHouse 导出格式、客户端落点、HTTP 导出和 S3 表函数的指南（2026-03-31，网络文章）
 - [[sources/qmd]] — QMD README（tobi/qmd，2026-04-13，项目文档）
 - [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]] — Anthropic 关于 Managed Agents 运行时架构的文章（2026-04-13，网络文章）
 - [[sources/use-the-index-luke-anatomy-of-an-index]] — Use The Index, Luke 的索引结构章节（2026-04-14，书籍章节）

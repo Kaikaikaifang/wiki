@@ -2,7 +2,7 @@
 title: 整体综述
 type: overview
 tags: [方法论, 知识管理]
-source_count: 27
+source_count: 28
 updated: 2026-04-28
 ---
 
@@ -36,6 +36,8 @@ updated: 2026-04-28
 
 新归档的 [[sources/clickhouse-cold-hot-storage]] 则把 ClickHouse 冷热分层从文档原语推进到实践检查单：在 Kubernetes 中接入阿里云 OSS，不只是写一个 S3 endpoint，还要把 virtual hosted style、Secret 注入、cache disk、storage policy、TTL move、`system.parts.disk_name` 和冷 / 热查询体感一起验证。这让“全量历史进入新集群后再靠冷热分层降成本”变成一个更可执行的判断。
 
+这次补入的 [[sources/oneuptime-clickhouse-export-file-formats]] 则把 ClickHouse 迁移里的“导出”单独拎出来：`FORMAT` 只是结果序列化，`INTO OUTFILE`、HTTP、`clickhouse-client` 和 `s3()` 表函数决定文件落点。它新增了 [[topics/clickhouse-data-export]]，也把生产回灌里坚持 `Native + zstd`、数据湖交换再优先 `Parquet + zstd` 的判断写得更清楚。
+
 这次摄入的 [[sources/kubernetes-autoscaling-workloads]] 和 [[sources/ack-node-scaling]]，则把 Kubernetes 从“部署 ClickHouse 的容器平台”推进成一条独立的调度与控制器主线。它们新增了 [[topics/kubernetes-autoscaling]] 与 [[entities/kubernetes]]：工作负载伸缩负责改变 replica 或 Pod 资源，节点伸缩负责为不可调度 Pod 补容量，两者必须通过调度器、resource requests、节点池、PDB 和云厂商库存接起来。
 
 这次摄入的 [[sources/databricks-what-is-hdfs]]、[[sources/aliyun-oss-hdfs-overview]] 和 [[sources/aliyun-oss-hdfs-notice]]，则新增了 [[topics/hdfs-and-oss-hdfs]] 这条大数据存储线索：传统 HDFS 用 NameNode、DataNode、block 和副本解决本地集群时代的大文件存储，OSS-HDFS 则把 HDFS 接口语义接到 OSS 对象存储之上，同时引入 `.dlsdata/` 内部目录、生命周期规则、版本控制和后台角色这些新的云上运维边界。
@@ -62,6 +64,7 @@ updated: 2026-04-28
 - 理解单节点 ClickHouse 迁到集群时，哪些变化属于拓扑升级，哪些变化属于表级迁移工程
 - 理解 ClickHouse 常见误区背后的物理约束：part 合并、稀疏主键、Keeper 协调与内存治理
 - 理解 ClickHouse 冷热分层的生产落点验证：对象存储、cache disk、TTL move 与查询体感要一起评估
+- 理解 ClickHouse 数据导出的格式与通道边界：文件落点、对象存储写入和回灌格式要从下游倒推
 - 理解 Kubernetes 弹性伸缩的分层模型：workload 层改副本和资源，node 层补调度容量
 - 理解 HDFS 到 OSS-HDFS 的演化：接口语义可以保留，但底层对象存储会带来新的运维边界
 - 理解软件版本号作为升级契约的沟通作用，而不是把 SemVer 当作机械规则
@@ -85,6 +88,7 @@ updated: 2026-04-28
 - 2026-04-16：归档单节点 ClickHouse 迁移到集群的问答，补充无缝切换与表引擎切换的实操判断
 - 2026-04-26：摄入 ClickHouse 入门 13 个误区，新增常见误区与物理模型检查表
 - 2026-04-27：摄入 ClickHouse 冷热分层实践笔记，补充 Kubernetes、OSS、cache disk 与 TTL move 的验证路径
+- 2026-04-28：摄入 ClickHouse 导出文件格式指南，新增数据导出格式与通道判断
 - 2026-04-28：摄入 Kubernetes 与 ACK 弹性伸缩文档，新增 workload / node 分层伸缩主题
 - 2026-04-28：摄入 HDFS 与 OSS-HDFS 文档，新增大数据文件系统和对象存储兼容层主题
 - 2026-04-28：摄入 Epoch Semantic Versioning，新增软件版本语义与开源升级沟通主题
@@ -92,4 +96,4 @@ updated: 2026-04-28
 
 ---
 
-相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[topics/kubernetes-autoscaling]] · [[topics/hdfs-and-oss-hdfs]] · [[topics/software-versioning]] · [[topics/javascript-module-systems]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/anthony-fu]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/kubernetes]] · [[entities/hdfs]] · [[entities/oss-hdfs]] · [[entities/nodejs]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/databricks-what-is-hdfs]] · [[sources/aliyun-oss-hdfs-overview]] · [[sources/aliyun-oss-hdfs-notice]] · [[sources/epoch-semantic-versioning]] · [[sources/move-on-to-esm-only]]
+相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-data-export]] · [[topics/kubernetes-autoscaling]] · [[topics/hdfs-and-oss-hdfs]] · [[topics/software-versioning]] · [[topics/javascript-module-systems]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/anthony-fu]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/kubernetes]] · [[entities/hdfs]] · [[entities/oss-hdfs]] · [[entities/nodejs]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/oneuptime-clickhouse-export-file-formats]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/databricks-what-is-hdfs]] · [[sources/aliyun-oss-hdfs-overview]] · [[sources/aliyun-oss-hdfs-notice]] · [[sources/epoch-semantic-versioning]] · [[sources/move-on-to-esm-only]]

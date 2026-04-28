@@ -285,3 +285,7 @@
 ## [2026-04-28] ingest | Move on to ESM-only
 
 摄入 Anthony Fu 的 `Move on to ESM-only`，新增 `sources/move-on-to-esm-only`、`topics/javascript-module-systems` 与 `entities/nodejs`，并归档到 `raw/articles/move-on-to-esm-only.md`；同步更新 Anthony Fu 实体页、索引与整体综述。核心沉淀是：ESM-only 的成熟不是单一语法偏好，而是 Vite 等现代工具链、Node.js `require(ESM)` 互操作能力、以及 dual CJS / ESM 维护成本共同推动出的生态迁移判断。
+
+## [2026-04-28] ingest | ClickHouse 导出文件格式
+
+摄入 OneUptime 的 `How to Export ClickHouse Data to Different File Formats`，新增 `sources/oneuptime-clickhouse-export-file-formats` 与 `topics/clickhouse-data-export`，并归档到 `raw/articles/oneuptime-clickhouse-export-file-formats.md`；同步更新 ClickHouse 实体页、生产迁移页、索引与整体综述。核心沉淀是：ClickHouse 导出要拆开格式和通道，`FORMAT` 决定序列化，`INTO OUTFILE`、HTTP、`clickhouse-client` 和 `s3()` 决定结果落点；生产回灌优先 `Native + zstd`，数据湖交换再优先 `Parquet + zstd`。
