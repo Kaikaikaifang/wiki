@@ -265,3 +265,7 @@
 ## [2026-04-27] query | 更新 ClickHouse production-v3 迁移资源口径
 
 更新 `topics/clickhouse-production-migration`，把 `/Users/kaikai/projects/test/test-migration/production-v3` 的当前资源设计沉淀为正式执行口径：`6 x 2 + 3 Keeper` 目标集群、`Vector` T0 双写、`VolumeSnapshot` 恢复只读静态源、OSS 中转回灌、统一 runner / verifier、冷热分层配置与状态表。根据生产项目生命周期统计，把首版冷热 TTL 从 `180d` 收紧为 `createdAt + 30 DAY TO VOLUME 'cold'`，不设置删除 TTL，后续再由查询日志决定是否对 `media` 或 `log` 单独收紧。
+
+## [2026-04-28] ingest | Kubernetes 弹性伸缩
+
+摄入 `Autoscaling Workloads` 与 ACK `节点伸缩` 两篇剪藏，新增 `sources/kubernetes-autoscaling-workloads`、`sources/ack-node-scaling`、`topics/kubernetes-autoscaling` 与 `entities/kubernetes`，并归档原文到 `raw/articles/`。核心沉淀是：Kubernetes 弹性伸缩必须分成 workload 层和 node 层理解；HPA、VPA、KEDA 改变副本或 Pod 资源，节点伸缩则围绕不可调度 Pod、节点池、调度约束、PDB 和云厂商库存补容量。

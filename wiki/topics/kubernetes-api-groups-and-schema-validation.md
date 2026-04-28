@@ -197,4 +197,4 @@ apiVersion: rbac.authorization.k8s.io/v1
 
 ---
 
-相关页面：[[topics/clickhouse-production-migration]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-deployment-topologies]]
+相关页面：[[entities/kubernetes]] · [[topics/kubernetes-autoscaling]] · [[topics/clickhouse-production-migration]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-deployment-topologies]]

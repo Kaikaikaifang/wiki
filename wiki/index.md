@@ -3,7 +3,7 @@ title: 内容目录
 type: index
 tags: [索引, 导航]
 source_count: 0
-updated: 2026-04-27
+updated: 2026-04-28
 ---
 
 > 每次摄入后由 LLM 更新。查询时先读此文件定位相关页面。
@@ -33,6 +33,7 @@ updated: 2026-04-27
 - [[topics/multi-agent-systems]] — 适合并行开放式任务的多智能体分工与协作模式
 - [[topics/knowledge-management]] — 知识管理的核心问题与主要范式对比
 - [[topics/kubernetes-api-groups-and-schema-validation]] — 把 `apiVersion`、core API 与编辑器 schema 假阳性放进同一个判断框架
+- [[topics/kubernetes-autoscaling]] — 把 HPA、VPA、KEDA 与节点伸缩放进同一个分层弹性判断框架
 - [[topics/kubernetes-crd-recording-strategy]] — 什么时候该记录 CRD 安装配置，什么时候不该直接 vendoring 整份上游 CRD
 - [[topics/postgresql-index-ddl-locking]] — 理解 PostgreSQL 中索引创建与删除 DDL 的锁强度和线上体感
 - [[topics/query-result-caching]] — 用 TTL、准入条件与安全边界复用昂贵 `SELECT` 结果
@@ -49,6 +50,7 @@ updated: 2026-04-27
 - [[entities/andrej-karpathy]] — AI 研究者，LLM Wiki 模式提出者
 - [[entities/clickhouse]] — 面向 OLAP 的列式数据库，强调分析查询性能与可观测性
 - [[entities/clickhouse-keeper]] — ClickHouse 的原生协调服务，面向复制与分布式 DDL
+- [[entities/kubernetes]] — 以声明式 API、调度器和控制器构成的容器编排系统
 - [[entities/managed-agents]] — Anthropic 的托管式长程 agent 运行时产品
 - [[entities/markus-winand]] — 以 SQL 索引与执行计划教学著称的数据库作者
 - [[entities/qmd]] — 面向 markdown 与 agent 工作流的本地搜索引擎
@@ -58,6 +60,7 @@ updated: 2026-04-27
 ## 来源
 
 - [[sources/building-effective-ai-agents]] — Anthropic 的 agent 工程文章（2026-04-13，网络文章）
+- [[sources/ack-node-scaling]] — 阿里云 ACK 关于节点自动伸缩与节点即时弹性的概览（2026-04-28，网络文章）
 - [[sources/altinity-converting-mergetree-to-replicated]] — Altinity 关于把 `MergeTree` 转为 `ReplicatedMergeTree` 的实务路线图（2026-04-16，网络文章）
 - [[sources/clickhouse-13-mistakes]] — ClickHouse 官方总结的 13 个入门常见误区（2026-04-26，网络文章）
 - [[sources/clickhouse-attach-as-replicated]] — ClickHouse `ATTACH ... AS REPLICATED` 文档，强调本地数据与复制元数据分离（2026-04-16，网络文章）
@@ -74,6 +77,7 @@ updated: 2026-04-27
 - [[sources/clickhouse-separation-storage-compute]] — ClickHouse 存算分离与 S3 架构指南（2026-04-16，网络文章）
 - [[sources/how-we-built-our-multi-agent-research-system]] — Anthropic 关于 Research 多智能体系统的复盘（2026-04-13，网络文章）
 - [[sources/introducing-the-clickhouse-query-cache]] — ClickHouse Query Cache 的设计与早期使用解读（2023-02-09，网络文章）
+- [[sources/kubernetes-autoscaling-workloads]] — Kubernetes 官方关于 HPA、VPA、KEDA 与工作负载伸缩的概念页（2025-11-23，网络文章）
 - [[sources/llm-wiki]] — LLM Wiki 模式论文（Karpathy，2026-04-13，网络文章）
 - [[sources/oneuptime-replicated-replacingmergetree]] — OneUptime 关于 `ReplicatedReplacingMergeTree` 标准建模、`FINAL` 与副本健康检查的教程（2026-03-31，网络文章）
 - [[sources/qmd]] — QMD README（tobi/qmd，2026-04-13，项目文档）

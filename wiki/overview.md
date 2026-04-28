@@ -2,8 +2,8 @@
 title: 整体综述
 type: overview
 tags: [方法论, 知识管理]
-source_count: 20
-updated: 2026-04-27
+source_count: 22
+updated: 2026-04-28
 ---
 
 这份 wiki 越往后写，我越清楚它不是“资料仓库”，而更像一条不断长出来的思考主线。起点当然是 [[topics/llm-wiki-pattern]]：Karpathy 提醒我，真正有复利的不是一次次对着原始资料发问，而是把理解编译进一个会持续演化的知识系统。
@@ -36,6 +36,8 @@ updated: 2026-04-27
 
 新归档的 [[sources/clickhouse-cold-hot-storage]] 则把 ClickHouse 冷热分层从文档原语推进到实践检查单：在 Kubernetes 中接入阿里云 OSS，不只是写一个 S3 endpoint，还要把 virtual hosted style、Secret 注入、cache disk、storage policy、TTL move、`system.parts.disk_name` 和冷 / 热查询体感一起验证。这让“全量历史进入新集群后再靠冷热分层降成本”变成一个更可执行的判断。
 
+这次摄入的 [[sources/kubernetes-autoscaling-workloads]] 和 [[sources/ack-node-scaling]]，则把 Kubernetes 从“部署 ClickHouse 的容器平台”推进成一条独立的调度与控制器主线。它们新增了 [[topics/kubernetes-autoscaling]] 与 [[entities/kubernetes]]：工作负载伸缩负责改变 replica 或 Pod 资源，节点伸缩负责为不可调度 Pod 补容量，两者必须通过调度器、resource requests、节点池、PDB 和云厂商库存接起来。
+
 ## 当前关注
 
 如果要用一句更个人的话来概括，这一阶段我最关心的不是“又学了哪些零散知识点”，而是能不能把这些主题收敛成几套稳定的判断框架。下面这些点，都是我觉得接下来值得继续深挖的方向。
@@ -54,6 +56,7 @@ updated: 2026-04-27
 - 理解单节点 ClickHouse 迁到集群时，哪些变化属于拓扑升级，哪些变化属于表级迁移工程
 - 理解 ClickHouse 常见误区背后的物理约束：part 合并、稀疏主键、Keeper 协调与内存治理
 - 理解 ClickHouse 冷热分层的生产落点验证：对象存储、cache disk、TTL move 与查询体感要一起评估
+- 理解 Kubernetes 弹性伸缩的分层模型：workload 层改副本和资源，node 层补调度容量
 
 ## 演化轨迹
 
@@ -73,7 +76,8 @@ updated: 2026-04-27
 - 2026-04-16：归档单节点 ClickHouse 迁移到集群的问答，补充无缝切换与表引擎切换的实操判断
 - 2026-04-26：摄入 ClickHouse 入门 13 个误区，新增常见误区与物理模型检查表
 - 2026-04-27：摄入 ClickHouse 冷热分层实践笔记，补充 Kubernetes、OSS、cache disk 与 TTL move 的验证路径
+- 2026-04-28：摄入 Kubernetes 与 ACK 弹性伸缩文档，新增 workload / node 分层伸缩主题
 
 ---
 
-相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-cold-hot-storage]]
+相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[topics/kubernetes-autoscaling]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/kubernetes]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]]
