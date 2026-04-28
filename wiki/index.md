@@ -28,6 +28,7 @@ updated: 2026-04-28
 - [[topics/hdfs-and-oss-hdfs]] — 从 NameNode / DataNode 到 OSS-HDFS，理解 HDFS 语义如何被对象存储承接
 - [[topics/index-maintenance-tradeoffs]] — 索引提升读取性能时带来的写入维护成本与过度索引问题
 - [[topics/index-supported-sorting-and-pagination]] — 利用索引支撑排序、Top-N 与 seek 分页
+- [[topics/javascript-module-systems]] — 把 ESM、CommonJS、Node.js 互操作和包发布策略放进同一个生态迁移判断框架
 - [[topics/local-first-search]] — 在本机完成索引与检索，保留 markdown 文件为事实来源
 - [[topics/long-horizon-agents]] — 长程 agent 的状态恢复、上下文管理与运行时分层
 - [[topics/llm-wiki-pattern]] — LLM 增量构建持久 wiki 的模式，替代 RAG 检索
@@ -57,6 +58,7 @@ updated: 2026-04-28
 - [[entities/kubernetes]] — 以声明式 API、调度器和控制器构成的容器编排系统
 - [[entities/managed-agents]] — Anthropic 的托管式长程 agent 运行时产品
 - [[entities/markus-winand]] — 以 SQL 索引与执行计划教学著称的数据库作者
+- [[entities/nodejs]] — JavaScript 服务端运行时，也是 ESM / CommonJS 迁移路径的关键中间层
 - [[entities/oss-hdfs]] — 阿里云 OSS 上兼容 HDFS 接口的数据湖存储服务
 - [[entities/qmd]] — 面向 markdown 与 agent 工作流的本地搜索引擎
 - [[entities/vannevar-bush]] — 1945 年 Memex 构想提出者，LLM Wiki 的精神先驱
@@ -88,6 +90,7 @@ updated: 2026-04-28
 - [[sources/introducing-the-clickhouse-query-cache]] — ClickHouse Query Cache 的设计与早期使用解读（2023-02-09，网络文章）
 - [[sources/kubernetes-autoscaling-workloads]] — Kubernetes 官方关于 HPA、VPA、KEDA 与工作负载伸缩的概念页（2025-11-23，网络文章）
 - [[sources/llm-wiki]] — LLM Wiki 模式论文（Karpathy，2026-04-13，网络文章）
+- [[sources/move-on-to-esm-only]] — Anthony Fu 关于 ESM-only 时机、dual format 成本与 Node.js `require(ESM)` 的生态判断（2026-04-28，网络文章）
 - [[sources/oneuptime-replicated-replacingmergetree]] — OneUptime 关于 `ReplicatedReplacingMergeTree` 标准建模、`FINAL` 与副本健康检查的教程（2026-03-31，网络文章）
 - [[sources/qmd]] — QMD README（tobi/qmd，2026-04-13，项目文档）
 - [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]] — Anthropic 关于 Managed Agents 运行时架构的文章（2026-04-13，网络文章）

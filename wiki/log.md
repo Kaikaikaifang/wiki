@@ -281,3 +281,7 @@
 ## [2026-04-28] query | 验证 ClickHouse production-v3 迁移资源
 
 验证 `/Users/kaikai/projects/test/test-migration/production-v3` 的 `dev-admin` 缩配资源：`3 x 2 + 3 Keeper` 目标集群 Ready，静态源由快照 `s-bp1b3lo6gyodshti9o0a` 恢复，独立冷层 bucket `swanlab-clickhouse-cold-layer.oss-cn-hangzhou-internal.aliyuncs.com` 可写，`cold_oss` / `s3_cache` / `hot_cold_policy` 生效。目标 schema 与回灌控制表可创建，三张目标表复制状态正常，并完成从静态源各抽样 `3` 行写入目标 `Distributed` 表的端到端验证；真实 runner 镜像、批次调度、OSS 中转导出 / 导入和自动对账仍未解除占位。
+
+## [2026-04-28] ingest | Move on to ESM-only
+
+摄入 Anthony Fu 的 `Move on to ESM-only`，新增 `sources/move-on-to-esm-only`、`topics/javascript-module-systems` 与 `entities/nodejs`，并归档到 `raw/articles/move-on-to-esm-only.md`；同步更新 Anthony Fu 实体页、索引与整体综述。核心沉淀是：ESM-only 的成熟不是单一语法偏好，而是 Vite 等现代工具链、Node.js `require(ESM)` 互操作能力、以及 dual CJS / ESM 维护成本共同推动出的生态迁移判断。
