@@ -273,3 +273,11 @@
 ## [2026-04-28] ingest | HDFS 与 OSS-HDFS
 
 摄入 clippings 中 HDFS 相关 3 篇来源，新增 `sources/databricks-what-is-hdfs`、`sources/aliyun-oss-hdfs-overview`、`sources/aliyun-oss-hdfs-notice`、`topics/hdfs-and-oss-hdfs`、`entities/hdfs` 与 `entities/oss-hdfs`，并归档到 `raw/articles/`。核心沉淀是：传统 HDFS 用 NameNode / DataNode、block 和副本解决本地集群时代的大文件存储；OSS-HDFS 保留 HDFS 接口语义并接入 OSS 对象存储，但 `.dlsdata/` 内部目录、生命周期、版本控制、Bucket Policy 和 RAM 角色都成为新的生产边界。
+
+## [2026-04-28] ingest | Epoch Semantic Versioning
+
+摄入 Anthony Fu 的 `Epoch Semantic Versioning`，新增 `sources/epoch-semantic-versioning`、`topics/software-versioning` 与 `entities/anthony-fu`，并归档到 `raw/articles/epoch-semantic-versioning.md`。核心沉淀是：版本号是维护者、用户和包管理器之间的升级风险沟通信号；Epoch SemVer 在不改变现有 SemVer 工具链的前提下，用 `{EPOCH * 1000 + MAJOR}.MINOR.PATCH` 拆开技术破坏性变化与时代级变化，作为长期 `v0` 和过度膨胀 major 之间的折中。
+
+## [2026-04-28] query | 验证 ClickHouse production-v3 迁移资源
+
+验证 `/Users/kaikai/projects/test/test-migration/production-v3` 的 `dev-admin` 缩配资源：`3 x 2 + 3 Keeper` 目标集群 Ready，静态源由快照 `s-bp1b3lo6gyodshti9o0a` 恢复，独立冷层 bucket `swanlab-clickhouse-cold-layer.oss-cn-hangzhou-internal.aliyuncs.com` 可写，`cold_oss` / `s3_cache` / `hot_cold_policy` 生效。目标 schema 与回灌控制表可创建，三张目标表复制状态正常，并完成从静态源各抽样 `3` 行写入目标 `Distributed` 表的端到端验证；真实 runner 镜像、批次调度、OSS 中转导出 / 导入和自动对账仍未解除占位。

@@ -2,7 +2,7 @@
 title: 整体综述
 type: overview
 tags: [方法论, 知识管理]
-source_count: 25
+source_count: 26
 updated: 2026-04-28
 ---
 
@@ -40,6 +40,8 @@ updated: 2026-04-28
 
 这次摄入的 [[sources/databricks-what-is-hdfs]]、[[sources/aliyun-oss-hdfs-overview]] 和 [[sources/aliyun-oss-hdfs-notice]]，则新增了 [[topics/hdfs-and-oss-hdfs]] 这条大数据存储线索：传统 HDFS 用 NameNode、DataNode、block 和副本解决本地集群时代的大文件存储，OSS-HDFS 则把 HDFS 接口语义接到 OSS 对象存储之上，同时引入 `.dlsdata/` 内部目录、生命周期规则、版本控制和后台角色这些新的云上运维边界。
 
+新摄入的 [[sources/epoch-semantic-versioning]] 则把主题扩展到开源维护与软件版本语义。它新增了 [[topics/software-versioning]] 和 [[entities/anthony-fu]]，提醒我版本号不是完美描述变更的事实系统，而是维护者、用户和包管理器之间的风险沟通信号；Epoch SemVer 的价值在于不改现有 SemVer 工具链，却把技术 breaking change 和时代级变化拆开表达。
+
 ## 当前关注
 
 如果要用一句更个人的话来概括，这一阶段我最关心的不是“又学了哪些零散知识点”，而是能不能把这些主题收敛成几套稳定的判断框架。下面这些点，都是我觉得接下来值得继续深挖的方向。
@@ -60,6 +62,7 @@ updated: 2026-04-28
 - 理解 ClickHouse 冷热分层的生产落点验证：对象存储、cache disk、TTL move 与查询体感要一起评估
 - 理解 Kubernetes 弹性伸缩的分层模型：workload 层改副本和资源，node 层补调度容量
 - 理解 HDFS 到 OSS-HDFS 的演化：接口语义可以保留，但底层对象存储会带来新的运维边界
+- 理解软件版本号作为升级契约的沟通作用，而不是把 SemVer 当作机械规则
 
 ## 演化轨迹
 
@@ -81,7 +84,8 @@ updated: 2026-04-28
 - 2026-04-27：摄入 ClickHouse 冷热分层实践笔记，补充 Kubernetes、OSS、cache disk 与 TTL move 的验证路径
 - 2026-04-28：摄入 Kubernetes 与 ACK 弹性伸缩文档，新增 workload / node 分层伸缩主题
 - 2026-04-28：摄入 HDFS 与 OSS-HDFS 文档，新增大数据文件系统和对象存储兼容层主题
+- 2026-04-28：摄入 Epoch Semantic Versioning，新增软件版本语义与开源升级沟通主题
 
 ---
 
-相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[topics/kubernetes-autoscaling]] · [[topics/hdfs-and-oss-hdfs]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/kubernetes]] · [[entities/hdfs]] · [[entities/oss-hdfs]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/databricks-what-is-hdfs]] · [[sources/aliyun-oss-hdfs-overview]] · [[sources/aliyun-oss-hdfs-notice]]
+相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[topics/kubernetes-autoscaling]] · [[topics/hdfs-and-oss-hdfs]] · [[topics/software-versioning]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/anthony-fu]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/kubernetes]] · [[entities/hdfs]] · [[entities/oss-hdfs]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/databricks-what-is-hdfs]] · [[sources/aliyun-oss-hdfs-overview]] · [[sources/aliyun-oss-hdfs-notice]] · [[sources/epoch-semantic-versioning]]
