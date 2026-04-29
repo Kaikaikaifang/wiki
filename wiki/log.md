@@ -293,3 +293,7 @@
 ## [2026-04-29] query | ClickHouse 回灌 cursor 与多 lane 提速
 
 更新 `topics/clickhouse-production-migration`、`topics/query-shape-and-index-usage` 与 `topics/clickhouse-data-export`，把 `scalar` 回灌第 `99` 批的性能定位沉淀为当前判断：慢点不在目标导入或 OSS 备份，而在静态源导出 cursor 没有命中主键裁剪；`tuple(...) > tuple(...)` 在 ClickHouse `24.3` 上退化为大范围扫描，展开成字典序 `OR` 后才能把读取量从十亿行级别降回二千万行级别。多 lane 提速必须基于互斥 key range 和独立 cursor，当前只读验证证明相邻 lane 覆盖 40M 行且 overlap 为 `0`，但端到端导入验证前仍不进入 `validation` 口径。
+
+## [2026-04-29] ingest | Agent Bridge 设计与实现
+
+摄入 `/Users/kaikai/projects/test/test-weixin` 下的 `bridge` 项目，新增 `sources/agent-bridge-design`、`topics/agent-bridge`、`entities/openclaw` 与 `entities/ilink`，并更新 `index` 与 `overview`。核心沉淀是：从深度绑定 OpenClaw 网关的微信插件，演进为独立的 Channel-Agent 轻量桥接器，用配置驱动的多对多路由、本地状态存储和安全默认值，让个人开发者能在不依赖完整网关框架的前提下，直接用微信消息或终端交互驱动本机 CLI Agent。

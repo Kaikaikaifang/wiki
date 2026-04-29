@@ -14,6 +14,7 @@ updated: 2026-04-29
 
 ## 主题
 
+- [[topics/agent-bridge]] — 通讯软件与 CLI Agent 的轻量桥接层，Channel-Agent 解耦、配置驱动、安全默认
 - [[topics/agent-computer-interface]] — 面向模型而非人类的工具接口设计原则
 - [[topics/agentic-systems]] — 从增强型 LLM 到 workflow 与自治 agent 的复杂度阶梯
 - [[topics/b-tree-indexes]] — 用叶子链表、树遍历与回表理解索引为什么会快或慢
@@ -56,10 +57,12 @@ updated: 2026-04-29
 - [[entities/clickhouse]] — 面向 OLAP 的列式数据库，强调分析查询性能与可观测性
 - [[entities/clickhouse-keeper]] — ClickHouse 的原生协调服务，面向复制与分布式 DDL
 - [[entities/hdfs]] — Hadoop 生态里的分布式文件系统，用 block、副本和 NameNode / DataNode 组织大数据存储
+- [[entities/ilink]] — 微信 iLink API，面向 Bot 开发者的长轮询消息接口
 - [[entities/kubernetes]] — 以声明式 API、调度器和控制器构成的容器编排系统
 - [[entities/managed-agents]] — Anthropic 的托管式长程 agent 运行时产品
 - [[entities/markus-winand]] — 以 SQL 索引与执行计划教学著称的数据库作者
 - [[entities/nodejs]] — JavaScript 服务端运行时，也是 ESM / CommonJS 迁移路径的关键中间层
+- [[entities/openclaw]] — 面向 AI agent 的网关与插件框架，支持多通道多 Agent 协同
 - [[entities/oss-hdfs]] — 阿里云 OSS 上兼容 HDFS 接口的数据湖存储服务
 - [[entities/qmd]] — 面向 markdown 与 agent 工作流的本地搜索引擎
 - [[entities/vannevar-bush]] — 1945 年 Memex 构想提出者，LLM Wiki 的精神先驱
@@ -67,6 +70,7 @@ updated: 2026-04-29
 
 ## 来源
 
+- [[sources/agent-bridge-design]] — Agent Bridge 的设计与实现：从 OpenClaw 微信插件到通用 Channel-Agent 桥接层（2026-04-29，项目文档）
 - [[sources/building-effective-ai-agents]] — Anthropic 的 agent 工程文章（2026-04-13，网络文章）
 - [[sources/ack-node-scaling]] — 阿里云 ACK 关于节点自动伸缩与节点即时弹性的概览（2026-04-28，网络文章）
 - [[sources/aliyun-oss-hdfs-notice]] — 阿里云 OSS-HDFS 使用前须知，强调 `.dlsdata/` 内部目录和 OSS 功能冲突风险（2026-04-28，网络文章）

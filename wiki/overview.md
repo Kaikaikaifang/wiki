@@ -2,8 +2,8 @@
 title: 整体综述
 type: overview
 tags: [方法论, 知识管理]
-source_count: 28
-updated: 2026-04-28
+source_count: 29
+updated: 2026-04-29
 ---
 
 这份 wiki 越往后写，我越清楚它不是“资料仓库”，而更像一条不断长出来的思考主线。起点当然是 [[topics/llm-wiki-pattern]]：Karpathy 提醒我，真正有复利的不是一次次对着原始资料发问，而是把理解编译进一个会持续演化的知识系统。
@@ -44,6 +44,8 @@ updated: 2026-04-28
 
 新摄入的 [[sources/epoch-semantic-versioning]] 则把主题扩展到开源维护与软件版本语义。它新增了 [[topics/software-versioning]] 和 [[entities/anthony-fu]]，提醒我版本号不是完美描述变更的事实系统，而是维护者、用户和包管理器之间的风险沟通信号；Epoch SemVer 的价值在于不改现有 SemVer 工具链，却把技术 breaking change 和时代级变化拆开表达。
 
+这次摄入的 [[sources/agent-bridge-design]] 则把视角从"阅读别人的 agent 设计"推进到"自己动手做一套桥接器"。它新增了 [[topics/agent-bridge]]、[[entities/openclaw]] 与 [[entities/ilink]]：原始代码是一套深度绑定 OpenClaw 网关的微信插件，新设计的 Agent Bridge 则把通讯软件通道与 CLI Agent 解耦，用配置驱动的多对多路由、本地状态存储和安全默认值，让个人开发者能在不依赖完整网关框架的前提下，直接用微信消息驱动本机的 Codex、Claude Code、Codebuddy 或任意命令行工具。
+
 继续摄入的 [[sources/move-on-to-esm-only]] 把 Anthony Fu 这条开源维护线从“版本号如何沟通风险”推进到“模块格式什么时候可以停止兼容旧世界”。它新增了 [[topics/javascript-module-systems]] 和 [[entities/nodejs]]：ESM-only 不是单纯语法偏好，而是工具链成熟、Node.js `require(ESM)` 互操作和 dual CJS / ESM 维护成本共同推动出来的生态迁移判断。
 
 ## 当前关注
@@ -69,6 +71,7 @@ updated: 2026-04-28
 - 理解 HDFS 到 OSS-HDFS 的演化：接口语义可以保留，但底层对象存储会带来新的运维边界
 - 理解软件版本号作为升级契约的沟通作用，而不是把 SemVer 当作机械规则
 - 理解 JavaScript 模块系统迁移：ESM-only 何时从激进选择变成更低成本的默认值
+- 理解通讯软件与 CLI Agent 的桥接设计：何时需要完整网关框架，何时只需要轻量桥接层
 
 ## 演化轨迹
 
@@ -93,7 +96,8 @@ updated: 2026-04-28
 - 2026-04-28：摄入 HDFS 与 OSS-HDFS 文档，新增大数据文件系统和对象存储兼容层主题
 - 2026-04-28：摄入 Epoch Semantic Versioning，新增软件版本语义与开源升级沟通主题
 - 2026-04-28：摄入 Move on to ESM-only，新增 JavaScript 模块系统与 Node.js 互操作主题
+- 2026-04-29：摄入 Agent Bridge 设计与实现，新增通讯软件与 CLI Agent 桥接主题
 
 ---
 
-相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-data-export]] · [[topics/kubernetes-autoscaling]] · [[topics/hdfs-and-oss-hdfs]] · [[topics/software-versioning]] · [[topics/javascript-module-systems]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/anthony-fu]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/kubernetes]] · [[entities/hdfs]] · [[entities/oss-hdfs]] · [[entities/nodejs]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/oneuptime-clickhouse-export-file-formats]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/databricks-what-is-hdfs]] · [[sources/aliyun-oss-hdfs-overview]] · [[sources/aliyun-oss-hdfs-notice]] · [[sources/epoch-semantic-versioning]] · [[sources/move-on-to-esm-only]]
+相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/agent-bridge]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-data-export]] · [[topics/kubernetes-autoscaling]] · [[topics/hdfs-and-oss-hdfs]] · [[topics/software-versioning]] · [[topics/javascript-module-systems]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/anthony-fu]] · [[entities/openclaw]] · [[entities/ilink]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/kubernetes]] · [[entities/hdfs]] · [[entities/oss-hdfs]] · [[entities/nodejs]] · [[sources/agent-bridge-design]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/oneuptime-clickhouse-export-file-formats]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/databricks-what-is-hdfs]] · [[sources/aliyun-oss-hdfs-overview]] · [[sources/aliyun-oss-hdfs-notice]] · [[sources/epoch-semantic-versioning]] · [[sources/move-on-to-esm-only]]
