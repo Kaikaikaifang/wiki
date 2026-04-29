@@ -92,6 +92,6 @@ Bridge 的定位是"本机桥接器"，不是"云端网关"。它的目标是让
 - 智能路由：按任务类型/成本/能力自动选择最优 Agent，而不是靠用户手动 `/agent`
 - 跨 Agent 上下文桥接：切换 Agent 时保留对话摘要，而不是完全重置会话
 
-来源：`/Users/kaikai/projects/test/test-weixin/bridge`
+来源：https://github.com/Kaikaikaifang/bridge
 
 相关页面：[[topics/agent-bridge]] · [[entities/openclaw]] · [[entities/ilink]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]]

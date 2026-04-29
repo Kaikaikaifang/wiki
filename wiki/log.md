@@ -264,7 +264,7 @@
 
 ## [2026-04-27] query | 更新 ClickHouse production-v3 迁移资源口径
 
-更新 `topics/clickhouse-production-migration`，把 `/Users/kaikai/projects/test/test-migration/production-v3` 的当前资源设计沉淀为正式执行口径：`6 x 2 + 3 Keeper` 目标集群、`Vector` T0 双写、`VolumeSnapshot` 恢复只读静态源、OSS 中转回灌、统一 runner / verifier、冷热分层配置与状态表。根据生产项目生命周期统计，把首版冷热 TTL 从 `180d` 收紧为 `createdAt + 30 DAY TO VOLUME 'cold'`，不设置删除 TTL，后续再由查询日志决定是否对 `media` 或 `log` 单独收紧。
+更新 `topics/clickhouse-production-migration`，把 `test-migration/production-v3` 的当前资源设计沉淀为正式执行口径：`6 x 2 + 3 Keeper` 目标集群、`Vector` T0 双写、`VolumeSnapshot` 恢复只读静态源、OSS 中转回灌、统一 runner / verifier、冷热分层配置与状态表。根据生产项目生命周期统计，把首版冷热 TTL 从 `180d` 收紧为 `createdAt + 30 DAY TO VOLUME 'cold'`，不设置删除 TTL，后续再由查询日志决定是否对 `media` 或 `log` 单独收紧。
 
 ## [2026-04-28] ingest | Kubernetes 弹性伸缩
 
@@ -280,7 +280,7 @@
 
 ## [2026-04-28] query | 验证 ClickHouse production-v3 迁移资源
 
-验证 `/Users/kaikai/projects/test/test-migration/production-v3` 的 `dev-admin` 缩配资源：`3 x 2 + 3 Keeper` 目标集群 Ready，静态源由快照 `s-bp1b3lo6gyodshti9o0a` 恢复，独立冷层 bucket `swanlab-clickhouse-cold-layer.oss-cn-hangzhou-internal.aliyuncs.com` 可写，`cold_oss` / `s3_cache` / `hot_cold_policy` 生效。目标 schema 与回灌控制表可创建，三张目标表复制状态正常，并完成从静态源各抽样 `3` 行写入目标 `Distributed` 表的端到端验证；真实 runner 镜像、批次调度、OSS 中转导出 / 导入和自动对账仍未解除占位。
+验证 `test-migration/production-v3` 的 `dev-admin` 缩配资源：`3 x 2 + 3 Keeper` 目标集群 Ready，静态源由快照 `s-bp1b3lo6gyodshti9o0a` 恢复，独立冷层 bucket `swanlab-clickhouse-cold-layer.oss-cn-hangzhou-internal.aliyuncs.com` 可写，`cold_oss` / `s3_cache` / `hot_cold_policy` 生效。目标 schema 与回灌控制表可创建，三张目标表复制状态正常，并完成从静态源各抽样 `3` 行写入目标 `Distributed` 表的端到端验证；真实 runner 镜像、批次调度、OSS 中转导出 / 导入和自动对账仍未解除占位。
 
 ## [2026-04-28] ingest | Move on to ESM-only
 
@@ -296,4 +296,4 @@
 
 ## [2026-04-29] ingest | Agent Bridge 设计与实现
 
-摄入 `/Users/kaikai/projects/test/test-weixin` 下的 `bridge` 项目，新增 `sources/agent-bridge-design`、`topics/agent-bridge`、`entities/openclaw` 与 `entities/ilink`，并更新 `index` 与 `overview`。核心沉淀是：从深度绑定 OpenClaw 网关的微信插件，演进为独立的 Channel-Agent 轻量桥接器，用配置驱动的多对多路由、本地状态存储和安全默认值，让个人开发者能在不依赖完整网关框架的前提下，直接用微信消息或终端交互驱动本机 CLI Agent。
+摄入 `test-weixin/bridge` 项目，新增 `sources/agent-bridge-design`、`topics/agent-bridge`、`entities/openclaw` 与 `entities/ilink`，并更新 `index` 与 `overview`。核心沉淀是：从深度绑定 OpenClaw 网关的微信插件，演进为独立的 Channel-Agent 轻量桥接器，用配置驱动的多对多路由、本地状态存储和安全默认值，让个人开发者能在不依赖完整网关框架的前提下，直接用微信消息或终端交互驱动本机 CLI Agent。

@@ -30,7 +30,7 @@ updated: 2026-04-29
 - 数据节点和 Keeper 都不使用 spot / 抢占式节点
 - 写入迁移使用 `Vector` 双写，双写验证通过的时刻记为 `T0`
 - 目标 schema 由迁移 DDL 预建，应用自动建表必须关闭
-- 当前生产资源配置入口收敛到 `/Users/kaikai/projects/test/test-migration/production-v3`
+- 当前生产资源配置入口收敛到 `test-migration/production-v3`
 
 早期我曾把 `4 shards x 2 replicas` 视为合理起点，但那是在“机器数可能受限”的前提下。现在既然生产资源可以按迁移目标重新规划，`6 x 2` 更符合未来一两年的稳定运行：它把单 shard 单副本的数据量压到约 `1186 GiB`，给 merge、回灌临时放大、热点项目倾斜和后续增长留出余量，也降低了上线不久再次 reshard 的概率。
 
