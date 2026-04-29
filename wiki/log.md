@@ -289,3 +289,7 @@
 ## [2026-04-28] ingest | ClickHouse 导出文件格式
 
 摄入 OneUptime 的 `How to Export ClickHouse Data to Different File Formats`，新增 `sources/oneuptime-clickhouse-export-file-formats` 与 `topics/clickhouse-data-export`，并归档到 `raw/articles/oneuptime-clickhouse-export-file-formats.md`；同步更新 ClickHouse 实体页、生产迁移页、索引与整体综述。核心沉淀是：ClickHouse 导出要拆开格式和通道，`FORMAT` 决定序列化，`INTO OUTFILE`、HTTP、`clickhouse-client` 和 `s3()` 决定结果落点；生产回灌优先 `Native + zstd`，数据湖交换再优先 `Parquet + zstd`。
+
+## [2026-04-29] query | ClickHouse 回灌 cursor 与多 lane 提速
+
+更新 `topics/clickhouse-production-migration`、`topics/query-shape-and-index-usage` 与 `topics/clickhouse-data-export`，把 `scalar` 回灌第 `99` 批的性能定位沉淀为当前判断：慢点不在目标导入或 OSS 备份，而在静态源导出 cursor 没有命中主键裁剪；`tuple(...) > tuple(...)` 在 ClickHouse `24.3` 上退化为大范围扫描，展开成字典序 `OR` 后才能把读取量从十亿行级别降回二千万行级别。多 lane 提速必须基于互斥 key range 和独立 cursor，当前只读验证证明相邻 lane 覆盖 40M 行且 overlap 为 `0`，但端到端导入验证前仍不进入 `validation` 口径。

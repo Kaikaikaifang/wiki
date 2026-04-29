@@ -7,7 +7,7 @@ tags:
   - 查询设计
   - 性能
 source_count: 5
-updated: 2026-04-26
+updated: 2026-04-29
 ---
 
 > 真正决定索引是否有用的，往往不是 DDL 那一刻建了什么，而是你在查询里把数据列写成了数据库还能不能理解的样子。
@@ -61,6 +61,18 @@ updated: 2026-04-26
 
 这和索引主题里的判断很一致：只有当查询写法与物理顺序对齐时，数据库才有机会提前停止。否则，“只要 10 行”只是业务语义，不是执行路径。
 
+## cursor 条件也要被优化器看懂
+
+这次 ClickHouse `scalar` 回灌给了我一个很有价值的反例。表的主键是 `(projectId, experimentId, key, step)`，从语义上看，下面这个 cursor 条件完全正确：
+
+```sql
+WHERE tuple(projectId, experimentId, key, step) > tuple(...)
+```
+
+但在 ClickHouse `24.3` 的静态源上，`EXPLAIN indexes = 1` 显示它没有被转换成主键裁剪，结果后段批次每次都读到接近游标之前的全部历史。把同一个语义展开成字典序 `OR` 后，主键条件才被识别，读放大从十亿行级别降回二千万行级别。
+
+我会把这条经验归纳成一句更通用的话：**seek pagination 的正确性不等于访问路径正确。** 如果 cursor 写法不能让数据库沿着索引或排序键定位，它就只是一个昂贵过滤器。大批量迁移尤其要用 `EXPLAIN` 和 `query_log` 验证 `read_rows`，不能只看 `LIMIT` 和业务结果行数。
+
 ## 部分索引
 
 对固定常量条件反复出现的查询，可以考虑 partial / filtered index。例如只索引 `processed = 'N'` 的消息，而不是把整个消息表都塞进索引。这会同时缩小索引的行数和宽度。我觉得这类设计最能体现“索引不是表的附属物，而是查询模式的物化”。
@@ -73,4 +85,4 @@ updated: 2026-04-26
 
 来源：[[sources/use-the-index-luke-preface]] · [[sources/use-the-index-luke-the-where-clause]] · [[sources/use-the-index-luke-execution-plans]] · [[sources/use-the-index-luke-partial-results]] · [[sources/clickhouse-13-mistakes]]
 
-相关页面：[[topics/sql-indexing]] · [[topics/b-tree-indexes]] · [[topics/sql-execution-plans]] · [[topics/index-supported-sorting-and-pagination]] · [[topics/clickhouse-common-pitfalls]] · [[sources/clickhouse-13-mistakes]]
+相关页面：[[topics/sql-indexing]] · [[topics/b-tree-indexes]] · [[topics/sql-execution-plans]] · [[topics/index-supported-sorting-and-pagination]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-production-migration]] · [[sources/clickhouse-13-mistakes]]

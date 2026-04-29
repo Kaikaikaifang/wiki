@@ -3,7 +3,7 @@ title: ClickHouse 数据导出
 type: topic
 tags: [数据库, ClickHouse, 导出, 数据格式, 对象存储]
 source_count: 1
-updated: 2026-04-28
+updated: 2026-04-29
 ---
 
 > 我现在会把 ClickHouse 数据导出理解成一个三元组：**导出通道、文件格式、下游消费者**。只讨论 `FORMAT CSV` 或 `INTO OUTFILE` 太容易把问题看小；真正决定导出方案质量的，是这三者是否匹配。
@@ -56,6 +56,8 @@ updated: 2026-04-28
 更稳的做法是批次化：按分区、时间窗口、业务 key 或目标 shard 维度切分，让每个批次都有独立路径、状态、重试和对账结果。并行可以有，但并发要受控，不能把源端 merge、磁盘、网络和对象存储写入同时打满。
 
 这也解释了为什么 [[topics/clickhouse-production-migration]] 里的历史回灌不能只是一组 shell 循环。循环能跑 demo，状态表才能跑生产。导出批次需要成为系统事实，而不是终端历史。
+
+最近的 `scalar` 回灌验证又补了一条：批次化还不够，cursor 必须顺着源表主键写。语义正确的 `tuple(...) > tuple(...)` 在 ClickHouse `24.3` 上没有触发主键裁剪，导致后段批次越跑越慢；展开成字典序 `OR` 后，源端读行数才从十亿级回到二千万级。大表导出要把 `EXPLAIN indexes = 1` 和 `system.query_log.read_rows` 作为验收项，否则 `LIMIT 20M` 可能只是结果限制，不是扫描限制。
 
 ## 和生产迁移的关系
 
