@@ -297,3 +297,7 @@
 ## [2026-04-29] ingest | Agent Bridge 设计与实现
 
 摄入 `test-weixin/bridge` 项目，新增 `sources/agent-bridge-design`、`topics/agent-bridge`、`entities/openclaw` 与 `entities/ilink`，并更新 `index` 与 `overview`。核心沉淀是：从深度绑定 OpenClaw 网关的微信插件，演进为独立的 Channel-Agent 轻量桥接器，用配置驱动的多对多路由、本地状态存储和安全默认值，让个人开发者能在不依赖完整网关框架的前提下，直接用微信消息或终端交互驱动本机 CLI Agent。
+
+## [2026-04-30] query | ClickHouse scalar 多 lane 回灌方案
+
+归档 `scalar` 多 lane 自动回灌经验，新增 `topics/clickhouse-scalar-multilane-backfill` 并更新索引。核心沉淀是：大表回灌的速度先取决于 cursor 是否命中主键裁剪，再取决于 lane 边界是否互斥和目标集群是否能消化导入；当前 `2 lanes x 20M` 是稳定无人值守策略，`4 lanes x 20M` 只适合有人监控时追求更快完成。

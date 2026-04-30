@@ -3,7 +3,7 @@ title: 内容目录
 type: index
 tags: [索引, 导航]
 source_count: 0
-updated: 2026-04-29
+updated: 2026-04-30
 ---
 
 > 每次摄入后由 LLM 更新。查询时先读此文件定位相关页面。
@@ -45,6 +45,7 @@ updated: 2026-04-29
 - [[topics/service-db-network-latency-diagnosis]] — 用冷连接、热连接与双侧耗时拆分判断接口慢点是否在数据库链路
 - [[topics/software-versioning]] — 把 SemVer、zero-major 和 Epoch SemVer 放进升级风险沟通框架
 - [[topics/clickhouse-production-migration]] — 面向单实例与 7 TiB 数据量场景的 ClickHouse 迁集群方案
+- [[topics/clickhouse-scalar-multilane-backfill]] — 用主键友好 cursor、排序键边界和受控 lane 数量完成 ClickHouse scalar 大表回灌
 - [[topics/sql-execution-plans]] — 把执行计划当作 SQL 性能调优的第一现场
 - [[topics/sql-indexing]] — 把索引视为开发者必须掌握的查询设计能力
 - [[topics/sql-join-performance]] — 按 join 算法选择不同索引策略，而不是机械补索引
