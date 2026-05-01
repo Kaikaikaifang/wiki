@@ -301,3 +301,7 @@
 ## [2026-04-30] query | ClickHouse scalar 多 lane 回灌方案
 
 归档 `scalar` 多 lane 自动回灌经验，新增 `topics/clickhouse-scalar-multilane-backfill` 并更新索引。核心沉淀是：大表回灌的速度先取决于 cursor 是否命中主键裁剪，再取决于 lane 边界是否互斥和目标集群是否能消化导入；当前 `2 lanes x 20M` 是稳定无人值守策略，`4 lanes x 20M` 只适合有人监控时追求更快完成。
+
+## [2026-05-01] query | 记录 ClickHouse 最终水位迁移方案
+
+更新 `topics/clickhouse-production-migration`，把最终验证流程收敛为显式 `S0` / `T0` 双水位：先给原始源打快照并记录 `S0`，再开启 `Vector` 双写并用唯一事件确认 `T0`；静态源只负责 `S0` 之前历史，原始源单独补 `(S0, T0)` 缺口，双写负责 `T0` 之后新增。同步记录三张表分别计算缺口，并在历史回灌、缺口补数和对账中统一排除垃圾项目 `projectId = 'l3baiq5daqucvtypcd2y0'`。
