@@ -305,3 +305,7 @@
 ## [2026-05-01] query | 记录 ClickHouse 最终水位迁移方案
 
 更新 `topics/clickhouse-production-migration`，把最终验证流程收敛为显式 `S0` / `T0` 双水位：先给原始源打快照并记录 `S0`，再开启 `Vector` 双写并用唯一事件确认 `T0`；静态源只负责 `S0` 之前历史，原始源单独补 `(S0, T0)` 缺口，双写负责 `T0` 之后新增。同步记录三张表分别计算缺口，并在历史回灌、缺口补数和对账中统一排除垃圾项目 `projectId = 'l3baiq5daqucvtypcd2y0'`。
+
+## [2026-05-06] ingest | ClickHouse production-v4 腾讯云验证
+
+摄入 production-v4 的腾讯云 TKE 验证文档，新增 `sources/clickhouse-production-v4-tencent-cloud-validation` 并更新 `topics/clickhouse-production-migration`。核心沉淀是：在 CBS 热盘 + COS 冷层前置的前提下，首发目标从早期偏保守的多 shard 规划收敛为 `2 shards x 2 replicas + 3 Keeper`，单 ClickHouse Pod 以 `16C / 64GiB / 2TiB` 起步；后续优先纵向升配到 `32C / 128GiB`，不先增加 shard。同步记录腾讯云落地时要先验证 Operator 镜像拉取、节点形态、CBS 持久化、COS endpoint 与 Secret 交付这些基础设施边界。

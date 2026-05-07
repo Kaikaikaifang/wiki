@@ -2,8 +2,8 @@
 title: ClickHouse 数据库
 type: entity
 tags: [数据库, ClickHouse, OLAP, 列式存储]
-source_count: 17
-updated: 2026-04-28
+source_count: 18
+updated: 2026-05-06
 ---
 
 > 我对 ClickHouse 的兴趣，已经不再只是“它是一个跑得很快的分析数据库”，而是它把数据库工程里很多原本被拆开的决策重新摆到了同一张桌面上。
@@ -21,6 +21,7 @@ updated: 2026-04-28
 - [[sources/clickhouse-issue-20867]] 用一个小 issue 补上了 `ReplacingMergeTree` 家族的真实边界：表内 replacement、version 列和 replicated insert deduplication 是三层不同机制。
 - [[sources/oneuptime-replicated-replacingmergetree]] 则从教程角度补齐了 `ReplicatedReplacingMergeTree` 的标准用法：identity、version、复制宏、`FINAL` 和副本健康检查要一起设计。
 - [[sources/oneuptime-clickhouse-export-file-formats]] 把数据导出这条线补上：`FORMAT` 只是序列化协议，`INTO OUTFILE`、HTTP、`clickhouse-client` 和 `s3()` 表函数才决定结果落点；格式选择要从下游消费者和回灌路径倒推。
+- [[sources/clickhouse-production-v4-tencent-cloud-validation]] 把这些能力放进腾讯云 TKE / CBS / COS 的验证语境里：冷热分层前置后，shard 数要按热工作集、查询 fan-out、节点形态和云盘能力一起判断。
 
 这让我把“数据库性能”从单一 SQL 优化问题，拆成至少三类工程问题：
 
@@ -38,6 +39,7 @@ updated: 2026-04-28
 - **存储策略可组合**：本地盘、对象存储、cache disk、`storage_policy` 可以按工作负载拼出不同拓扑。
 - **冷热分层必须验证落点**：对象存储配置、cache disk、TTL move 和 `system.parts.disk_name` 要一起看，不能把 DDL 成功误认为数据已经进入冷层。
 - **导出要拆开格式和通道**：`Native`、Parquet、CSV、JSONEachRow 等格式服务不同下游，客户端文件、HTTP 响应和对象存储直写也有不同失败模式。
+- **云厂商控制面会反过来约束拓扑**：TKE 节点形态、CBS StorageClass、COS endpoint、镜像分发和 Secret 管理，都会决定理论上正确的集群能否真正落地。
 - **安全与运维不是附属项**：用户隔离、监控接口、分布式 DDL、网络与升级都被纳入一组完整运维能力。
 - **性能来自顺着物理模型设计**：批量写入、低基数分区、合适的 `ORDER BY`、克制使用 mutations 和物化视图，都是让后台 merge、Keeper 和内存池不过载的前提。
 
@@ -51,6 +53,6 @@ updated: 2026-04-28
 
 ---
 
-来源：[[sources/clickhouse-query-cache]] · [[sources/introducing-the-clickhouse-query-cache]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/altinity-converting-mergetree-to-replicated]] · [[sources/clickhouse-replicated-table-engines]] · [[sources/clickhouse-attach-as-replicated]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-issue-20867]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/oneuptime-clickhouse-export-file-formats]]
+来源：[[sources/clickhouse-query-cache]] · [[sources/introducing-the-clickhouse-query-cache]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/altinity-converting-mergetree-to-replicated]] · [[sources/clickhouse-replicated-table-engines]] · [[sources/clickhouse-attach-as-replicated]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-issue-20867]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/oneuptime-clickhouse-export-file-formats]] · [[sources/clickhouse-production-v4-tencent-cloud-validation]]
 
-相关页面：[[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-data-export]] · [[topics/sql-indexing]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-query-cache]] · [[sources/introducing-the-clickhouse-query-cache]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-replicated-table-engines]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-issue-20867]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/oneuptime-clickhouse-export-file-formats]]
+相关页面：[[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-production-migration]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-data-export]] · [[topics/sql-indexing]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-query-cache]] · [[sources/introducing-the-clickhouse-query-cache]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-replicated-table-engines]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-issue-20867]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/oneuptime-clickhouse-export-file-formats]] · [[sources/clickhouse-production-v4-tencent-cloud-validation]]

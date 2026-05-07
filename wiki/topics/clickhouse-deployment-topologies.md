@@ -2,8 +2,8 @@
 title: ClickHouse 部署拓扑
 type: topic
 tags: [数据库, ClickHouse, 部署, 架构]
-source_count: 10
-updated: 2026-04-27
+source_count: 11
+updated: 2026-05-06
 ---
 
 > 我对 ClickHouse 部署最强烈的感受是，它逼你放弃“有没有标准架构”这种偷懒问法，转而老老实实回答自己到底想解决哪一类瓶颈。
@@ -128,6 +128,14 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 - **加冷热分层**：当远端对象存储已经引入，但又需要本地缓存保证热工作集性能。
 - **慎用多地域**：当跨地域需求是真实存在的容灾需求，而不是模糊的“全球部署更高级”。
 
+## 云厂商验证会改变 shard 判断
+
+[[sources/clickhouse-production-v4-tencent-cloud-validation]] 给我补上了一个更贴近生产的提醒：分片数不是只由全量历史数据决定，也由热冷分层后真正留在本地高性能盘上的工作集决定。
+
+在腾讯云 TKE / CBS / COS 的目标形态里，如果最近一个月热数据只有全量历史的一小部分，`2 shards x 2 replicas + 3 Keeper` 可能比更激进的 `6 x 2` 更稳。前者减少了 `Distributed` 查询 fan-out、PVC 数量、副本队列和 Keeper 元数据复杂度；后者只有在全量历史长期留热盘，或者单 shard 写入 / 查询压力被真实观测证明后，才更像合理选择。
+
+这让我把扩容顺序再收紧一层：冷热分层前置时，先验证对象存储冷层、cache disk、热盘容量和节点 I/O；如果 CPU 或内存先吃紧，优先纵向升配；只有当单 shard 数据量、写入吞吐或扫描压力成为明确瓶颈时，再增加 shard。否则 shard 数加得太早，只是在还没有证明瓶颈前提前支付分布式查询和运维成本。
+
 ## 对我的启发
 
 这些文档把 ClickHouse 从“快的列式数据库”扩展成了一个更完整的系统形象：它不仅会算得快，还要求使用者明确理解**拓扑、协调、介质、缓存与网络时延**之间的连锁关系。
@@ -136,6 +144,6 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 
 ---
 
-来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]]
+来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-production-v4-tencent-cloud-validation]]
 
-相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]]
+相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-production-migration]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-production-v4-tencent-cloud-validation]]

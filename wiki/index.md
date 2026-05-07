@@ -3,7 +3,7 @@ title: 内容目录
 type: index
 tags: [索引, 导航]
 source_count: 0
-updated: 2026-04-30
+updated: 2026-05-06
 ---
 
 > 每次摄入后由 LLM 更新。查询时先读此文件定位相关页面。
@@ -86,6 +86,7 @@ updated: 2026-04-30
 - [[sources/clickhouse-manage-and-deploy]] — ClickHouse 部署与运维文档总览（2026-04-16，网络文章）
 - [[sources/clickhouse-multi-region-replication]] — ClickHouse 多地域复制 FAQ（2026-04-16，网络文章）
 - [[sources/clickhouse-operator-introduction]] — ClickHouse Operator 入门文档，强调生产使用 `Replicated` 数据库引擎（2026-04-16，网络文章）
+- [[sources/clickhouse-production-v4-tencent-cloud-validation]] — ClickHouse production-v4 在腾讯云 TKE / CBS / COS 形态下的生产迁移验证与资源口径（2026-05-06，项目文档）
 - [[sources/clickhouse-query-cache]] — ClickHouse 查询缓存文档（2026-04-15，网络文章）
 - [[sources/clickhouse-replicated-table-engines]] — ClickHouse 复制引擎文档，说明从 `MergeTree` 迁移到 `ReplicatedMergeTree` 的官方路径（2026-04-16，网络文章）
 - [[sources/clickhouse-replication-and-scaling]] — ClickHouse 分片与多副本集群示例（2026-04-16，网络文章）
