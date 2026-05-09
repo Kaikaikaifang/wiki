@@ -130,6 +130,7 @@ def find_orphaned_pages(wiki_dir: str) -> List[str]:
         rel_str = str(rel)
         all_pages.add(rel_str)
         page_names[md_file.stem] = rel_str
+        page_names[str(rel.with_suffix(""))] = rel_str
         incoming_links[rel_str] = set()
 
     for md_file in wiki_path.rglob("*.md"):

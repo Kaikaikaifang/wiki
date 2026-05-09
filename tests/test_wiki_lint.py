@@ -149,6 +149,17 @@ class TestFindOrphanedPages:
         orphans = find_orphaned_pages(str(wiki_dir))
         assert "topics/b.md" in orphans
 
+    def test_no_orphan_with_path_prefix(self, tmp_path):
+        wiki_dir = tmp_path / "wiki"
+        wiki_dir.mkdir()
+        (wiki_dir / "topics").mkdir()
+        (wiki_dir / "sources").mkdir()
+        (wiki_dir / "sources" / "ref.md").write_text("# Ref\n")
+        (wiki_dir / "topics" / "a.md").write_text("# A\n\n[[sources/ref]]")
+
+        orphans = find_orphaned_pages(str(wiki_dir))
+        assert "sources/ref.md" not in orphans
+
 
 class TestScanPrivacyLeaks:
     """测试隐私信息扫描。"""
