@@ -3,7 +3,7 @@ title: 内容目录
 type: index
 tags: [索引, 导航]
 source_count: 0
-updated: 2026-05-06
+updated: 2026-05-09
 ---
 
 > 每次摄入后由 LLM 更新。查询时先读此文件定位相关页面。
@@ -34,6 +34,7 @@ updated: 2026-05-06
 - [[topics/javascript-module-systems]] — 把 ESM、CommonJS、Node.js 互操作和包发布策略放进同一个生态迁移判断框架
 - [[topics/local-first-search]] — 在本机完成索引与检索，保留 markdown 文件为事实来源
 - [[topics/long-horizon-agents]] — 长程 agent 的状态恢复、上下文管理与运行时分层
+- [[topics/local-llm-inference]] — 本地 LLM 推理的约束博弈：量化、KV cache、上下文长度与 agent 兼容性
 - [[topics/llm-wiki-pattern]] — LLM 增量构建持久 wiki 的模式，替代 RAG 检索
 - [[topics/multi-agent-systems]] — 适合并行开放式任务的多智能体分工与协作模式
 - [[topics/knowledge-management]] — 知识管理的核心问题与主要范式对比
@@ -54,9 +55,11 @@ updated: 2026-05-06
 ## 实体
 
 - [[entities/anthropic]] — 以 Claude 与 agent 工程实践著称的 AI 公司
+- [[entities/antirez]] — Redis 作者，ds4.c 本地推理引擎创建者
 - [[entities/andrej-karpathy]] — AI 研究者，LLM Wiki 模式提出者
 - [[entities/anthony-fu]] — 前端开源工具链作者，Epoch SemVer 提案提出者
 - [[entities/clickhouse]] — 面向 OLAP 的列式数据库，强调分析查询性能与可观测性
+- [[entities/deepseek]] — 开放权重 MoE 大模型提供商，以 DeepSeek V4 Flash 的本地推理友好性著称
 - [[entities/clickhouse-keeper]] — ClickHouse 的原生协调服务，面向复制与分布式 DDL
 - [[entities/hdfs]] — Hadoop 生态里的分布式文件系统，用 block、副本和 NameNode / DataNode 组织大数据存储
 - [[entities/ilink]] — 微信 iLink API，面向 Bot 开发者的长轮询消息接口
@@ -93,6 +96,7 @@ updated: 2026-05-06
 - [[sources/clickhouse-replicated-table-engines]] — ClickHouse 复制引擎文档，说明从 `MergeTree` 迁移到 `ReplicatedMergeTree` 的官方路径（2026-04-16，网络文章）
 - [[sources/clickhouse-replication-and-scaling]] — ClickHouse 分片与多副本集群示例（2026-04-16，网络文章）
 - [[sources/clickhouse-separation-storage-compute]] — ClickHouse 存算分离与 S3 架构指南（2026-04-16，网络文章）
+- [[sources/ds4-readme]] — antirez 的 DeepSeek V4 Flash 专用推理引擎，聚焦非对称量化、磁盘 KV cache 与官方向量验证（2026-05-09，项目文档）
 - [[sources/databricks-what-is-hdfs]] — Databricks 对 HDFS 的基础介绍，聚焦 block、副本、NameNode 与 DataNode（2021-12-08，网络文章）
 - [[sources/epoch-semantic-versioning]] — Anthony Fu 提出的 Epoch SemVer，用现有 SemVer 三段式表达 epoch 与技术破坏性变化（2026-04-28，网络文章）
 - [[sources/how-we-built-our-multi-agent-research-system]] — Anthropic 关于 Research 多智能体系统的复盘（2026-04-13，网络文章）

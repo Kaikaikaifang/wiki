@@ -2,7 +2,7 @@
 title: AI Agent Harness
 type: topic
 tags: [Agent编排, 运行时, 多智能体, 工具链]
-source_count: 1
+source_count: 2
 updated: 2026-05-09
 ---
 
@@ -126,8 +126,27 @@ omo 的路由和委派逻辑大量依赖 Sisyphus 的 system prompt（Intent Gat
 
 如果以上有 2 个以上答案是 yes，那么一个 harness（无论是 omo、LangGraph 还是自研）通常是值得的。
 
+## 本地模型作为 Harness 后端
+
+以上讨论默认模型来自云端 API，但 [[topics/local-llm-inference]] 让我意识到 harness 的后端选择还有另一条线：本地专用推理引擎。
+
+ds4.c 的启示是，本地模型不只是「云端的降级版」，而是一组不同约束下的重新优化：
+
+- **延迟**。本地模型没有网络往返，对于 orchestrator 需要频繁调用 specialist 的场景，延迟差异会累积成体验差异。
+- **隐私**。代码、文档、个人笔记不需要离开本机。
+- **长上下文成本**。1M tokens 的云端调用是一笔可观开销，本地运行是一次性硬件投入。
+- **可控性**。本地环境完全控制版本、配置和状态，不受提供商更新策略影响。
+
+但本地模型对 harness 也提出了新要求：
+
+1. **兼容性**。本地引擎需要提供 OpenAI/Anthropic 兼容 API，否则 harness 的 tool calling、streaming、thinking controls 都需要重新适配。
+2. **验证标准**。本地模型的「可用性」不能靠感觉，而需要官方向量验证（如 ds4.c 的 logits 对比）来保证 agent 场景下的可靠性。
+3. **上下文管理**。本地推理的 KV cache 持久化（磁盘缓存）改变了 harness 对会话恢复和上下文重用的假设。
+
+换句话说，引入 harness 时，「用哪个模型」不只是能力选择，也是部署模式选择：云端 API、本地通用运行器（llama.cpp/Ollama）、还是本地专用引擎（ds4.c）——这三者的延迟、成本、隐私和可靠性特征完全不同，harness 的路由和回退策略需要把它们纳入同一决策框架。
+
 ---
 
-来源：[[sources/oh-my-openagent]]
+来源：[[sources/oh-my-openagent]] · [[sources/ds4-readme]]
 
-相关页面：[[topics/multi-agent-systems]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/long-horizon-agents]] · [[entities/oh-my-openagent]] · [[entities/anthropic]] · [[entities/managed-agents]]
+相关页面：[[topics/multi-agent-systems]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/long-horizon-agents]] · [[topics/local-llm-inference]] · [[entities/oh-my-openagent]] · [[entities/anthropic]] · [[entities/managed-agents]] · [[entities/deepseek]] · [[entities/antirez]]

@@ -48,6 +48,8 @@ updated: 2026-05-09
 
 继续摄入的 [[sources/move-on-to-esm-only]] 把 Anthony Fu 这条开源维护线从“版本号如何沟通风险”推进到“模块格式什么时候可以停止兼容旧世界”。它新增了 [[topics/javascript-module-systems]] 和 [[entities/nodejs]]：ESM-only 不是单纯语法偏好，而是工具链成熟、Node.js `require(ESM)` 互操作和 dual CJS / ESM 维护成本共同推动出来的生态迁移判断。
 
+这次摄入的 [[sources/ds4-readme]] 则把 wiki 的 agent 主线从「编排层怎么设计」推进到「本地模型能不能成为 agent 的可信后端」。它新增了 [[topics/local-llm-inference]]、[[entities/antirez]] 与 [[entities/deepseek]]：antirez 不为通用性做框架，而是为一个特定模型（DeepSeek V4 Flash）做端到端优化的专用引擎；2-bit 非对称量化只压 routed MoE experts，磁盘 KV cache 把上下文持久化从 RAM 解放到 SSD，官方向量验证则把「感觉差不多」变成比特级一致。这些设计让我意识到，本地推理不是云端的降级版，而是一组独立约束下的重新优化。
+
 ## 当前关注
 
 如果要用一句更个人的话来概括，这一阶段我最关心的不是“又学了哪些零散知识点”，而是能不能把这些主题收敛成几套稳定的判断框架。下面这些点，都是我觉得接下来值得继续深挖的方向。
@@ -72,6 +74,9 @@ updated: 2026-05-09
 - 理解软件版本号作为升级契约的沟通作用，而不是把 SemVer 当作机械规则
 - 理解 JavaScript 模块系统迁移：ESM-only 何时从激进选择变成更低成本的默认值
 - 理解通讯软件与 CLI Agent 的桥接设计：何时需要完整网关框架，何时只需要轻量桥接层
+- 理解本地 LLM 推理的约束博弈：量化策略、KV cache 持久化、上下文长度与 agent 兼容性的组合关系
+- 理解专用推理引擎与通用运行器的取舍：「只做一个模型但做到极致」和「支持所有模型但都不完美」各自适合什么场景
+- 理解 DeepSeek V4 Flash 的 MoE 架构如何改变本地推理的硬件边界：2-bit 非对称量化、1M 上下文、磁盘 KV cache
 - 理解 AI Agent Harness 的三层模型：host substrate、orchestration layer、specialist agent 如何独立演进
 - 理解 category-based delegation 的设计取舍：模型选择从配置问题变成意图表达问题的价值与风险
 - 理解多智能体系统的后台并行机制：会话隔离、生命周期管理、结果回注和熔断器如何组成完整基础设施
@@ -102,7 +107,8 @@ updated: 2026-05-09
 - 2026-04-28：摄入 Move on to ESM-only，新增 JavaScript 模块系统与 Node.js 互操作主题
 - 2026-04-29：摄入 Agent Bridge 设计与实现，新增通讯软件与 CLI Agent 桥接主题
 - 2026-05-09：摄入 oh-my-openagent 架构分析，新增 AI Agent Harness 主题，把 agentic systems 从理论概念推进到具体运行时实现
+- 2026-05-09：摄入 ds4.c README，新增本地 LLM 推理主题，把 agent 后端从云端 API 延伸到本地专用引擎
 
 ---
 
-相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/ai-agent-harness]] · [[topics/long-horizon-agents]] · [[topics/agent-bridge]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-data-export]] · [[topics/kubernetes-autoscaling]] · [[topics/hdfs-and-oss-hdfs]] · [[topics/software-versioning]] · [[topics/javascript-module-systems]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/anthony-fu]] · [[entities/openclaw]] · [[entities/ilink]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/kubernetes]] · [[entities/hdfs]] · [[entities/oss-hdfs]] · [[entities/nodejs]] · [[entities/oh-my-openagent]] · [[sources/agent-bridge-design]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/oneuptime-clickhouse-export-file-formats]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/databricks-what-is-hdfs]] · [[sources/aliyun-oss-hdfs-overview]] · [[sources/aliyun-oss-hdfs-notice]] · [[sources/epoch-semantic-versioning]] · [[sources/move-on-to-esm-only]] · [[sources/oh-my-openagent]]
+相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/ai-agent-harness]] · [[topics/long-horizon-agents]] · [[topics/agent-bridge]] · [[topics/local-llm-inference]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-data-export]] · [[topics/kubernetes-autoscaling]] · [[topics/hdfs-and-oss-hdfs]] · [[topics/software-versioning]] · [[topics/javascript-module-systems]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/anthony-fu]] · [[entities/openclaw]] · [[entities/ilink]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/kubernetes]] · [[entities/hdfs]] · [[entities/oss-hdfs]] · [[entities/nodejs]] · [[entities/oh-my-openagent]] · [[entities/antirez]] · [[entities/deepseek]] · [[sources/agent-bridge-design]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/oneuptime-clickhouse-export-file-formats]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/databricks-what-is-hdfs]] · [[sources/aliyun-oss-hdfs-overview]] · [[sources/aliyun-oss-hdfs-notice]] · [[sources/epoch-semantic-versioning]] · [[sources/move-on-to-esm-only]] · [[sources/oh-my-openagent]] · [[sources/ds4-readme]]
