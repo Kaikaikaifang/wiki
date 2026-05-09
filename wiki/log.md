@@ -309,3 +309,7 @@
 ## [2026-05-06] ingest | ClickHouse production-v4 腾讯云验证
 
 摄入 production-v4 的腾讯云 TKE 验证文档，新增 `sources/clickhouse-production-v4-tencent-cloud-validation` 并更新 `topics/clickhouse-production-migration`。核心沉淀是：在 CBS 热盘 + COS 冷层前置的前提下，首发目标从早期偏保守的多 shard 规划收敛为 `2 shards x 2 replicas + 3 Keeper`，单 ClickHouse Pod 以 `16C / 64GiB / 2TiB` 起步；后续优先纵向升配到 `32C / 128GiB`，不先增加 shard。同步记录腾讯云落地时要先验证 Operator 镜像拉取、节点形态、CBS 持久化、COS endpoint 与 Secret 交付这些基础设施边界。
+
+## [2026-05-09] ingest | oh-my-openagent 架构分析
+
+触及页面：`sources/oh-my-openagent`、`entities/oh-my-openagent`、`topics/ai-agent-harness`、`topics/multi-agent-systems`、`topics/agentic-systems`、`index`、`overview`。核心沉淀是：oh-my-openagent 是一个把"单模型对话"扩展为"多 agent 并行编排运行时"的 OpenCode 插件，其最值得关注的架构决策是把模型选择从"用户手动配置"变成"category 语义驱动"的自动行为——用户表达意图，harness 自动路由到合适的模型和 specialist。它实现了 5 步初始化、10 个 hook handler、53 个 lifecycle hook、26 个工具和 11 个 agent，把 orchestrator-worker 模式落地为可安装的基础设施。

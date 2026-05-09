@@ -16,6 +16,7 @@ updated: 2026-05-06
 
 - [[topics/agent-bridge]] — 通讯软件与 CLI Agent 的轻量桥接层，Channel-Agent 解耦、配置驱动、安全默认
 - [[topics/agent-computer-interface]] — 面向模型而非人类的工具接口设计原则
+- [[topics/ai-agent-harness]] — AI Agent Harness：从单模型会话到多 agent 编排运行时的设计模式与生产实践
 - [[topics/agentic-systems]] — 从增强型 LLM 到 workflow 与自治 agent 的复杂度阶梯
 - [[topics/b-tree-indexes]] — 用叶子链表、树遍历与回表理解索引为什么会快或慢
 - [[topics/clickhouse-common-pitfalls]] — 用 part、主键、Keeper 与内存模型理解 ClickHouse 常见入门误区
@@ -63,6 +64,7 @@ updated: 2026-05-06
 - [[entities/managed-agents]] — Anthropic 的托管式长程 agent 运行时产品
 - [[entities/markus-winand]] — 以 SQL 索引与执行计划教学著称的数据库作者
 - [[entities/nodejs]] — JavaScript 服务端运行时，也是 ESM / CommonJS 迁移路径的关键中间层
+- [[entities/oh-my-openagent]] — OpenCode 插件，将单一会话扩展为多模型 specialist 并行编排的运行时
 - [[entities/openclaw]] — 面向 AI agent 的网关与插件框架，支持多通道多 Agent 协同
 - [[entities/oss-hdfs]] — 阿里云 OSS 上兼容 HDFS 接口的数据湖存储服务
 - [[entities/qmd]] — 面向 markdown 与 agent 工作流的本地搜索引擎
@@ -97,6 +99,7 @@ updated: 2026-05-06
 - [[sources/introducing-the-clickhouse-query-cache]] — ClickHouse Query Cache 的设计与早期使用解读（2023-02-09，网络文章）
 - [[sources/kubernetes-autoscaling-workloads]] — Kubernetes 官方关于 HPA、VPA、KEDA 与工作负载伸缩的概念页（2025-11-23，网络文章）
 - [[sources/llm-wiki]] — LLM Wiki 模式论文（Karpathy，2026-04-13，网络文章）
+- [[sources/oh-my-openagent]] — oh-my-openagent 架构分析：5 步初始化、category 路由、模型 fallback、后台任务与 3 层 MCP（2026-05-09，代码分析）
 - [[sources/move-on-to-esm-only]] — Anthony Fu 关于 ESM-only 时机、dual format 成本与 Node.js `require(ESM)` 的生态判断（2026-04-28，网络文章）
 - [[sources/oneuptime-replicated-replacingmergetree]] — OneUptime 关于 `ReplicatedReplacingMergeTree` 标准建模、`FINAL` 与副本健康检查的教程（2026-03-31，网络文章）
 - [[sources/oneuptime-clickhouse-export-file-formats]] — OneUptime 关于 ClickHouse 导出格式、客户端落点、HTTP 导出和 S3 表函数的指南（2026-03-31，网络文章）

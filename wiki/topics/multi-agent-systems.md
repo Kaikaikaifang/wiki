@@ -5,8 +5,8 @@ tags:
   - Agent
   - 多智能体
   - 研究工作流
-source_count: 2
-updated: 2026-04-16
+source_count: 3
+updated: 2026-05-09
 ---
 
 > 多智能体最容易被误解成“多堆几份模型调用”，但真正稀缺的从来不是 agent 数量，而是你能不能把问题拆成值得并行的几条独立思路线。
@@ -60,12 +60,27 @@ updated: 2026-04-16
 - **可靠性要求更高**：任何单点失败都可能影响整条研究链路；
 - **并非所有领域都适合**：如果任务强依赖共享上下文或高度串行，多智能体收益会下降。
 
+## 一个生产级实例：oh-my-openagent
+
+[[sources/oh-my-openagent]] 提供了一个非常具体的 orchestrator-worker 实现。Sisyphus 作为总调度，不直接选择模型，而是选择 `category`（如 `visual-engineering`、`ultrabrain`、`quick`），再由 harness 解析为具体模型和 fallback chain。
+
+omo 的后台任务系统把并行执行做成了基础设施：
+
+- 每个 subagent 运行在独立的 OpenCode 子会话中，有自己的模型和上下文。
+- 并发限制 5 个/模型，FIFO 队列，避免挤占。
+- 完成后通过 `<system-reminder>` 注入结果，不污染主会话上下文。
+- 内置熔断器，检测子 agent 陷入工具循环时自动取消。
+
+这个实现让我意识到：多智能体系统的"并行"不只是同时发几个 API 请求，而是**会话隔离 + 生命周期管理 + 结果回注**的一整套机制。缺少其中任何一环，并行都会退化成"同时跑几个不知道彼此进度的黑盒"。
+
+omo 还做了一件事值得记录：它把模型选择从"用户手动操作"变成了"category 语义驱动"。用户说"帮我画个前端"，系统自动路由到 `visual-engineering` → gemini-3.1-pro；用户说"帮我分析架构"，自动路由到 `ultrabrain` → gpt-5.5 xhigh。这种抽象让多智能体的使用门槛降低了一个数量级。
+
 ## 一个实用判断句
 
 如果问题不能被自然拆成几条彼此相对独立的工作流，那么它通常还不够适合多智能体。
 
 ---
 
-来源：[[sources/how-we-built-our-multi-agent-research-system]] · [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]]
+来源：[[sources/how-we-built-our-multi-agent-research-system]] · [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]] · [[sources/oh-my-openagent]]
 
-相关页面：[[topics/agentic-systems]] · [[topics/long-horizon-agents]] · [[topics/agent-computer-interface]] · [[entities/managed-agents]] · [[entities/anthropic]]
+相关页面：[[topics/agentic-systems]] · [[topics/ai-agent-harness]] · [[topics/long-horizon-agents]] · [[topics/agent-computer-interface]] · [[entities/managed-agents]] · [[entities/anthropic]] · [[entities/oh-my-openagent]]

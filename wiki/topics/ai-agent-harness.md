@@ -1,0 +1,133 @@
+---
+title: AI Agent Harness
+type: topic
+tags: [Agent编排, 运行时, 多智能体, 工具链]
+source_count: 1
+updated: 2026-05-09
+---
+
+> 当我把"agent 系统"拆成"host substrate + orchestration layer + specialist agents"三层后，很多之前觉得混乱的设计突然变得清晰了。
+
+## 什么是 Harness
+
+在 AI agent 的语境里，**harness** 指的是把模型调用、工具注册、会话管理、生命周期钩子和安全策略组装成一个可运行系统的中间层。它不是模型本身，也不是某个具体工具，而是**让模型与工具、会话与策略、编排与执行能够协同工作的运行时框架**。
+
+如果用最短的定义：harness 是 agent 的"操作系统"。
+
+## 三层模型
+
+从 oh-my-openagent 的源码分析中，我看到一个非常清晰的分层：
+
+| 层级 | 职责 | 实例 |
+|------|------|------|
+| **Host Substrate** | 会话、模型、原生工具执行 | OpenCode、Claude Code、Cursor |
+| **Orchestration Layer** | 策略注入、路由、委派、生命周期、回退 | oh-my-openagent、LangGraph、AutoGen |
+| **Specialist Agents** | 具体任务的执行体 | Sisyphus、Oracle、Explore、Librarian 等 |
+
+这种分层的价值在于：**每一层都可以独立演进**。OpenCode 更新模型支持，不影响 orchestration 逻辑；omo 新增一个 category，不需要改 OpenCode 内核； specialist agent 的 prompt 调优，也不影响 harness 层。
+
+## 核心能力
+
+一个完整的 agent harness 通常需要具备以下能力：
+
+### 1. Agent 注册与发现
+
+不是硬编码 agent 列表，而是让 harness 能动态发现可用 agent。oh-my-openagent 在 `src/agents/builtin-agents.ts` 中维护内置 agent map，同时支持用户通过配置覆盖和自定义 agent。
+
+### 2. Category / Intent 路由
+
+用户表达意图 → orchestrator 分类 → 路由到对应 specialist。omo 的 Sisyphus 在 prompt 层面做 Intent Gate，然后选择 `category`（如 `visual-engineering`）；harness 再把 category 解析为具体模型。
+
+这比"用户手动选模型"或"固定 agent 做所有事"都更灵活。
+
+### 3. 模型解析与回退
+
+模型选择不能只靠静态配置。omo 实现了 4-step 解析管道：
+
+1. 用户显式覆盖
+2. Category 默认模型
+3. Provider fallback chain（按可用性依次尝试）
+4. 系统默认模型
+
+此外还有运行时回退（provider 错误时自动切换）。这种防御性设计是生产级 harness 的标配。
+
+### 4. 后台并行执行
+
+复杂任务需要多个 specialist 同时工作。omo 的 `BackgroundManager` 创建独立 OpenCode 子会话，每个子会话有自己的模型和上下文，并发限制为 5 个/模型。
+
+关键设计点：
+- 子会话通过 `parentID` 与主会话关联
+- 完成后通过 `<system-reminder>` 注入结果，不污染主上下文
+- 熔断器防止子 agent 陷入无限循环
+
+### 5. 生命周期钩子
+
+omo 注册了 53 个 hook，覆盖会话创建、消息发送、工具执行前后、会话压缩、错误恢复等节点。每个 hook 都是独立可禁用的策略单元。
+
+常见 hook 类型：
+- **Session hooks**：模型回退、上下文窗口监控、自动恢复
+- **Tool guard hooks**：文件写保护、comment 检查、规则注入
+- **Transform hooks**：关键词检测、上下文注入、thinking block 验证
+- **Continuation hooks**：todo 强制延续、compaction 保护
+
+### 6. MCP 集成
+
+harness 需要统一接入外部工具。omo 采用 3 层 MCP：
+- 内置 MCP（websearch、context7、grep_app）
+- Claude Code 兼容层（`.mcp.json`）
+- Skill 内嵌 MCP（按 session 隔离）
+
+## 设计取舍
+
+### 兼容性 vs 原生优化
+
+omo 选择兼容 Claude Code 的全部生态（hooks、skills、agents、MCPs、plugins、commands），代价是更大的兼容表面和更复杂的配置合并逻辑。好处是用户迁移零成本。
+
+### 集中路由 vs 去中心化
+
+omo 采用 Sisyphus 作为单一 orchestrator，所有委派决策由它做出。这比完全去中心化的多智能体更容易调试，但也意味着 Sisyphus 的 prompt 质量直接决定系统上限。
+
+### Prompt 驱动 vs 代码驱动
+
+omo 的路由和委派逻辑大量依赖 Sisyphus 的 system prompt（Intent Gate、category 选择、并行规则）。这与 LangGraph 等代码驱动的 workflow 形成对比。前者的灵活性更高，后者的可预测性更强。
+
+## 与 Anthropic Managed Agents 的对比
+
+| 维度 | oh-my-openagent（本地插件） | Anthropic Managed Agents（托管服务） |
+|------|------------------------------|--------------------------------------|
+| orchestrator | Sisyphus（prompt 驱动） | Managed runtime（基础设施驱动） |
+| 模型路由 | Category fallback chain | 用户显式或运行时动态 |
+| 会话隔离 | OpenCode 子会话 | 内部 session 管理 |
+| 可观测性 | Hook + polling + circuit breaker | 内置 tracing、eval、sandbox |
+| 部署 | 本地 OpenCode | Anthropic 托管 |
+| 安全边界 | 依赖 host（OpenCode） | 内置 sandbox 与权限控制 |
+
+两者的共性在于：都认同"orchestrator + specialist"的分层，都强调上下文隔离、模型回退和生命周期管理。
+
+## 什么时候需要 harness
+
+不是所有项目都需要一个完整的 harness。根据 [[sources/building-effective-ai-agents]] 的复杂度阶梯：
+
+- **增强型 LLM / Prompt chaining**：不需要 harness，直接调用模型即可。
+- **Routing / Parallelization**：简单的路由可以用 `if/else` 或 switch，不需要完整 harness。
+- **Orchestrator-workers**：当需要动态分配子任务、管理多个 specialist 的生命周期时，harness 的价值开始显现。
+- **Evaluator-optimizer / Autonomous agent**：当需要多轮自治、错误恢复、状态持久化时，harness 几乎是必需的。
+
+也就是说，harness 的引入门槛是"**你是否需要管理多个 agent 的生命周期、上下文隔离和模型路由**"。
+
+## 实用判断
+
+如果你正在评估是否要引入一个 harness 框架，我会建议按以下顺序检查：
+
+1. 你是否已经在手动切换多个模型来完成不同任务？
+2. 你是否需要让多个 agent 并行工作，然后把结果汇总？
+3. 你是否需要为不同任务类型配置不同的工具集和权限？
+4. 你是否需要模型故障时的自动回退机制？
+
+如果以上有 2 个以上答案是 yes，那么一个 harness（无论是 omo、LangGraph 还是自研）通常是值得的。
+
+---
+
+来源：[[sources/oh-my-openagent]]
+
+相关页面：[[topics/multi-agent-systems]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/long-horizon-agents]] · [[entities/oh-my-openagent]] · [[entities/anthropic]] · [[entities/managed-agents]]

@@ -5,8 +5,8 @@ tags:
   - Agent
   - 工作流
   - 方法论
-source_count: 3
-updated: 2026-04-16
+source_count: 4
+updated: 2026-05-09
 ---
 
 > 我越来越觉得，“要不要上 agent”这个问题经常被问错了。真正该问的不是它高级不高级，而是你的任务到底需要把多少控制权真的交给模型。
@@ -75,6 +75,10 @@ agent 的优势来自自治，但风险也来自自治。我现在会把这部�
 
 也就是说，agentic system 不只是 prompt + tools，还包含一套运行时架构。
 
+[[sources/oh-my-openagent]] 则把这种运行时架构做得非常具体：它不是抽象地讨论"harness 层应该做什么"，而是实现了 10 个 hook handler、53 个 lifecycle hook、26 个工具和 11 个 agent，把 orchestrator-worker 模式落地为一个可安装的 OpenCode 插件。omo 让我看到，**agentic system 的复杂度阶梯不是理论概念，而是可以逐层实现的基础设施**：从简单的 prompt chaining，到 category 路由，到后台并行，到模型回退，到生命周期管理，每一层都有对应的代码模块。
+
+omo 的 Sisyphus 尤其值得注意：它被显式训练为"默认委派"（default bias: DELEGATE），只在任务 trivial 时才自己处理。这与很多人直觉上的"agent 应该尽量自治"相反——omo 认为，**更好的自治是知道什么时候不该自治**，而是把任务交给更适合的 specialist。
+
 因此，agent 设计通常需要配套：sandbox、guardrails、迭代上限、人工介入点与显式日志。
 
 ## 一个实用判断句
@@ -85,4 +89,4 @@ agent 的优势来自自治，但风险也来自自治。我现在会把这部�
 
 来源：[[sources/building-effective-ai-agents]] · [[sources/how-we-built-our-multi-agent-research-system]] · [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]]
 
-相关页面：[[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[entities/managed-agents]] · [[entities/anthropic]]
+相关页面：[[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/ai-agent-harness]] · [[topics/long-horizon-agents]] · [[entities/managed-agents]] · [[entities/anthropic]] · [[entities/oh-my-openagent]]
