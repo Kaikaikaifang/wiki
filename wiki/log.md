@@ -317,3 +317,7 @@
 ## [2026-05-09] ingest | oh-my-openagent 架构分析
 
 触及页面：`sources/oh-my-openagent`、`entities/oh-my-openagent`、`topics/ai-agent-harness`、`topics/multi-agent-systems`、`topics/agentic-systems`、`index`、`overview`。核心沉淀是：oh-my-openagent 是一个把"单模型对话"扩展为"多 agent 并行编排运行时"的 OpenCode 插件，其最值得关注的架构决策是把模型选择从"用户手动配置"变成"category 语义驱动"的自动行为——用户表达意图，harness 自动路由到合适的模型和 specialist。它实现了 5 步初始化、10 个 hook handler、53 个 lifecycle hook、26 个工具和 11 个 agent，把 orchestrator-worker 模式落地为可安装的基础设施。
+
+## [2026-05-11] ingest | 腾讯云 ClickHouse 集群实例选型指南
+
+触及页面：`sources/tencent-cloud-clickhouse-cluster-sizing`、`topics/clickhouse-cluster-sizing`、`index`、`overview`。核心沉淀是：腾讯云 TCHouse-C 把计算节点打包成标准型、存储优化型与高性能型三类规格，选型核心不在"哪款最大"，而在先回答查询模式、数据温度与成本约束；Keeper 节点虽常被忽略，但其网络抖动会直接影响整个集群的副本健康度。新增主题页把 CPU、内存、磁盘、网络四条约束线拧成一组可验证的选型假设，并与既有 `clickhouse-deployment-topologies`、`clickhouse-production-migration` 形成互补。
