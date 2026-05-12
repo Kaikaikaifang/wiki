@@ -3,7 +3,7 @@ title: 内容目录
 type: index
 tags: [索引, 导航]
 source_count: 0
-updated: 2026-05-09
+updated: 2026-05-12
 ---
 
 > 每次摄入后由 LLM 更新。查询时先读此文件定位相关页面。
@@ -30,6 +30,7 @@ updated: 2026-05-09
 - [[topics/ddl-vs-dml]] — 用“改结构”和“改数据”的区别理解 `ON CLUSTER` 为什么只管 DDL
 - [[topics/hybrid-retrieval]] — 组合 BM25、向量检索、查询扩展与重排的检索范式
 - [[topics/hdfs-and-oss-hdfs]] — 从 NameNode / DataNode 到 OSS-HDFS，理解 HDFS 语义如何被对象存储承接
+- [[topics/interaction-models]] — 把实时多模态交互能力原生内建到模型中，以 micro-turns 实现真正的人机协作
 - [[topics/index-maintenance-tradeoffs]] — 索引提升读取性能时带来的写入维护成本与过度索引问题
 - [[topics/index-supported-sorting-and-pagination]] — 利用索引支撑排序、Top-N 与 seek 分页
 - [[topics/javascript-module-systems]] — 把 ESM、CommonJS、Node.js 互操作和包发布策略放进同一个生态迁移判断框架
@@ -69,6 +70,7 @@ updated: 2026-05-09
 - [[entities/markus-winand]] — 以 SQL 索引与执行计划教学著称的数据库作者
 - [[entities/nodejs]] — JavaScript 服务端运行时，也是 ESM / CommonJS 迁移路径的关键中间层
 - [[entities/oh-my-openagent]] — OpenCode 插件，将单一会话扩展为多模型 specialist 并行编排的运行时
+- [[entities/thinking-machines-lab]] — Ilya Sutskever 创立的研究实验室，致力于安全 AGI 与 interaction models
 - [[entities/openclaw]] — 面向 AI agent 的网关与插件框架，支持多通道多 Agent 协同
 - [[entities/oss-hdfs]] — 阿里云 OSS 上兼容 HDFS 接口的数据湖存储服务
 - [[entities/qmd]] — 面向 markdown 与 agent 工作流的本地搜索引擎
@@ -101,6 +103,7 @@ updated: 2026-05-09
 - [[sources/databricks-what-is-hdfs]] — Databricks 对 HDFS 的基础介绍，聚焦 block、副本、NameNode 与 DataNode（2021-12-08，网络文章）
 - [[sources/epoch-semantic-versioning]] — Anthony Fu 提出的 Epoch SemVer，用现有 SemVer 三段式表达 epoch 与技术破坏性变化（2026-04-28，网络文章）
 - [[sources/how-we-built-our-multi-agent-research-system]] — Anthropic 关于 Research 多智能体系统的复盘（2026-04-13，网络文章）
+- [[sources/interaction-models]] — Thinking Machines Lab 的 interaction model 研究预览：原生实时多模态交互与双模型架构（2026-05-11，网络文章）
 - [[sources/introducing-the-clickhouse-query-cache]] — ClickHouse Query Cache 的设计与早期使用解读（2023-02-09，网络文章）
 - [[sources/kubernetes-autoscaling-workloads]] — Kubernetes 官方关于 HPA、VPA、KEDA 与工作负载伸缩的概念页（2025-11-23，网络文章）
 - [[sources/llm-wiki]] — LLM Wiki 模式论文（Karpathy，2026-04-13，网络文章）

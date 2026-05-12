@@ -5,8 +5,8 @@ tags:
   - Agent
   - 工作流
   - 方法论
-source_count: 4
-updated: 2026-05-09
+source_count: 5
+updated: 2026-05-12
 ---
 
 > 我越来越觉得，“要不要上 agent”这个问题经常被问错了。真正该问的不是它高级不高级，而是你的任务到底需要把多少控制权真的交给模型。
@@ -33,6 +33,19 @@ updated: 2026-05-09
 7. **Autonomous agent**：在环境中多轮行动，持续自我校正。
 
 这条阶梯的价值不在于“越往后越高级”，而在于提醒自己：**优先选择能满足目标的最低复杂度方案。** 我很喜欢这种工程判断，因为它天然反对“为了追求 agent 而 agent”。
+
+## 实时协作：一个新的维度
+
+[[sources/interaction-models]] 提出了一个不完全落在上述阶梯上、但同样重要的分类：**agent 是否需要与人类在实时时间流中共处**。传统的 turn-based 模型无论多智能，都在等待-生成-等待的循环中运行；而 interaction model 以 200ms micro-turns 持续感知和响应，把协作从"回合制"变成"流式"。
+
+这个范式变化的关键在于，它引入了一种新的系统分工：
+
+- **Interaction model**：负责实时 presence，保持低延迟的双向多模态交互
+- **Background model**：负责深度推理和工具调用，异步返回结果
+
+两者不是简单的"快模型"和"慢模型"的关系，而是**同一智能体在不同时间尺度上的两个面相**。Interaction model 决定"什么时候说"，background model 决定"说什么最有深度"。这与 [[topics/multi-agent-systems]] 中的 orchestrator-worker 模式有相似之处，但分工逻辑不同——不是按任务并行度拆分，而是按**实时性需求**拆分。
+
+我觉得这个维度未来可能会成为 agentic system 设计中的独立考量：你的应用场景需要回合制交互，还是流式协作？这个选择会影响从模型架构到推理系统到安全策略的整套设计。
 
 [[sources/how-we-built-our-multi-agent-research-system]] 则补上了一个关键现实：当任务天然适合 breadth-first 并行探索时，**orchestrator-worker 型多智能体**可以被看作这条阶梯上“并行化 + 长程自治”的一次组合升级。它不是默认终点，而是只在研究类任务中非常有效的一种特化形态。
 
@@ -87,6 +100,6 @@ omo 的 Sisyphus 尤其值得注意：它被显式训练为"默认委派"（defa
 
 ---
 
-来源：[[sources/building-effective-ai-agents]] · [[sources/how-we-built-our-multi-agent-research-system]] · [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]]
+来源：[[sources/building-effective-ai-agents]] · [[sources/how-we-built-our-multi-agent-research-system]] · [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]] · [[sources/interaction-models]] · [[sources/oh-my-openagent]]
 
-相关页面：[[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/ai-agent-harness]] · [[topics/long-horizon-agents]] · [[entities/managed-agents]] · [[entities/anthropic]] · [[entities/oh-my-openagent]]
+相关页面：[[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/ai-agent-harness]] · [[topics/long-horizon-agents]] · [[topics/interaction-models]] · [[entities/managed-agents]] · [[entities/anthropic]] · [[entities/oh-my-openagent]] · [[entities/thinking-machines-lab]]

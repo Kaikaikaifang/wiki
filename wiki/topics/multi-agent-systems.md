@@ -5,8 +5,8 @@ tags:
   - Agent
   - 多智能体
   - 研究工作流
-source_count: 3
-updated: 2026-05-09
+source_count: 4
+updated: 2026-05-12
 ---
 
 > 多智能体最容易被误解成“多堆几份模型调用”，但真正稀缺的从来不是 agent 数量，而是你能不能把问题拆成值得并行的几条独立思路线。
@@ -41,6 +41,19 @@ updated: 2026-05-09
 - 必要时再加入专门的 citation、review 或 evaluator 环节。
 
 这种结构比完全平权的多智能体更容易调试，因为责任分工更清楚。我也更偏好这种设计，因为很多“多智能体协作”一旦没有明确层级，就会很快退化成昂贵的混乱。
+
+## 另一种分工：按时间尺度拆分
+
+[[sources/interaction-models]] 提出了一种不太一样的双模型结构：interaction model 负责实时响应，background model 负责深度推理。两者的分工不是按任务并行度，而是按**时间尺度**——一个处理 200ms 的 micro-turns，另一个处理需要数秒甚至数分钟的复杂推理。
+
+这与 orchestrator-worker 模式有本质区别：
+
+- **Orchestrator-worker**：按任务类型或搜索方向并行拆分，每个 worker 处理不同的子问题
+- **Interaction-background**：按延迟需求拆分，两个模型处理的是**同一个对话的不同时间分辨率**
+
+这种结构的优势在于，用户始终感觉到一个持续在场的协作者，而不会被"模型正在思考，请稍候"打断。Interaction model 决定**何时说话、如何保持对话节奏**，background model 决定**说什么最有深度**。两者通过流式结果回注协作，而不是通过最终答案交付协作。
+
+我觉得这个模式对多智能体设计的启示是：**分工的维度不只可以是任务空间，还可以是时间空间**。在某些场景下，让不同智能体负责不同时间尺度的响应，可能比让它们负责不同子任务更有效。
 
 ## 成功关键不只是模型
 
@@ -81,6 +94,6 @@ omo 还做了一件事值得记录：它把模型选择从"用户手动操作"�
 
 ---
 
-来源：[[sources/how-we-built-our-multi-agent-research-system]] · [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]] · [[sources/oh-my-openagent]]
+来源：[[sources/how-we-built-our-multi-agent-research-system]] · [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]] · [[sources/oh-my-openagent]] · [[sources/interaction-models]]
 
-相关页面：[[topics/agentic-systems]] · [[topics/ai-agent-harness]] · [[topics/long-horizon-agents]] · [[topics/agent-computer-interface]] · [[entities/managed-agents]] · [[entities/anthropic]] · [[entities/oh-my-openagent]]
+相关页面：[[topics/agentic-systems]] · [[topics/ai-agent-harness]] · [[topics/long-horizon-agents]] · [[topics/agent-computer-interface]] · [[topics/interaction-models]] · [[entities/managed-agents]] · [[entities/anthropic]] · [[entities/oh-my-openagent]] · [[entities/thinking-machines-lab]]

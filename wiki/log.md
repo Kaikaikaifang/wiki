@@ -325,3 +325,7 @@
 ## [2026-05-12] ingest | 腾讯云 CVM 完整实例规格补充
 
 触及页面：`sources/tencent-cloud-clickhouse-cluster-sizing`、`topics/clickhouse-cluster-sizing`。核心沉淀是：补充了腾讯云全量 CVM 实例族信息（标准型 SA9/S9/SA9e/S9e/S9pro/S8/SA5/SA4/S6/SA3/SR1/S5 等、内存型 MA9/M9/MA9e/M9e/M9pro/M8/MA5/MA4/MA3/M6/M5/M4/M3/M2、高 IO 型 ITA5/IT5/IT3/IA5se/IA3se、大数据型 D3/D2、计算型 C6/C5/C4 等），在主题页中增加了精细的实例族-场景映射表和五个具体场景的推荐配置（通用 OLAP、内存密集型、热数据低延迟、海量冷数据归档、大规模生产集群），并补充了网络性能关键指标（PPS、带宽、队列数、DPDK）和垂直变配限制的详细说明。
+
+## [2026-05-12] ingest | Interaction Models：可扩展的人机协作方式
+
+触及页面：`sources/interaction-models`、`topics/interaction-models`、`entities/thinking-machines-lab`、`topics/agent-computer-interface`、`topics/agentic-systems`、`topics/multi-agent-systems`、`index`、`overview`。核心沉淀是：Thinking Machines Lab 提出的 interaction model 不是让 turn-based 模型跑得更快，而是彻底取消 turn 的概念——以 200ms micro-turns 持续运行，原生支持打断、重叠语音、视觉主动性和并发工具调用；双模型架构把实时 presence 交给 interaction model，把深度推理交给 background model，让 agentic system 的分工维度从任务空间扩展到时间空间。

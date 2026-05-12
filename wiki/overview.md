@@ -2,8 +2,8 @@
 title: 整体综述
 type: overview
 tags: [方法论, 知识管理]
-source_count: 31
-updated: 2026-05-11
+source_count: 32
+updated: 2026-05-12
 ---
 
 这份 wiki 越往后写，我越清楚它不是“资料仓库”，而更像一条不断长出来的思考主线。起点当然是 [[topics/llm-wiki-pattern]]：Karpathy 提醒我，真正有复利的不是一次次对着原始资料发问，而是把理解编译进一个会持续演化的知识系统。
@@ -27,6 +27,8 @@ updated: 2026-05-11
 这次继续沿着 ClickHouse 往下挖的 [[sources/clickhouse-manage-and-deploy]]、[[sources/clickhouse-replication-and-scaling]]、[[sources/clickhouse-separation-storage-compute]]、[[sources/clickhouse-external-disks-for-storing-data]] 与 [[sources/clickhouse-multi-region-replication]]，则把主题从“查询如何更省”扩展到“分析数据库如何真正部署成生产系统”。它们新增了 [[topics/clickhouse-deployment-topologies]] 这条主线，把副本、分片、Keeper、对象存储、本地缓存与多地域时延约束串成一个完整的架构判断框架。
 
 最新补入的 [[sources/clickhouse-keeper]] 则把这条主线继续推进到协调层选型：当 ClickHouse 已经需要 Keeper 这类组件时，团队真正要判断的不是“能不能用”，而是**应不应该在 ClickHouse 专用协调层与通用 ZooKeeper 基础设施之间做切换**。它新增了 [[topics/clickhouse-keeper-vs-zookeeper]]，把兼容性、迁移边界、组织复用与生产运维建议放进同一判断框架。
+
+这次摄入的 [[sources/interaction-models]] 则把 wiki 的 agent 主线从「编排层怎么设计」推进到「人机协作的实时性」这一新维度。它新增了 [[topics/interaction-models]]、[[entities/thinking-machines-lab]]：Thinking Machines Lab 提出的 interaction model 不是让 turn-based 模型跑得更快，而是**彻底取消 turn 的概念**——以 200ms micro-turns 持续运行，原生支持打断、重叠语音、视觉主动性和并发工具调用。双模型架构把实时 presence 交给 interaction model，把深度推理交给 background model，让我意识到 agentic system 的分工维度不只可以是任务空间，还可以是时间空间。
 
 这次继续补入的 [[sources/clickhouse-operator-introduction]]、[[sources/altinity-converting-mergetree-to-replicated]]、[[sources/clickhouse-replicated-table-engines]] 与 [[sources/clickhouse-attach-as-replicated]]，则把 ClickHouse 主线从“集群怎么搭”推进到“生产上应该在什么时候选 replicated，以及选错后如何迁移”。它们新增了 [[topics/clickhouse-replicated-engines-and-conversion]]，把 `Replicated` 数据库引擎、`ReplicatedMergeTree`、`ATTACH ... AS REPLICATED`、`convert_to_replicated` 与旁路迁移方案放进同一个生产判断框架。
 
@@ -83,6 +85,8 @@ updated: 2026-05-11
 - 理解 category-based delegation 的设计取舍：模型选择从配置问题变成意图表达问题的价值与风险
 - 理解多智能体系统的后台并行机制：会话隔离、生命周期管理、结果回注和熔断器如何组成完整基础设施
 - 理解 agent 复杂度阶梯的可实现性：prompt chaining → routing → orchestrator-workers → evaluator-optimizer 每一层对应什么代码模块
+- 理解 interaction model 带来的范式变化：从 turn-based 到流式协作，ACI 是否需要同时回答"模型如何调用工具"和"模型如何与人类共享时间"
+- 理解双模型架构中按时间尺度的分工逻辑：实时 presence 与深度推理的边界如何定义，结果如何自然回注到对话流中
 
 ## 演化轨迹
 
@@ -110,7 +114,8 @@ updated: 2026-05-11
 - 2026-04-29：摄入 Agent Bridge 设计与实现，新增通讯软件与 CLI Agent 桥接主题
 - 2026-05-09：摄入 oh-my-openagent 架构分析，新增 AI Agent Harness 主题，把 agentic systems 从理论概念推进到具体运行时实现
 - 2026-05-09：摄入 ds4.c README，新增本地 LLM 推理主题，把 agent 后端从云端 API 延伸到本地专用引擎
+- 2026-05-12：摄入 Thinking Machines Lab 的 interaction models，新增实时多模态交互主题，把 agent 设计从编排层推进到人机协作的时间维度
 
 ---
 
-相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/ai-agent-harness]] · [[topics/long-horizon-agents]] · [[topics/agent-bridge]] · [[topics/local-llm-inference]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-data-export]] · [[topics/kubernetes-autoscaling]] · [[topics/hdfs-and-oss-hdfs]] · [[topics/software-versioning]] · [[topics/javascript-module-systems]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/anthony-fu]] · [[entities/openclaw]] · [[entities/ilink]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/kubernetes]] · [[entities/hdfs]] · [[entities/oss-hdfs]] · [[entities/nodejs]] · [[entities/oh-my-openagent]] · [[entities/antirez]] · [[entities/deepseek]] · [[sources/agent-bridge-design]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/oneuptime-clickhouse-export-file-formats]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/databricks-what-is-hdfs]] · [[sources/aliyun-oss-hdfs-overview]] · [[sources/aliyun-oss-hdfs-notice]] · [[sources/epoch-semantic-versioning]] · [[sources/move-on-to-esm-only]] · [[sources/oh-my-openagent]] · [[sources/ds4-readme]]
+相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/ai-agent-harness]] · [[topics/long-horizon-agents]] · [[topics/agent-bridge]] · [[topics/local-llm-inference]] · [[topics/interaction-models]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-data-export]] · [[topics/kubernetes-autoscaling]] · [[topics/hdfs-and-oss-hdfs]] · [[topics/software-versioning]] · [[topics/javascript-module-systems]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/anthony-fu]] · [[entities/openclaw]] · [[entities/ilink]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/kubernetes]] · [[entities/hdfs]] · [[entities/oss-hdfs]] · [[entities/nodejs]] · [[entities/oh-my-openagent]] · [[entities/antirez]] · [[entities/deepseek]] · [[entities/thinking-machines-lab]] · [[sources/agent-bridge-design]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/oneuptime-clickhouse-export-file-formats]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/databricks-what-is-hdfs]] · [[sources/aliyun-oss-hdfs-overview]] · [[sources/aliyun-oss-hdfs-notice]] · [[sources/epoch-semantic-versioning]] · [[sources/move-on-to-esm-only]] · [[sources/oh-my-openagent]] · [[sources/ds4-readme]] · [[sources/interaction-models]]

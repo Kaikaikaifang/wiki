@@ -69,8 +69,16 @@ Anthropic 在 SWE-bench coding agent 上的经验甚至是：**优化工具花�
 
 [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]] 则把 ACI 再向下推进一层：当 sandbox、MCP 服务、手机或其他执行环境都统一抽象成 `execute(name, input) → string` 时，agent 面对的是一个更稳定的“手的接口”。这类抽象并不降低复杂度本身，但能降低系统边界的脆弱性。
 
+## 从工具接口到协作接口
+
+[[sources/interaction-models]] 让我意识到 ACI 还有一个更深层、之前被忽略的维度：**agent 如何与人类在同一个时间流中共处**。现有的 ACI 讨论几乎完全集中在"模型怎么调用外部工具"，但完全没有触及"模型怎么和人类实时协作"。
+
+Interaction model 把这个问题推进到了极致：当模型以 200ms micro-turns 持续运行，同时处理音频、视频和文本输入，同时生成输出，"接口"就不再是一套函数签名，而是一种**共在状态**。模型可以在你听它说话时浏览网页、生成界面、观察你的屏幕并适时插话——这要求一套全新的注意力管理、边界保持和安全对齐机制。
+
+这个视角的延伸意义在于：未来的 ACI 设计可能需要同时回答两个问题——**模型如何调用工具**，以及**模型如何与人类共享时间和注意力**。两者都是 agent 能力的边界条件，缺一不可。
+
 ---
 
-来源：[[sources/building-effective-ai-agents]] · [[sources/how-we-built-our-multi-agent-research-system]] · [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]]
+来源：[[sources/building-effective-ai-agents]] · [[sources/how-we-built-our-multi-agent-research-system]] · [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]] · [[sources/interaction-models]]
 
-相关页面：[[topics/agentic-systems]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[entities/managed-agents]] · [[entities/anthropic]]
+相关页面：[[topics/agentic-systems]] · [[topics/multi-agent-systems]] · [[topics/long-horizon-agents]] · [[topics/interaction-models]] · [[entities/managed-agents]] · [[entities/anthropic]] · [[entities/thinking-machines-lab]]
