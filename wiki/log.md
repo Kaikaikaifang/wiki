@@ -321,3 +321,7 @@
 ## [2026-05-11] ingest | 腾讯云 ClickHouse 集群实例选型指南
 
 触及页面：`sources/tencent-cloud-clickhouse-cluster-sizing`、`topics/clickhouse-cluster-sizing`、`index`、`overview`。核心沉淀是：腾讯云 TCHouse-C 把计算节点打包成标准型、存储优化型与高性能型三类规格，选型核心不在"哪款最大"，而在先回答查询模式、数据温度与成本约束；Keeper 节点虽常被忽略，但其网络抖动会直接影响整个集群的副本健康度。新增主题页把 CPU、内存、磁盘、网络四条约束线拧成一组可验证的选型假设，并与既有 `clickhouse-deployment-topologies`、`clickhouse-production-migration` 形成互补。
+
+## [2026-05-12] ingest | 腾讯云 CVM 完整实例规格补充
+
+触及页面：`sources/tencent-cloud-clickhouse-cluster-sizing`、`topics/clickhouse-cluster-sizing`。核心沉淀是：补充了腾讯云全量 CVM 实例族信息（标准型 SA9/S9/SA9e/S9e/S9pro/S8/SA5/SA4/S6/SA3/SR1/S5 等、内存型 MA9/M9/MA9e/M9e/M9pro/M8/MA5/MA4/MA3/M6/M5/M4/M3/M2、高 IO 型 ITA5/IT5/IT3/IA5se/IA3se、大数据型 D3/D2、计算型 C6/C5/C4 等），在主题页中增加了精细的实例族-场景映射表和五个具体场景的推荐配置（通用 OLAP、内存密集型、热数据低延迟、海量冷数据归档、大规模生产集群），并补充了网络性能关键指标（PPS、带宽、队列数、DPDK）和垂直变配限制的详细说明。
