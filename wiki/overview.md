@@ -69,6 +69,8 @@ updated: 2026-05-13
 - 建立一套关于 SQL 索引、执行计划与分页策略的基础性能判断
 - 理解分析型数据库中的查询结果缓存如何在新鲜度、安全性与成本之间折中
 - 理解 ClickHouse 中分片、副本、存算分离与冷热分层之间的组合关系
+- 理解 ClickHouse 分片决策的触发条件：在冷热分层前提下，何时分片、何时全副本
+- 理解 ClickHouse 从独立节点到全副本集群的迁移路径与关键验证点
 - 理解 ClickHouse 中 Keeper 与 ZooKeeper 的适用边界，以及协调层选型如何影响生产复杂度
 - 理解 ClickHouse 中 `Replicated` 数据库引擎与 `ReplicatedMergeTree` 的分工，以及旧表转 replicated 的风险边界
 - 理解单节点 ClickHouse 迁到集群时，哪些变化属于拓扑升级，哪些变化属于表级迁移工程

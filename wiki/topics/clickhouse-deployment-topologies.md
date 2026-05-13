@@ -165,6 +165,17 @@ Cloud 架构里我最喜欢的设计是 **compute-compute separation**：多个�
 
 它不适合把全球多地域都纳入同一个低延迟写集群想象中。
 
+## 分片决策的具体化
+
+[[topics/clickhouse-sharding-decision]] 把我之前的判断框架进一步具体化了。它强调了一个关键区分：
+
+- **加副本是配置参数的变化**：`remote_servers` 里加一行，数据自动同步；
+- **加分片是架构重构**：需要分片键设计、数据重分布、查询路径调整。
+
+在冷热分层已经开启的前提下，分片的唯一合理触发条件是**单机处理能力成为明确瓶颈**。如果热工作集能被单机内存 cache 覆盖、CPU 和内存远未饱和、写入量不大，那么不分片（1 shard × N replicas）配合 Parallel Replicas 是更简洁、更弹性的选择。
+
+这让我把扩容顺序再收紧一层：冷热分层前置时，先验证对象存储冷层、cache disk、热盘容量和节点 I/O；如果 CPU 或内存先吃紧，优先纵向升配；只有当单 shard 数据量、写入吞吐或扫描压力成为明确瓶颈时，再增加 shard。否则 shard 数加得太早，只是在还没有证明瓶颈前提前支付分布式查询和运维成本。
+
 ## 一个实用的部署判断框架
 
 - **先纵向扩容或加副本**：当单机资源仍可提升，或核心诉求是高可用、节点故障自动接管、避免单节点损坏导致服务中断。
@@ -191,4 +202,4 @@ Cloud 架构里我最喜欢的设计是 **compute-compute separation**：多个�
 
 来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-production-v4-tencent-cloud-validation]] · [[sources/clickhouse-cloud-architecture]] · [[sources/clickhouse-parallel-replicas]]
 
-相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-production-migration]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-production-v4-tencent-cloud-validation]]
+相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-production-migration]] · [[topics/clickhouse-sharding-decision]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-production-v4-tencent-cloud-validation]]

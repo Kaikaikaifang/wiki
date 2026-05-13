@@ -26,6 +26,7 @@ updated: 2026-05-13
 - [[topics/clickhouse-operator-installation-on-shared-clusters]] — 在共享 Kubernetes 集群里安装官方 ClickHouse Operator 时，如何判断 Helm、watch 范围与 CRD 管理策略
 - [[topics/clickhouse-keeper-vs-zookeeper]] — 用“专用协调层”与“通用协调服务”的边界判断 Keeper 与 ZooKeeper
 - [[topics/clickhouse-replicated-engines-and-conversion]] — 把 `Replicated` 数据库引擎、`ReplicatedMergeTree` 与旧表迁移路径放进同一生产判断框架
+- [[topics/clickhouse-sharding-decision]] — 在冷热分层前提下，何时分片、何时全副本的决策框架与真实案例分析
 - [[topics/clickhouse-single-node-to-cluster-migration]] — 从单节点 ClickHouse 迁到多副本多分片集群时，如何判断无缝切换、引擎切换与迁移步骤
 - [[topics/ddl-vs-dml]] — 用“改结构”和“改数据”的区别理解 `ON CLUSTER` 为什么只管 DDL
 - [[topics/hybrid-retrieval]] — 组合 BM25、向量检索、查询扩展与重排的检索范式
