@@ -334,6 +334,10 @@
 
 触及页面：`sources/clickhouse-cloud-architecture`、`sources/clickhouse-parallel-replicas`、`topics/clickhouse-deployment-topologies`、`entities/clickhouse`、`index`、`overview`。核心沉淀是：ClickHouse Cloud 并非自管版的 UI 包装，而是以对象存储为默认底座、计算层自动扩缩容与 idle、compute-compute separation 让读写资源彻底解耦的另一种架构；Parallel Replicas 则补上了无分片场景下的查询并行化机制，用 granule 取代 shard 作为工作单元，通过 announcement、dynamic coordination、cache locality 和 task stealing 解决异步复制、尾延迟与缓存命中问题。两者共同更新了部署拓扑判断框架，把 Cloud 架构选择并行查询策略也纳入同一体系。
 
+## [2026-05-13] ingest | clickhouse-go 客户端配置
+
+触及页面：`sources/clickhouse-go-configuration`、`topics/clickhouse-deployment-topologies`、`entities/clickhouse`、`index`、`overview`。核心沉淀是：全副本架构下，客户端的 `Addr` 应填入所有 replica 地址，通过 `ConnOpenStrategy`（轮询或随机）实现查询负载均衡；`ConnMaxLifetime` 默认值 1 小时在节点动态扩缩容时可能导致连接分布不均，需要监控；协议选择（TCP vs HTTP）不仅影响压缩选项，还影响 session 语义和认证方式。
+
 ## [2026-05-13] query | ClickHouse 分片决策：从 4 个独立节点到全副本集群
 
 触及页面：`topics/clickhouse-sharding-decision`（新建）、`topics/clickhouse-deployment-topologies`、`entities/clickhouse`、`index`、`overview`。核心沉淀是：在冷热分层前提下（目标周期 1 个月，热数据约 0.53TB/月，压缩后 < 200GB），4 个独立单节点（64C/256GiB，CPU 峰值 28%，内存峰值 12%）不应分片，而应改为 1 shard × 4 replicas 的全副本集群。分片不是配置参数的变化，而是需要分片键设计、数据重分布、查询路径调整的架构重构；副本才是配置参数的变化。关键判断：分片的唯一合理触发条件是单机处理能力成为明确瓶颈，而当前所有指标都远未触达。迁移路径：选定一个权威源节点执行 `ATTACH ... AS REPLICATED`，其他节点清空重建为 replica，配合冷热分层和 Parallel Replicas。

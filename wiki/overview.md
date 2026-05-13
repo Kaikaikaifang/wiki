@@ -44,6 +44,8 @@ updated: 2026-05-13
 
 这次继续深挖的 [[sources/clickhouse-cloud-architecture]] 和 [[sources/clickhouse-parallel-replicas]]，则把 ClickHouse 主线从“自管集群怎么搭”推进到“Cloud 托管架构下查询怎么并行化”。前者让我看到 ClickHouse Cloud 并不是自管版的包装，而是以对象存储为默认底座、计算层自动扩缩容与 idle、compute-compute separation 让读写资源彻底解耦的另一种架构。后者则补上了无分片场景下的查询并行化机制：用 granule 取代 shard 作为工作单元，通过 announcement、dynamic coordination、cache locality 和 task stealing 解决异步复制、尾延迟与缓存命中问题。它们共同更新了 [[topics/clickhouse-deployment-topologies]]，把 Cloud 架构判断与并行查询策略也纳入同一框架。
 
+这次补入的 [[sources/clickhouse-go-configuration]] 则把 ClickHouse 主线从"服务端怎么部署"推进到"客户端怎么连接"。它更新了 [[topics/clickhouse-deployment-topologies]]：全副本架构下，客户端的 `Addr` 应填入所有 replica 地址，通过 `ConnOpenStrategy`（轮询或随机）实现查询负载均衡；`ConnMaxLifetime` 默认值 1 小时在节点动态扩缩容时可能导致连接分布不均，需要监控；协议选择（TCP vs HTTP）不仅影响压缩选项，还影响 session 语义和认证方式。
+
 这次摄入的 [[sources/kubernetes-autoscaling-workloads]] 和 [[sources/ack-node-scaling]]，则把 Kubernetes 从“部署 ClickHouse 的容器平台”推进成一条独立的调度与控制器主线。它们新增了 [[topics/kubernetes-autoscaling]] 与 [[entities/kubernetes]]：工作负载伸缩负责改变 replica 或 Pod 资源，节点伸缩负责为不可调度 Pod 补容量，两者必须通过调度器、resource requests、节点池、PDB 和云厂商库存接起来。
 
 这次摄入的 [[sources/databricks-what-is-hdfs]]、[[sources/aliyun-oss-hdfs-overview]] 和 [[sources/aliyun-oss-hdfs-notice]]，则新增了 [[topics/hdfs-and-oss-hdfs]] 这条大数据存储线索：传统 HDFS 用 NameNode、DataNode、block 和副本解决本地集群时代的大文件存储，OSS-HDFS 则把 HDFS 接口语义接到 OSS 对象存储之上，同时引入 `.dlsdata/` 内部目录、生命周期规则、版本控制和后台角色这些新的云上运维边界。

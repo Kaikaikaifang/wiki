@@ -91,6 +91,7 @@ updated: 2026-05-13
 - [[sources/clickhouse-cloud-architecture]] — ClickHouse Cloud 官方架构文档：对象存储打底、自动扩缩容、compute-compute separation 与服务隔离（2026-05-13，网络文章）
 - [[sources/clickhouse-cold-hot-storage]] — ClickHouse 在 Kubernetes 中用阿里云 OSS、cache disk 与 TTL move 实现冷热分层的实践笔记（2026-04-27，网络文章）
 - [[sources/clickhouse-external-disks-for-storing-data]] — ClickHouse 外部存储与文件缓存文档（2026-04-16，网络文章）
+- [[sources/clickhouse-go-configuration]] — clickhouse-go 客户端配置：连接池、多节点策略、压缩与 TCP/HTTP 协议选择（2026-05-13，网络文章）
 - [[sources/clickhouse-issue-20867]] — ClickHouse issue 讨论 `ReplicatedReplacingMergeTree` 中 replacement、version 列与 insert deduplication 的边界（2021-02-18，GitHub issue）
 - [[sources/clickhouse-keeper]] — ClickHouse Keeper 文档，聚焦配置、兼容边界与迁移要点（2026-04-16，网络文章）
 - [[sources/clickhouse-manage-and-deploy]] — ClickHouse 部署与运维文档总览（2026-04-16，网络文章）

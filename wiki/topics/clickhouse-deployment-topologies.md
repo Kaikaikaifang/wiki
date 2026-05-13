@@ -198,8 +198,18 @@ Cloud 架构里我最喜欢的设计是 **compute-compute separation**：多个�
 
 这也让我意识到，分析数据库的部署优化，和 OLTP 世界那种“主从 + 索引 + 连接池”思路并不一样。这里更像是在拼一台面向分析工作负载的分布式机器。
 
+## 客户端配置与拓扑决策的耦合
+
+[[sources/clickhouse-go-configuration]] 让我意识到，服务端选择了全副本架构后，客户端的连接策略也需要相应调整：
+
+- **全副本架构下**，客户端的 `Addr` 应填入所有 replica 地址，通过 `ConnOpenStrategy`（轮询或随机）实现查询负载均衡；
+- **`ConnMaxLifetime` 默认值 1 小时**：在节点动态扩缩容时可能导致连接分布不均，需要监控；
+- **协议选择（TCP vs HTTP）**：不仅影响压缩选项，还影响 session 语义和认证方式。
+
+这让我把"客户端配置"也纳入了部署拓扑判断框架：服务端选择全副本架构后，客户端的连接策略、连接池大小和协议选择都需要相应调整。
+
 ---
 
 来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-production-v4-tencent-cloud-validation]] · [[sources/clickhouse-cloud-architecture]] · [[sources/clickhouse-parallel-replicas]]
 
-相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-production-migration]] · [[topics/clickhouse-sharding-decision]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-production-v4-tencent-cloud-validation]]
+相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-production-migration]] · [[topics/clickhouse-sharding-decision]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-production-v4-tencent-cloud-validation]] · [[sources/clickhouse-go-configuration]]
