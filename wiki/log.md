@@ -345,3 +345,7 @@
 ## [2026-05-13] ingest | ClickHouse SharedMergeTree
 
 触及页面：`sources/clickhouse-shared-merge-tree`、`topics/clickhouse-deployment-topologies`、`entities/clickhouse`、`index`、`overview`。核心沉淀是：SharedMergeTree 是 ClickHouse Cloud 的默认引擎，用"共享存储 + Keeper 元数据 + 异步 leaderless 复制"取代了 ReplicatedMergeTree 的"replica 间复制"，实现了秒级扩容和数百 replica 支持。用户写 `ENGINE = MergeTree` 时 Cloud 会自动转换为 SharedMergeTree，完全透明。这也解释了为什么 ClickHouse Cloud 能做到 compute-compute separation 和动态扩缩容——底层引擎已经为"共享存储 + 无状态计算节点"做好了设计。自管集群即使配置了对象存储，仍然使用 ReplicatedMergeTree，replica 间仍然需要复制，扩容速度天然受限。
+
+## [2026-05-13] query | ClickHouse Cloud 客户端连接策略
+
+触及页面：`sources/clickhouse-cloud-architecture`、`topics/clickhouse-deployment-topologies`。核心沉淀是：ClickHouse Cloud 的客户端只需要连接一个 service endpoint（如 `xxx.clickhouse.cloud:9440`），Cloud 内部负责负载均衡和查询分发。这与自管集群"配多地址做轮询"的策略不同——自管集群需要外部 LB 或客户端多地址来实现连接分发，Cloud 则把这些都内置了。根本原因是引擎差异：Cloud 使用无状态的 SharedMergeTree（数据在共享存储），自管集群使用有状态的 ReplicatedMergeTree（数据在本地盘）。自管集群可以通过"外部 LB + Parallel Replicas"近似 Cloud 体验，但无法实现秒级透明扩缩容。

@@ -41,6 +41,32 @@ Cloud 环境下多租户隔离分三层：
 
 对于 AWS Enterprise 服务，还支持 CMEK（Customer-Managed Encryption Key）实现静态数据的高级隔离。
 
+## 客户端连接方式：为什么只需要一个 Endpoint
+
+ClickHouse Cloud 与自管集群在客户端连接策略上有本质区别。官方文档明确说明：
+
+- 每个 Cloud service 提供一个**服务 endpoint**（如 `xxx.REGION.CSP.clickhouse.cloud:9440`）
+- 客户端**不需要**在连接串中列出所有 replica 节点
+- Cloud 平台内部负责负载均衡和查询分发
+
+这与自管集群的推荐做法不同：自管集群要么自己配负载均衡器（LB），要么在客户端列出所有 replica 地址做轮询。Cloud 把这些都托管了。
+
+**连接示例（官方推荐）：**
+
+```go
+conn, err := clickhouse.Open(&clickhouse.Options{
+    Addr: []string{"xxx.asia-northeast1.gcp.clickhouse.cloud:9440"},
+    Protocol: clickhouse.Native,
+    TLS:      &tls.Config{},
+    Auth: clickhouse.Auth{
+        Username: "default",
+        Password: "xxx",
+    },
+})
+```
+
+注意 `Addr` 只有一个地址，但 Cloud 内部会把连接分发到某个计算节点，再由该节点作为 coordinator 做 Parallel Replicas 并行化。
+
 ## Compute-Compute Separation
 
 这是我觉得 Cloud 架构里最有工程价值的设计之一：多个计算节点组（warehouse）可以共享同一份底层对象存储，每个节点组有自己独立的服务 URL。

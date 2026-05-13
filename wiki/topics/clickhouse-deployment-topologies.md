@@ -282,6 +282,35 @@ Cloud 架构里我最喜欢的设计是 **compute-compute separation**：多个�
 
 - 全副本架构下，客户端需要**分散连接**（轮询/随机/LB）让查询到达不同节点，再由 Parallel Replicas 在服务端做查询内并行
 
+### ClickHouse Cloud 的特殊情况
+
+以上分析主要针对**自管集群**。ClickHouse Cloud 在客户端连接策略上有本质不同：
+
+**Cloud 只需要一个 endpoint：**
+
+```go
+// Cloud 连接方式：只连一个 Cloud endpoint
+Addr: []string{"xxx.asia-northeast1.gcp.clickhouse.cloud:9440"}
+```
+
+**为什么 Cloud 可以只连一个？**
+
+1. **Cloud 内部有托管负载均衡器**：你连接的 endpoint 不是具体节点，而是 Cloud 的 LB 入口，Cloud 自动把连接分发到可用计算节点
+2. **SharedMergeTree 引擎**：计算节点是无状态的，数据在共享对象存储，新节点秒级上线即可 serving 查询
+3. **扩容对客户端完全透明**：加/减 replica 时不需要更新客户端配置，Cloud 内部自动处理
+
+**这与自管集群的区别：**
+
+| 维度 | 自管集群 | ClickHouse Cloud |
+|---|---|---|
+| 客户端连接 | 多地址（或外部 LB） | **单 endpoint** |
+| 负载均衡 | 客户端驱动或外部 LB | **Cloud 内部托管** |
+| 节点发现 | 客户端/ LB 需感知所有节点 | **Cloud 自动处理** |
+| 扩容影响 | 需更新客户端配置或 LB 后端 | **对客户端完全透明** |
+| 节点状态 | 有状态（本地持数据） | **无状态（共享存储）** |
+
+**核心原则**：自管集群需要客户端或外部 LB 来分散连接到多个 replica；Cloud 把这些都内置了，客户端只需要连到 Cloud 提供的入口。
+
 ### 节点故障时的客户端行为
 
 这是一个实际生产中一定会遇到的问题。客户端配置了多个节点地址，如果某个节点挂掉但客户端未及时更新配置，会发生什么？
