@@ -46,6 +46,8 @@ updated: 2026-05-13
 
 这次补入的 [[sources/clickhouse-go-configuration]] 则把 ClickHouse 主线从"服务端怎么部署"推进到"客户端怎么连接"。它更新了 [[topics/clickhouse-deployment-topologies]]：全副本架构下，客户端的 `Addr` 应填入所有 replica 地址，通过 `ConnOpenStrategy`（轮询或随机）实现查询负载均衡；`ConnMaxLifetime` 默认值 1 小时在节点动态扩缩容时可能导致连接分布不均，需要监控；协议选择（TCP vs HTTP）不仅影响压缩选项，还影响 session 语义和认证方式。
 
+这次摄入的 [[sources/clickhouse-shared-merge-tree]] 则把 ClickHouse Cloud 的底层引擎摊开来看：SharedMergeTree 是 ReplicatedMergeTree 在云原生环境下的重新实现，用"共享存储 + Keeper 元数据 + 异步 leaderless 复制"取代了传统的"replica 间复制"，实现了秒级扩容和数百 replica 支持。这让我理解了为什么 ClickHouse Cloud 能做到 compute-compute separation 和动态扩缩容——底层引擎已经为"共享存储 + 无状态计算节点"做好了设计。自管集群即使配置了对象存储，仍然使用 ReplicatedMergeTree，replica 间仍然需要复制，扩容速度天然受限。
+
 这次摄入的 [[sources/kubernetes-autoscaling-workloads]] 和 [[sources/ack-node-scaling]]，则把 Kubernetes 从“部署 ClickHouse 的容器平台”推进成一条独立的调度与控制器主线。它们新增了 [[topics/kubernetes-autoscaling]] 与 [[entities/kubernetes]]：工作负载伸缩负责改变 replica 或 Pod 资源，节点伸缩负责为不可调度 Pod 补容量，两者必须通过调度器、resource requests、节点池、PDB 和云厂商库存接起来。
 
 这次摄入的 [[sources/databricks-what-is-hdfs]]、[[sources/aliyun-oss-hdfs-overview]] 和 [[sources/aliyun-oss-hdfs-notice]]，则新增了 [[topics/hdfs-and-oss-hdfs]] 这条大数据存储线索：传统 HDFS 用 NameNode、DataNode、block 和副本解决本地集群时代的大文件存储，OSS-HDFS 则把 HDFS 接口语义接到 OSS 对象存储之上，同时引入 `.dlsdata/` 内部目录、生命周期规则、版本控制和后台角色这些新的云上运维边界。

@@ -89,6 +89,7 @@ updated: 2026-05-13
 - [[sources/clickhouse-13-mistakes]] — ClickHouse 官方总结的 13 个入门常见误区（2026-04-26，网络文章）
 - [[sources/clickhouse-attach-as-replicated]] — ClickHouse `ATTACH ... AS REPLICATED` 文档，强调本地数据与复制元数据分离（2026-04-16，网络文章）
 - [[sources/clickhouse-cloud-architecture]] — ClickHouse Cloud 官方架构文档：对象存储打底、自动扩缩容、compute-compute separation 与服务隔离（2026-05-13，网络文章）
+- [[sources/clickhouse-shared-merge-tree]] — ClickHouse SharedMergeTree 引擎文档：Cloud 架构下 ReplicatedMergeTree 的云原生替代，共享存储 + Keeper 元数据 + 异步 leaderless 复制（2026-05-13，网络文章）
 - [[sources/clickhouse-cold-hot-storage]] — ClickHouse 在 Kubernetes 中用阿里云 OSS、cache disk 与 TTL move 实现冷热分层的实践笔记（2026-04-27，网络文章）
 - [[sources/clickhouse-external-disks-for-storing-data]] — ClickHouse 外部存储与文件缓存文档（2026-04-16，网络文章）
 - [[sources/clickhouse-go-configuration]] — clickhouse-go 客户端配置：连接池、多节点策略、压缩与 TCP/HTTP 协议选择（2026-05-13，网络文章）

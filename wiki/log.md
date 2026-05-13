@@ -341,3 +341,7 @@
 ## [2026-05-13] query | ClickHouse 分片决策：从 4 个独立节点到全副本集群
 
 触及页面：`topics/clickhouse-sharding-decision`（新建）、`topics/clickhouse-deployment-topologies`、`entities/clickhouse`、`index`、`overview`。核心沉淀是：在冷热分层前提下（目标周期 1 个月，热数据约 0.53TB/月，压缩后 < 200GB），4 个独立单节点（64C/256GiB，CPU 峰值 28%，内存峰值 12%）不应分片，而应改为 1 shard × 4 replicas 的全副本集群。分片不是配置参数的变化，而是需要分片键设计、数据重分布、查询路径调整的架构重构；副本才是配置参数的变化。关键判断：分片的唯一合理触发条件是单机处理能力成为明确瓶颈，而当前所有指标都远未触达。迁移路径：选定一个权威源节点执行 `ATTACH ... AS REPLICATED`，其他节点清空重建为 replica，配合冷热分层和 Parallel Replicas。
+
+## [2026-05-13] ingest | ClickHouse SharedMergeTree
+
+触及页面：`sources/clickhouse-shared-merge-tree`、`topics/clickhouse-deployment-topologies`、`entities/clickhouse`、`index`、`overview`。核心沉淀是：SharedMergeTree 是 ClickHouse Cloud 的默认引擎，用"共享存储 + Keeper 元数据 + 异步 leaderless 复制"取代了 ReplicatedMergeTree 的"replica 间复制"，实现了秒级扩容和数百 replica 支持。用户写 `ENGINE = MergeTree` 时 Cloud 会自动转换为 SharedMergeTree，完全透明。这也解释了为什么 ClickHouse Cloud 能做到 compute-compute separation 和动态扩缩容——底层引擎已经为"共享存储 + 无状态计算节点"做好了设计。自管集群即使配置了对象存储，仍然使用 ReplicatedMergeTree，replica 间仍然需要复制，扩容速度天然受限。

@@ -2,7 +2,7 @@
 title: ClickHouse 部署拓扑
 type: topic
 tags: [数据库, ClickHouse, 部署, 架构]
-source_count: 13
+source_count: 14
 updated: 2026-05-13
 ---
 
@@ -114,6 +114,30 @@ Cloud 架构里我最喜欢的设计是 **compute-compute separation**：多个�
 
 这比自管集群里"用同一份资源既做写入又做查询"的模型干净得多。代价是你必须接受 ClickHouse Cloud 的托管边界：网络、IAM、计费和版本升级都不再完全由自己控制。
 
+## SharedMergeTree：Cloud 架构的引擎基石
+
+[[sources/clickhouse-shared-merge-tree]] 让我理解了 ClickHouse Cloud 为什么能做到"无分片 + 数百 replica"——底层引擎已经不是 ReplicatedMergeTree，而是 SharedMergeTree。
+
+**核心差异：从"复制"到"共享"**
+
+| 维度 | ReplicatedMergeTree | SharedMergeTree |
+|---|---|---|
+| 数据存储 | 每个 replica 持完整数据副本 | 数据在共享对象存储，所有 replica 共享 |
+| 元数据存储 | 每个 replica 本地持有，需要 replica 间复制 | 元数据在 ClickHouse-Keeper，所有 replica 共享 |
+| replica 间通信 | 需要直接通信复制数据和元数据 | 不直接通信，通过共享存储和 Keeper 协调 |
+| 复制模型 | 同步/异步 leader-follower | **异步 leaderless** |
+| 扩容速度 | 需要复制数据到新 replica | 新 replica 直接从共享存储读取元数据，秒级 |
+| 最大 replica 数 | 受复制开销限制 | **可支持数百个 replica** |
+
+**这意味着什么？**
+
+- 扩容不再是"加 replica 等数据复制"，而是"新 replica 订阅 Keeper 元数据即可"
+- 写入性能不再受 replica 间复制带宽限制，只受共享存储吞吐限制
+- 一致性不再需要在 N 个 replica 间确认，只需要在 Keeper quorum 间确认
+- 用户写 `ENGINE = MergeTree` 时，Cloud 环境会自动转换为 `SharedMergeTree`，完全透明
+
+这也解释了为什么 ClickHouse Cloud 可以支持 compute-compute separation 和动态扩缩容：底层引擎已经为"共享存储 + 无状态计算节点"做好了设计。自管集群即使配置了对象存储，仍然使用 ReplicatedMergeTree，replica 间仍然需要复制，扩容速度天然受限。
+
 ## Parallel Replicas：无分片架构下的查询并行化
 
 [[sources/clickhouse-parallel-replicas]] 解决了一个 Cloud 架构下的核心问题：如果没有 shard，单个查询怎么利用多个 replica？
@@ -198,6 +222,104 @@ Cloud 架构里我最喜欢的设计是 **compute-compute separation**：多个�
 
 这也让我意识到，分析数据库的部署优化，和 OLTP 世界那种“主从 + 索引 + 连接池”思路并不一样。这里更像是在拼一台面向分析工作负载的分布式机器。
 
+## 客户端连接策略：连接串应该指向谁？
+
+这是从架构落到实施时最容易被忽略的问题。核心原则是：**客户端通常不需要连接所有节点，而是连接一个入口（LB 或任一可达节点），让服务端负责后续路由和并行化。**
+
+### 无分片全副本架构
+
+在这种架构下：
+
+1. **客户端连接策略**：
+   - 方式 A（推荐）：通过一个**负载均衡器**（如 K8s Service、HAProxy、Nginx）作为统一入口，LB 把连接分发到各 replica
+   - 方式 B：客户端直接配置所有 replica 地址，通过 `ConnOpenRoundRobin` 或 `ConnOpenRandom` 做连接级负载均衡
+   - **不需要客户端自己实现"对多个副本并发查询"**，那是 Parallel Replicas 的工作
+
+2. **查询并行化发生在服务端**：
+   - 请求到达任一节点后，该节点成为 **coordinator**
+   - coordinator 通过 Parallel Replicas 把 granules 作为工作单元分发到所有 replica
+   - 各 replica 处理完后回传 mergeable state，coordinator 合并结果
+
+3. **关键设置**（在查询 settings 中开启，不需要客户端特殊代码）：
+   ```sql
+   SET enable_parallel_replicas = 1;
+   SET cluster_for_parallel_replicas = 'default';
+   SET max_parallel_replicas = 4;
+   ```
+
+### 多分片多副本架构
+
+在这种架构下：
+
+1. **客户端连接策略**：
+   - 通常连接 **Distributed 表所在的入口节点**（或通过 LB 指向该节点）
+   - 客户端只需要知道一个入口，不需要知道底层有多少 shard 和 replica
+   - Distributed 表负责把查询路由到各个 shard，并在每个 shard 里选一个 replica 执行
+
+2. **查询路由发生在服务端**：
+   - `Distributed` 表把查询拆成 M 个子查询（M = shard 数）
+   - 每个子查询被发送到对应 shard
+   - **每个 shard 只选一个 replica** 执行（默认优先本地 replica，可通过 `load_balancing` 调整策略）
+   - 各 shard 返回结果后，`Distributed` 表做最终聚合
+
+3. **写入路由**：
+   - 写入必须走 `Distributed` 表
+   - `Distributed` 表根据**分片键**（sharding key）计算数据属于哪个 shard
+   - 数据被路由到对应 shard 的一个 replica，再由复制机制同步到同 shard 的其他 replica
+
+### 两种架构的连接策略对比
+
+| 维度 | 无分片（1 shard × N replicas） | 多分片（M shards × N replicas） |
+|---|---|---|
+| **客户端连接目标** | 所有 replica（或 LB 入口） | Distributed 表入口（或 LB） |
+| **客户端职责** | 轻。LB 或客户端做连接分发 | 更轻。只需要知道一个入口 |
+| **查询并行化** | Parallel Replicas（granule 级） | Distributed 表跨分片路由 + 每分片选一个 replica |
+| **是否需要 Distributed 表** | **不需要** | **必须** |
+| **故障转移** | 客户端/ LB 自动处理 | 入口节点故障需 LB 切换 |
+| **扩展性** | 加 replica 时客户端需更新 Addr | 加 shard 时客户端**无需**变更 |
+
+这让我意识到，"连接串指向谁"不是一个孤立的技术问题，而是服务端拓扑决策在客户端的映射：
+
+- 全副本架构下，客户端需要**分散连接**（轮询/随机/LB）让查询到达不同节点，再由 Parallel Replicas 在服务端做查询内并行
+
+### 节点故障时的客户端行为
+
+这是一个实际生产中一定会遇到的问题。客户端配置了多个节点地址，如果某个节点挂掉但客户端未及时更新配置，会发生什么？
+
+**查询场景：**
+
+| 连接策略 | 节点故障影响 | 恢复行为 |
+|---|---|---|
+| `ConnOpenInOrder`（默认） | 先尝试故障节点，连接超时后 fallback 到下一个节点 | 每次查询增加一次连接超时延迟（默认 30s） |
+| `ConnOpenRoundRobin` | 轮询到故障节点时连接失败，查询报错 | 需要应用层重试或连接池自动重连 |
+| `ConnOpenRandom` | 随机选中故障节点时连接失败，查询报错 | 需要应用层重试 |
+
+**关键细节：**
+
+- `ConnOpenInOrder` 的故障转移是**连接级别**的，不是**查询级别**的。如果连接池里有存活连接，查询会正常执行；只有当需要新建连接时才触发故障转移。
+- `ConnMaxLifetime` 默认 1 小时意味着连接会定期重建，因此故障节点的影响会持续存在直到被移出配置或恢复。
+- 如果查询**已经建立连接**后在执行过程中节点挂掉（如 coordinator 在执行 Parallel Replicas 时崩溃），查询会直接失败，需要应用层重试。
+- Parallel Replicas 内部有容错：如果某个 worker replica 挂掉，coordinator 会通过 announcement 发现并在其他 replica 上重试；但如果 coordinator 本身挂掉，整个查询失败。
+
+**写入场景：**
+
+在无分片全副本架构下，写入通常直接打到某个 replica（不走 Distributed 表）：
+
+- 如果写入目标节点挂掉：写入失败，需要重试到另一个节点
+- 如果写入成功但复制过程中其他 replica 挂掉：数据会在挂掉节点恢复后通过复制队列补齐（`ReplicatedMergeTree` 的保障）
+
+**生产建议：**
+
+1. **优先用负载均衡器（LB）代替客户端多地址配置**：LB 可以做健康检查，自动剔除故障节点，客户端只需要配一个 LB 地址
+2. **如果必须用客户端多地址**：
+   - 生产环境不要用 `ConnOpenInOrder`（故障节点排前面会导致每次查询都先超时）
+   - 用 `ConnOpenRoundRobin` 或 `ConnOpenRandom`，配合应用层重试
+   - 设置合理的 `DialTimeout`（不要默认 30s，建议 5-10s）
+3. **监控 `system.replicas`**：关注 `absolute_delay`、`queue_size`，及时发现复制延迟或 replica 失联
+- 分片架构下，客户端需要**收敛连接**到一个入口，由 Distributed 表在服务端做跨分片路由
+
+两种架构的负载均衡**层次完全不同**：全副本是"连接层分散 + 查询层并行"，分片是"连接层收敛 + 服务端路由"。
+
 ## 客户端配置与拓扑决策的耦合
 
 [[sources/clickhouse-go-configuration]] 让我意识到，服务端选择了全副本架构后，客户端的连接策略也需要相应调整：
@@ -212,4 +334,4 @@ Cloud 架构里我最喜欢的设计是 **compute-compute separation**：多个�
 
 来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-production-v4-tencent-cloud-validation]] · [[sources/clickhouse-cloud-architecture]] · [[sources/clickhouse-parallel-replicas]]
 
-相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-production-migration]] · [[topics/clickhouse-sharding-decision]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-production-v4-tencent-cloud-validation]] · [[sources/clickhouse-go-configuration]]
+相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-production-migration]] · [[topics/clickhouse-sharding-decision]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-production-v4-tencent-cloud-validation]] · [[sources/clickhouse-go-configuration]] · [[sources/clickhouse-shared-merge-tree]]
