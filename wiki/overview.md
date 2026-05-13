@@ -2,8 +2,8 @@
 title: 整体综述
 type: overview
 tags: [方法论, 知识管理]
-source_count: 32
-updated: 2026-05-12
+source_count: 34
+updated: 2026-05-13
 ---
 
 这份 wiki 越往后写，我越清楚它不是“资料仓库”，而更像一条不断长出来的思考主线。起点当然是 [[topics/llm-wiki-pattern]]：Karpathy 提醒我，真正有复利的不是一次次对着原始资料发问，而是把理解编译进一个会持续演化的知识系统。
@@ -41,6 +41,8 @@ updated: 2026-05-12
 这次补入的 [[sources/oneuptime-clickhouse-export-file-formats]] 则把 ClickHouse 迁移里的“导出”单独拎出来：`FORMAT` 只是结果序列化，`INTO OUTFILE`、HTTP、`clickhouse-client` 和 `s3()` 表函数决定文件落点。它新增了 [[topics/clickhouse-data-export]]，也把生产回灌里坚持 `Native + zstd`、数据湖交换再优先 `Parquet + zstd` 的判断写得更清楚。
 
 这次摄入的 [[sources/tencent-cloud-clickhouse-cluster-sizing]] 则把 ClickHouse 主线从“怎么部署”推进到“用什么机器部署”。它新增了 [[topics/clickhouse-cluster-sizing]]：腾讯云 TCHouse-C 把计算节点打包成标准型、存储优化型与高性能型三类规格，本质上是把 CPU/内存配比与磁盘介质这两个维度做了预设。选型真正的难点不是“哪款最大”，而是先回答查询模式、数据温度与成本约束，再在 CPU、内存、磁盘和网络四条线上做取舍。Keeper 节点虽然常被忽略，但它的网络抖动会直接影响整个集群的副本健康度。
+
+这次继续深挖的 [[sources/clickhouse-cloud-architecture]] 和 [[sources/clickhouse-parallel-replicas]]，则把 ClickHouse 主线从“自管集群怎么搭”推进到“Cloud 托管架构下查询怎么并行化”。前者让我看到 ClickHouse Cloud 并不是自管版的包装，而是以对象存储为默认底座、计算层自动扩缩容与 idle、compute-compute separation 让读写资源彻底解耦的另一种架构。后者则补上了无分片场景下的查询并行化机制：用 granule 取代 shard 作为工作单元，通过 announcement、dynamic coordination、cache locality 和 task stealing 解决异步复制、尾延迟与缓存命中问题。它们共同更新了 [[topics/clickhouse-deployment-topologies]]，把 Cloud 架构判断与并行查询策略也纳入同一框架。
 
 这次摄入的 [[sources/kubernetes-autoscaling-workloads]] 和 [[sources/ack-node-scaling]]，则把 Kubernetes 从“部署 ClickHouse 的容器平台”推进成一条独立的调度与控制器主线。它们新增了 [[topics/kubernetes-autoscaling]] 与 [[entities/kubernetes]]：工作负载伸缩负责改变 replica 或 Pod 资源，节点伸缩负责为不可调度 Pod 补容量，两者必须通过调度器、resource requests、节点池、PDB 和云厂商库存接起来。
 

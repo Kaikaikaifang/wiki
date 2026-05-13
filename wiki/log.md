@@ -329,3 +329,7 @@
 ## [2026-05-12] ingest | Interaction Models：可扩展的人机协作方式
 
 触及页面：`sources/interaction-models`、`topics/interaction-models`、`entities/thinking-machines-lab`、`topics/agent-computer-interface`、`topics/agentic-systems`、`topics/multi-agent-systems`、`index`、`overview`。核心沉淀是：Thinking Machines Lab 提出的 interaction model 不是让 turn-based 模型跑得更快，而是彻底取消 turn 的概念——以 200ms micro-turns 持续运行，原生支持打断、重叠语音、视觉主动性和并发工具调用；双模型架构把实时 presence 交给 interaction model，把深度推理交给 background model，让 agentic system 的分工维度从任务空间扩展到时间空间。
+
+## [2026-05-13] ingest | ClickHouse Cloud 架构与 Parallel Replicas
+
+触及页面：`sources/clickhouse-cloud-architecture`、`sources/clickhouse-parallel-replicas`、`topics/clickhouse-deployment-topologies`、`entities/clickhouse`、`index`、`overview`。核心沉淀是：ClickHouse Cloud 并非自管版的 UI 包装，而是以对象存储为默认底座、计算层自动扩缩容与 idle、compute-compute separation 让读写资源彻底解耦的另一种架构；Parallel Replicas 则补上了无分片场景下的查询并行化机制，用 granule 取代 shard 作为工作单元，通过 announcement、dynamic coordination、cache locality 和 task stealing 解决异步复制、尾延迟与缓存命中问题。两者共同更新了部署拓扑判断框架，把 Cloud 架构选择并行查询策略也纳入同一体系。

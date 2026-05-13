@@ -2,8 +2,8 @@
 title: ClickHouse 部署拓扑
 type: topic
 tags: [数据库, ClickHouse, 部署, 架构]
-source_count: 11
-updated: 2026-05-06
+source_count: 13
+updated: 2026-05-13
 ---
 
 > 我对 ClickHouse 部署最强烈的感受是，它逼你放弃“有没有标准架构”这种偷懒问法，转而老老实实回答自己到底想解决哪一类瓶颈。
@@ -92,6 +92,51 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 
 官方还明确提醒，这条路线更复杂，自管成本更高。也就是说，它不是默认升级路径，而是当对象存储的成本优势和弹性价值足够大时才值得引入。
 
+## ClickHouse Cloud 把存算分离做成了默认
+
+[[sources/clickhouse-cloud-architecture]] 让我看到，Cloud 版并不是"在自管版上加个 UI"，而是把整个底座换成了对象存储：
+
+- 所有服务的数据落在共享对象存储的不同 subpath 上，由 IAM 或独立 bucket 做隔离；
+- 计算节点不再长期持有数据，而是按需从对象存储拉取，本地 SSD 只做 cache；
+- 计算层可以自动扩缩容，甚至 idle 到零，需要时自动 resume。
+
+这意味着 Cloud 架构下的扩容逻辑和自管集群完全不同。自管集群加 replica 是为了数据冗余和读并发；Cloud 架构里数据冗余已由对象存储保证，加 replica 主要是为了**提升查询并发**和**降低单节点负载**。
+
+### Compute-Compute Separation
+
+Cloud 架构里我最喜欢的设计是 **compute-compute separation**：多个计算节点组共享同一份底层对象存储，每个节点组有自己独立的 endpoint 和扩缩容边界。
+
+这让我可以把写入负载和交互式查询负载彻底分开：
+
+- 一个节点组负责批量写入和 ETL；
+- 另一个节点组负责面向用户的实时查询；
+- 两者看到的数据完全一致，但资源争夺为零。
+
+这比自管集群里"用同一份资源既做写入又做查询"的模型干净得多。代价是你必须接受 ClickHouse Cloud 的托管边界：网络、IAM、计费和版本升级都不再完全由自己控制。
+
+## Parallel Replicas：无分片架构下的查询并行化
+
+[[sources/clickhouse-parallel-replicas]] 解决了一个 Cloud 架构下的核心问题：如果没有 shard，单个查询怎么利用多个 replica？
+
+传统思路是"一个 shard 一个任务"，但 Cloud 架构下所有 replica 数据相同。Parallel replicas 的解法是**把 granule 作为最小工作单元**：
+
+1. 查询到达的节点成为 coordinator；
+2. coordinator 收集各 replica 的 **announcement**（当前拥有哪些 parts），避免把任务分配给缺数据的 replica；
+3. 把 granules 拆成任务集，通过 **dynamic coordination** 让 replica 主动领取而非一次性派发；
+4. 用 `hash(part + granules) % replica_count` 保证重复查询能命中同一 replica 的本地 cache；
+5. 如果某个 replica 变慢，其他 replica 可以 **steal** 它的任务，降低尾延迟。
+
+这套机制让我觉得 ClickHouse Cloud 在"无分片"和"高并行"之间找到了一个务实的平衡点：不需要维护复杂的 shard 路由逻辑，查询仍能横向扩展到多个 replica。
+
+但也有明确的限制需要注意：
+
+- 复杂查询（CTE、JOIN、子查询）效果可能不佳；
+- 小查询的协调开销可能抵消并行收益；
+- 使用 `FINAL` 或 projections 时不可用；
+- 必须开启新 analyzer。
+
+也就是说，parallel replicas 不是"开启就能加速所有查询"的开关，而是**在 granule 级别有充足并行空间时的加速器**。
+
 ## 冷热数据分层本质上是存储策略组合
 
 [[sources/clickhouse-external-disks-for-storing-data]] 没把“冷热分层”包装成单独概念，但它给出了足够完整的底层原语。这里的结论有一部分是**我基于文档做的归纳**：
@@ -144,6 +189,6 @@ ClickHouse 的部署问题不能只问“单机还是集群”。更准确的问
 
 ---
 
-来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-production-v4-tencent-cloud-validation]]
+来源：[[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-production-v4-tencent-cloud-validation]] · [[sources/clickhouse-cloud-architecture]] · [[sources/clickhouse-parallel-replicas]]
 
 相关页面：[[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-production-migration]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/zookeeper]] · [[sources/clickhouse-manage-and-deploy]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-separation-storage-compute]] · [[sources/clickhouse-external-disks-for-storing-data]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/clickhouse-multi-region-replication]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-production-v4-tencent-cloud-validation]]
