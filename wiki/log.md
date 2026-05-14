@@ -349,3 +349,7 @@
 ## [2026-05-13] query | ClickHouse Cloud 客户端连接策略
 
 触及页面：`sources/clickhouse-cloud-architecture`、`topics/clickhouse-deployment-topologies`。核心沉淀是：ClickHouse Cloud 的客户端只需要连接一个 service endpoint（如 `xxx.clickhouse.cloud:9440`），Cloud 内部负责负载均衡和查询分发。这与自管集群"配多地址做轮询"的策略不同——自管集群需要外部 LB 或客户端多地址来实现连接分发，Cloud 则把这些都内置了。根本原因是引擎差异：Cloud 使用无状态的 SharedMergeTree（数据在共享存储），自管集群使用有状态的 ReplicatedMergeTree（数据在本地盘）。自管集群可以通过"外部 LB + Parallel Replicas"近似 Cloud 体验，但无法实现秒级透明扩缩容。
+
+## [2026-05-13] query | 多分片架构下的 Parallel Replicas
+
+触及页面：`sources/clickhouse-parallel-replicas`、`topics/clickhouse-deployment-topologies`。核心沉淀是：多分片架构（M shards × N replicas）下**可以**开启 Parallel Replicas，而且这是官方文档介绍的场景。工作机制是分层并行：`Distributed` 表负责第一层跨 shard 分发，每个 shard 内部再由 Parallel Replicas 做第二层 granule 级并行化。`max_parallel_replicas` 控制的是**每个 shard 内部**的并行度，而不是整个集群的总 replica 数。配置时 `cluster_for_parallel_replicas` 应指向与 `Distributed` 表相同的集群名。常见误区是以为 Parallel Replicas 只能用于无分片架构——实际上官方文档最初就是在分片架构的语境下介绍它的。

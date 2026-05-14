@@ -273,7 +273,7 @@ Cloud 架构里我最喜欢的设计是 **compute-compute separation**：多个�
 |---|---|---|
 | **客户端连接目标** | 所有 replica（或 LB 入口） | Distributed 表入口（或 LB） |
 | **客户端职责** | 轻。LB 或客户端做连接分发 | 更轻。只需要知道一个入口 |
-| **查询并行化** | Parallel Replicas（granule 级） | Distributed 表跨分片路由 + 每分片选一个 replica |
+| **查询并行化** | Parallel Replicas（granule 级） | Distributed 表跨 shard + **每 shard 内 Parallel Replicas**（granule 级） |
 | **是否需要 Distributed 表** | **不需要** | **必须** |
 | **故障转移** | 客户端/ LB 自动处理 | 入口节点故障需 LB 切换 |
 | **扩展性** | 加 replica 时客户端需更新 Addr | 加 shard 时客户端**无需**变更 |

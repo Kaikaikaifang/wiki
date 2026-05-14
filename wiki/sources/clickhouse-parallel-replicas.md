@@ -77,6 +77,79 @@ Parallel replicas 用 **granule** 作为最小工作单元，而不是 shard。�
 | `parallel_replicas_min_number_of_rows_per_replica` | 按预估行数限制实际使用的 replica 数 |
 | `enable_analyzer` | 必须开启新 analyzer 才能使用 parallel replicas |
 
+## 多分片架构下的 Parallel Replicas
+
+官方文档最初在"分片架构"的语境下介绍 Parallel Replicas，这与我之前的理解不同——它不只是无分片架构的专利。
+
+**工作机制：分层并行**
+
+在 `M shards × N replicas` 架构下，Parallel Replicas 与 `Distributed` 表协同工作：
+
+1. **第一层：跨 shard 并行**（由 `Distributed` 表负责）
+   - `Distributed` 表把查询拆成 M 个子查询，分发到各 shard
+   - 每个 shard 收到自己的子查询
+
+2. **第二层：跨 replica 并行**（由 Parallel Replicas 负责）
+   - 每个 shard 内部，某个 replica 成为 **coordinator**
+   - coordinator 把该 shard 的 granules 分发到该 shard 的多个 replica
+   - 各 replica 处理完后回传 mergeable state
+   - shard 内 coordinator 合并结果
+
+3. **最终结果汇总**
+   - `Distributed` 表收集所有 shard 的结果
+   - 做最终聚合后返回客户端
+
+**关键区别：作用范围**
+
+| 维度 | 无分片（1 shard × N replicas） | 多分片（M shards × N replicas） |
+|---|---|---|
+| **查询入口** | 直接查本地表 | 必须查 `Distributed` 表 |
+| **第一层并行** | 无（只有一个 shard） | `Distributed` 表跨 shard |
+| **第二层并行** | Parallel Replicas（所有 replica） | Parallel Replicas（**每个 shard 内部**的 replica） |
+| **max_parallel_replicas 作用范围** | 整个集群的所有 replica | **每个 shard 内部**的 replica |
+
+官方文档明确说明：
+
+> "When the `max_parallel_replicas` option is enabled, query processing is parallelized across all replicas **within a single shard**."
+
+这意味着 `max_parallel_replicas` 限制的是**每个 shard** 最多用多少个 replica，而不是整个集群的总 replica 数。
+
+**配置示例：**
+
+```xml
+<remote_servers>
+    <my_cluster>
+        <shard>
+            <internal_replication>true</internal_replication>
+            <replica><host>node1</host></replica>
+            <replica><host>node2</host></replica>
+            <replica><host>node3</host></replica>
+        </shard>
+        <shard>
+            <internal_replication>true</internal_replication>
+            <replica><host>node4</host></replica>
+            <replica><host>node5</host></replica>
+            <replica><host>node6</host></replica>
+        </shard>
+    </my_cluster>
+</remote_servers>
+```
+
+```sql
+-- 查询 Distributed 表，同时开启 Parallel Replicas
+SELECT * FROM distributed_table
+SETTINGS 
+    enable_parallel_replicas = 1,
+    cluster_for_parallel_replicas = 'my_cluster',
+    max_parallel_replicas = 3;  -- 每个 shard 最多用 3 个 replica
+```
+
+**注意事项：**
+
+- `cluster_for_parallel_replicas` 应指向**包含所有 shard 和 replica 的同一个集群名**（与 `Distributed` 表使用的集群一致）
+- 如果 `max_parallel_replicas` 小于单个 shard 的 replica 数，会在该 shard 的 replica 中随机选择
+- 复杂查询（CTE、JOIN、子查询）、小查询、`FINAL`、projections 等限制同样适用
+
 ## 调试手段
 
 - `system.query_log`：查看每查询实际使用的设置；
@@ -88,4 +161,4 @@ Parallel replicas 用 **granule** 作为最小工作单元，而不是 shard。�
 
 来源：[Parallel replicas | ClickHouse Docs](https://clickhouse.com/docs/deployment-guides/parallel-replicas)
 
-相关页面：[[entities/clickhouse]] · [[topics/clickhouse-deployment-topologies]] · [[sources/clickhouse-cloud-architecture]]
+相关页面：[[entities/clickhouse]] · [[topics/clickhouse-deployment-topologies]] · [[sources/clickhouse-cloud-architecture]] · [[sources/clickhouse-sharding-decision]]
