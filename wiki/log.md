@@ -353,3 +353,11 @@
 ## [2026-05-13] query | 多分片架构下的 Parallel Replicas
 
 触及页面：`sources/clickhouse-parallel-replicas`、`topics/clickhouse-deployment-topologies`。核心沉淀是：多分片架构（M shards × N replicas）下**可以**开启 Parallel Replicas，而且这是官方文档介绍的场景。工作机制是分层并行：`Distributed` 表负责第一层跨 shard 分发，每个 shard 内部再由 Parallel Replicas 做第二层 granule 级并行化。`max_parallel_replicas` 控制的是**每个 shard 内部**的并行度，而不是整个集群的总 replica 数。配置时 `cluster_for_parallel_replicas` 应指向与 `Distributed` 表相同的集群名。常见误区是以为 Parallel Replicas 只能用于无分片架构——实际上官方文档最初就是在分片架构的语境下介绍它的。
+
+## [2026-05-14] ingest | Traefik 负载均衡与 Envoy 服务网格
+
+触及页面：`sources/advanced-load-balancing-traefik`、`sources/choosing-load-balancing-strategy`、`sources/what-is-envoy`、`topics/load-balancing-strategies`（新建）、`topics/progressive-delivery`（新建）、`topics/service-mesh`（新建）、`entities/traefik`（新建）、`entities/envoy`（新建）、`index`、`overview`。核心沉淀是：负载均衡策略的选择取决于后端是否同构与请求是否可预测，四种核心策略（WRR、P2C、HRW、Least-Time）覆盖从最简单到最复杂的全部场景；渐进式交付的本质是用负载均衡器的权重和路由规则把发布风险摊薄到时间轴上；Envoy 的进程外架构让服务到服务通信从应用代码中抽离，形成统一治理的基础设施层。
+
+## [2026-05-14] ingest | Harness Engineering vs Platform Engineering
+
+触及页面：`sources/harness-vs-platform-engineering`、`topics/ai-agent-harness`、`index`、`overview`。核心沉淀是：agentic 系统的架构不是两层（model + harness），而是三层（harness + platform + targets）。Harness 负责进程内的任务优化，Platform 负责跨 agent fleet 的治理。Harness 与 Platform 之间的 seam 是企业级 agent 部署中最关键的设计决策。治理引力陷阱（商业、技术、组织三股驱动力）会导致 harness 吸收本属于 platform 的 concerns，最终形成"五个 harness、五种 auth 模型"的不可治理状态。前瞻趋势：harness 变薄（能力迁移到模型），platform 变厚（监管/成本/审计需求增加）。

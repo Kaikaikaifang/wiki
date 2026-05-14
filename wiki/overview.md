@@ -2,8 +2,8 @@
 title: 整体综述
 type: overview
 tags: [方法论, 知识管理]
-source_count: 34
-updated: 2026-05-13
+source_count: 38
+updated: 2026-05-14
 ---
 
 这份 wiki 越往后写，我越清楚它不是“资料仓库”，而更像一条不断长出来的思考主线。起点当然是 [[topics/llm-wiki-pattern]]：Karpathy 提醒我，真正有复利的不是一次次对着原始资料发问，而是把理解编译进一个会持续演化的知识系统。
@@ -59,6 +59,10 @@ updated: 2026-05-13
 继续摄入的 [[sources/move-on-to-esm-only]] 把 Anthony Fu 这条开源维护线从“版本号如何沟通风险”推进到“模块格式什么时候可以停止兼容旧世界”。它新增了 [[topics/javascript-module-systems]] 和 [[entities/nodejs]]：ESM-only 不是单纯语法偏好，而是工具链成熟、Node.js `require(ESM)` 互操作和 dual CJS / ESM 维护成本共同推动出来的生态迁移判断。
 
 这次摄入的 [[sources/ds4-readme]] 则把 wiki 的 agent 主线从「编排层怎么设计」推进到「本地模型能不能成为 agent 的可信后端」。它新增了 [[topics/local-llm-inference]]、[[entities/antirez]] 与 [[entities/deepseek]]：antirez 不为通用性做框架，而是为一个特定模型（DeepSeek V4 Flash）做端到端优化的专用引擎；2-bit 非对称量化只压 routed MoE experts，磁盘 KV cache 把上下文持久化从 RAM 解放到 SSD，官方向量验证则把「感觉差不多」变成比特级一致。这些设计让我意识到，本地推理不是云端的降级版，而是一组独立约束下的重新优化。
+
+这次同时摄入的 [[sources/harness-vs-platform-engineering]] 则把 agent 架构从"单个 harness 怎么设计"推进到"企业级 fleet 如何治理"。它新增了 Harness vs Platform 的分层视角：harness 负责进程内的任务优化（编排、提示组装、工具选择），platform 负责跨 agent 的治理（身份、授权、审计、限流、成本）。三层架构（Harness → Platform → Targets）之间的 seam 定义，是 agentic 系统在企业规模下最关键的设计决策。这篇文章也更新了 [[topics/ai-agent-harness]]，补充了治理引力陷阱、反模式清单和前瞻趋势。
+
+这次摄入的三篇基础设施文章则新增了负载均衡与服务网格主题。[[sources/choosing-load-balancing-strategy]] 和 [[sources/advanced-load-balancing-traefik]] 共同构建了 [[topics/load-balancing-strategies]]：从 WRR、P2C、HRW、Least-Time 四种核心策略的选择框架，到服务级策略（金丝雀、镜像、故障转移）的组合使用。[[sources/what-is-envoy]] 则新增了 [[topics/service-mesh]] 和 [[entities/envoy]]：Envoy 作为进程外代理的设计哲学——语言无关、独立升级、统一治理——以及 sidecar 模式向 ambient mesh 的演进。同时新增的 [[entities/traefik]] 和 [[topics/progressive-delivery]] 则把负载均衡器从"流量分发工具"重新定位为"发布策略的承载面"。
 
 ## 当前关注
 
@@ -123,7 +127,9 @@ updated: 2026-05-13
 - 2026-05-09：摄入 oh-my-openagent 架构分析，新增 AI Agent Harness 主题，把 agentic systems 从理论概念推进到具体运行时实现
 - 2026-05-09：摄入 ds4.c README，新增本地 LLM 推理主题，把 agent 后端从云端 API 延伸到本地专用引擎
 - 2026-05-12：摄入 Thinking Machines Lab 的 interaction models，新增实时多模态交互主题，把 agent 设计从编排层推进到人机协作的时间维度
+- 2026-05-14：摄入 Harness Engineering vs Platform Engineering，把 agent 架构从单 harness 设计推进到企业级 fleet 治理，新增 Harness-Platform-Targets 三层架构视角
+- 2026-05-14：摄入 Traefik 负载均衡策略文章，新增负载均衡策略选择框架、渐进式交付与 Traefik/Envoy 代理架构主题
 
 ---
 
-相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/ai-agent-harness]] · [[topics/long-horizon-agents]] · [[topics/agent-bridge]] · [[topics/local-llm-inference]] · [[topics/interaction-models]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-data-export]] · [[topics/kubernetes-autoscaling]] · [[topics/hdfs-and-oss-hdfs]] · [[topics/software-versioning]] · [[topics/javascript-module-systems]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/anthony-fu]] · [[entities/openclaw]] · [[entities/ilink]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/kubernetes]] · [[entities/hdfs]] · [[entities/oss-hdfs]] · [[entities/nodejs]] · [[entities/oh-my-openagent]] · [[entities/antirez]] · [[entities/deepseek]] · [[entities/thinking-machines-lab]] · [[sources/agent-bridge-design]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/oneuptime-clickhouse-export-file-formats]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/databricks-what-is-hdfs]] · [[sources/aliyun-oss-hdfs-overview]] · [[sources/aliyun-oss-hdfs-notice]] · [[sources/epoch-semantic-versioning]] · [[sources/move-on-to-esm-only]] · [[sources/oh-my-openagent]] · [[sources/ds4-readme]] · [[sources/interaction-models]]
+相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/ai-agent-harness]] · [[topics/long-horizon-agents]] · [[topics/agent-bridge]] · [[topics/local-llm-inference]] · [[topics/interaction-models]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-data-export]] · [[topics/kubernetes-autoscaling]] · [[topics/hdfs-and-oss-hdfs]] · [[topics/software-versioning]] · [[topics/javascript-module-systems]] · [[topics/load-balancing-strategies]] · [[topics/progressive-delivery]] · [[topics/service-mesh]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/anthony-fu]] · [[entities/openclaw]] · [[entities/ilink]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/kubernetes]] · [[entities/hdfs]] · [[entities/oss-hdfs]] · [[entities/nodejs]] · [[entities/oh-my-openagent]] · [[entities/antirez]] · [[entities/deepseek]] · [[entities/thinking-machines-lab]] · [[entities/traefik]] · [[entities/envoy]] · [[sources/agent-bridge-design]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/oneuptime-clickhouse-export-file-formats]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/databricks-what-is-hdfs]] · [[sources/aliyun-oss-hdfs-overview]] · [[sources/aliyun-oss-hdfs-notice]] · [[sources/epoch-semantic-versioning]] · [[sources/move-on-to-esm-only]] · [[sources/oh-my-openagent]] · [[sources/ds4-readme]] · [[sources/interaction-models]] · [[sources/harness-vs-platform-engineering]] · [[sources/advanced-load-balancing-traefik]] · [[sources/choosing-load-balancing-strategy]] · [[sources/what-is-envoy]]

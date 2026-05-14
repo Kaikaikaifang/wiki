@@ -2,8 +2,8 @@
 title: AI Agent Harness
 type: topic
 tags: [Agent编排, 运行时, 多智能体, 工具链]
-source_count: 2
-updated: 2026-05-09
+source_count: 3
+updated: 2026-05-14
 ---
 
 > 当我把"agent 系统"拆成"host substrate + orchestration layer + specialist agents"三层后，很多之前觉得混乱的设计突然变得清晰了。
@@ -91,6 +91,55 @@ omo 采用 Sisyphus 作为单一 orchestrator，所有委派决策由它做出�
 
 omo 的路由和委派逻辑大量依赖 Sisyphus 的 system prompt（Intent Gate、category 选择、并行规则）。这与 LangGraph 等代码驱动的 workflow 形成对比。前者的灵活性更高，后者的可预测性更强。
 
+## Harness 的企业级边界：与 Platform 的分层
+
+以上讨论聚焦单个 harness 的技术实现，但当企业运行几十个甚至几百个 agent 时，一个新的架构维度浮现出来：**harness 负责进程内的任务优化，platform 负责跨 agent fleet 的治理**。这是 [[sources/harness-vs-platform-engineering]] 提出的核心框架。
+
+### 三层参考架构
+
+```
+Layer 1: Harness（进程内）
+  → 编排、提示组装、工具选择、子 agent fan-out、上下文压缩、内存、自我验证
+  → 归属：应用团队，按 agent 优化
+
+Layer 2: Platform（进程外）
+  → 身份、授权、审计、限流、成本、密钥、过滤、路由、故障转移、可观测性
+  → 归属：平台/基础设施团队，跨 agent 统一强制执行
+
+Layer 3: Targets（依赖项）
+  → 模型、工具与 MCP 服务器、现有应用 API
+  → 归属：各团队或供应商，作为被治理的依赖
+```
+
+Harness 与 Platform 的分界是 agentic 系统中最关键的设计决策。Harness 的优化目标是**单个 agent 的任务性能、token 预算和延迟 profile**；Platform 的优化目标是**跨所有 agent 的一致性治理、可审计性和长期稳定性**。
+
+### 治理引力陷阱
+
+Harness 框架有一种结构性倾向：吸收本属于 platform 层的 concerns。三股驱动力：
+
+1. **商业驱动**：Harness 厂商通过"包揽更多"提高切换成本
+2. **技术驱动**：进程内检查比进程外快几个数量级（微秒 vs 毫秒）
+3. **组织驱动**：应用团队比平台团队移动更快，自建治理"临时方案"很少被真正迁移
+
+结果是：五个 harness、五种 auth 模型、五种审计格式。CISO 无法回答"哪些 agent 能访问哪些数据"，FinOps 无法做成本归因，合规团队发现审计记录散落在各 vendor 的 trace store 里。
+
+### 关键反模式
+
+| 反模式 | 症状 | 修复 |
+|---|---|---|
+| Auth in the Harness | 安全团队需要读多个仓库源码才能回答授权问题 | 把授权移到 gateway，按 agent 身份和任务上下文统一决策 |
+| Per-Product Harness with No Platform | 多种模型合同、多种审计格式、无统一成本视图 | 先标准化 platform 层（网关、身份、审计），再考虑 harness 标准化 |
+| Harness Vendor as Governance Vendor | 引入第二个 harness 需重建所有控制 | 把治理保留在 platform 层，与 harness 无关 |
+| Model List in Harness Config | 引入新模型需协调所有 harness 更新 | Harness 请求"模型类"，由 AI Gateway 按策略解析为具体模型 |
+| MCP Servers as Direct Dependencies | 每个 MCP 服务器各自实现 auth、限流、审计 | MCP 流量通过 MCP Gateway 统一治理 |
+
+### 前瞻趋势
+
+- **Harness 变薄**：自我验证、规划、工具使用正在迁移到模型内部（如 Opus 4.7 的 self-verification）。LangChain 已明确承认这一轨迹。
+- **Platform 变厚**：每一条 AI 监管要求（EU AI Act、行业框架、主权数据规则）都落在 platform 层，因为那里是可强制执行的。每一次 breach analysis 都落在 platform 层，因为那里才有审计记录。
+
+结论：赌 harness 会继续变化，赌 platform 会继续积累需求。有意识地构建它们之间的 seam，并**抵抗把两层 collapse 为一层的引力**。
+
 ## 与 Anthropic Managed Agents 的对比
 
 | 维度 | oh-my-openagent（本地插件） | Anthropic Managed Agents（托管服务） |
@@ -147,6 +196,6 @@ ds4.c 的启示是，本地模型不只是「云端的降级版」，而是一�
 
 ---
 
-来源：[[sources/oh-my-openagent]] · [[sources/ds4-readme]]
+来源：[[sources/oh-my-openagent]] · [[sources/ds4-readme]] · [[sources/harness-vs-platform-engineering]]
 
-相关页面：[[topics/multi-agent-systems]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/long-horizon-agents]] · [[topics/local-llm-inference]] · [[entities/oh-my-openagent]] · [[entities/anthropic]] · [[entities/managed-agents]] · [[entities/deepseek]] · [[entities/antirez]]
+相关页面：[[topics/multi-agent-systems]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/long-horizon-agents]] · [[topics/local-llm-inference]] · [[entities/oh-my-openagent]] · [[entities/anthropic]] · [[entities/managed-agents]] · [[entities/deepseek]] · [[entities/antirez]] · [[entities/traefik]]
