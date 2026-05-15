@@ -338,7 +338,7 @@ conn, _ := clickhouse.Open(&clickhouse.Options{
 | 连接层负载均衡 | Cloud 内部托管 | Traefik TCP LB（轮询） | ✅ 近似 |
 | 健康检查与故障剔除 | 自动 | TCP 端口探测（10s 间隔） | ⚠️ 有延迟（实测 2 次失败） |
 | 查询层并行化 | Parallel Replicas | Parallel Replicas（手动开启） | ⚠️ 需配置 |
-| 扩容透明性 | 完全透明 | ❌ 需手动更新 ConfigMap IP | ❌ 有差距 |
+| 扩容透明性 | 完全透明 | ✅ DNS 名称自动解析 | ✅ 等价 |
 | 节点状态 | 无状态（共享存储） | 有状态（本地盘 + 复制） | ❌ 本质差异 |
 | 秒级扩容 | 支持 | 不支持（需数据复制） | ❌ 引擎差异 |
 
@@ -346,7 +346,7 @@ conn, _ := clickhouse.Open(&clickhouse.Options{
 
 1. **连接层可以近似 Cloud**：Traefik LB 让客户端只需配一个地址，连接均匀分发，故障后自动剔除（虽有 10s 级延迟）；
 2. **健康检查延迟是真实存在的**：TCP 端口探测的 10s 间隔在节点故障时会产生瞬态失败，生产环境应缩短间隔或增加应用层探针；
-3. **静态 IP 是运维负担**：ConfigMap 中的硬编码 Pod IP 在 Pod 重建后失效，生产环境应改用 Kubernetes CRD provider 或 DNS 名称实现动态发现；
+3. **DNS 名称解决静态 IP 问题**：`base/gateway.yaml` 中已改用 Pod FQDN（`clickhouse-clickhouse-0-0-0.clickhouse-clickhouse-headless...`），Pod 重建后 DNS 自动解析到新 IP，无需手动更新配置；
 4. **状态层无法复制**：ReplicatedMergeTree 的扩容需要数据复制，不是 LB 能解决的。
 
 ### 生产建议（基于验证结果）
@@ -369,11 +369,18 @@ conn, _ := clickhouse.Open(&clickhouse.Options{
 
 #### 长期方案（推荐 Traefik）
 
-3. **缩短 health check 间隔**：从 10s 缩短到 3-5s，减少故障窗口；
-4. **使用 DNS 名称而非静态 IP**：在 Traefik TCP service 中使用 ClickHouse headless Service 的 DNS 名称（如 `clickhouse-clickhouse-headless.swanlab.svc.cluster.local`），让 Kubernetes DNS 自动解析到存活 Pod；
+3. **使用 DNS 名称而非静态 IP**：在 Traefik TCP service 中使用 Pod FQDN（如 `clickhouse-clickhouse-0-0-0.clickhouse-clickhouse-headless.swanlab.svc.cluster.local:9000`），让 Kubernetes DNS 自动解析到 Pod IP，Pod 重建后无需更新配置；
+4. **缩短 health check 间隔**：从 10s 缩短到 3-5s，减少故障窗口；
 5. **增加应用层健康检查**：Traefik TCP healthCheck 只能验证端口，建议配合 `clickhouse-client --query "SELECT 1"` 的 sidecar 探针或监控告警；
 6. **写入路径仍需走 Distributed 表**：LB 轮询写入本地表会破坏分片键路由，写入必须指向 Distributed 表入口；
 7. **考虑 Envoy 替代**：如果需要更细粒度的健康检查（如 HTTP `/ping`）、主动异常检测或熔断，Envoy 比 Traefik 更适合有状态后端。
+
+**配置位置**：`deploy/charts/base/gateway.yaml` 已集成 ClickHouse TCP 负载均衡配置，包括：
+- `clickhouse-native` (`:9000`) 和 `clickhouse-http` (`:8123`) entryPoints；
+- TCP routers + TCP services，指向各 Pod FQDN；
+- healthCheck（`interval: 10s`, `timeout: 5s`）；
+- Gateway Service 暴露 9000/8123 端口；
+- Deployment 增加 `ch-native` 和 `ch-http` containerPorts。
 
 ---
 
