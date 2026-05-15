@@ -240,6 +240,96 @@ LB 解决的是连接可用性，不是数据一致性。如果某个 replica �
 - 一旦 health check 将故障 Pod 标记为 DOWN，后续查询立即恢复正常；
 - Pod 重建并 Ready 后，Traefik 不会自动重新添加新 IP（因为 ConfigMap 中是静态 IP），需要手动更新 ConfigMap 或改用 Kubernetes CRD provider 实现动态服务发现。
 
+### 补充验证：clickhouse-go 客户端连接分发行为
+
+上述 Phase 1 和 Phase 3 的测试使用的是 `clickhouse-client`（每次新建连接）。为了验证**实际应用**中 `clickhouse-go` 驱动的行为，我们专门在集群内运行了 Go 测试程序，对比了不同配置下的连接分发效果。
+
+**测试环境**：`golang:1.24-alpine` Pod，使用 `github.com/ClickHouse/clickhouse-go/v2` v2.46.0
+
+#### 测试 1：Service DNS + 默认连接池（ConnMaxLifetime=1h）
+
+```go
+conn, _ := clickhouse.Open(&clickhouse.Options{
+    Addr: []string{"clickhouse-clickhouse-headless.swanlab.svc.cluster.local:9000"},
+    // ConnMaxLifetime 默认 1h
+})
+```
+
+| 指标 | 结果 |
+|---|---|
+| 20 次 `SELECT hostname()` | 全部命中 `clickhouse-clickhouse-0-1-0` |
+| connection_id | 全部为 0（同一连接复用） |
+
+**结论**：clickhouse-go 在默认配置下**不会**利用 DNS 返回的多 A 记录做负载均衡。DNS 只在初始连接时解析一次，随后连接被长期复用。
+
+#### 测试 2：多地址 + ConnOpenRoundRobin（同一连接）
+
+```go
+conn, _ := clickhouse.Open(&clickhouse.Options{
+    Addr: []string{"pod-0:9000", "pod-1:9000"},
+    ConnOpenStrategy: clickhouse.ConnOpenRoundRobin,
+})
+```
+
+| 指标 | 结果 |
+|---|---|
+| 20 次查询 | 全部命中同一 Pod |
+
+**结论**：`ConnOpenRoundRobin` 只在**新建连接时**生效，对已有连接池中的连接无效。
+
+#### 测试 3：多地址 + ConnOpenRandom（每次新建连接）
+
+```go
+for i := 0; i < 20; i++ {
+    conn, _ := clickhouse.Open(&clickhouse.Options{
+        Addr: []string{"pod-0:9000", "pod-1:9000"},
+        ConnOpenStrategy: clickhouse.ConnOpenRandom,
+    })
+    // 查询后立即 Close
+}
+```
+
+| Pod | 命中次数 |
+|---|---|
+| clickhouse-clickhouse-0-0-0 | 11 |
+| clickhouse-clickhouse-0-1-0 | 9 |
+
+**结论**：每次新建连接时，`ConnOpenRandom` 确实会随机选择地址，实现近似均匀的分布。
+
+#### 测试 4：Service DNS + ConnMaxLifetime=1s
+
+```go
+conn, _ := clickhouse.Open(&clickhouse.Options{
+    Addr: []string{"clickhouse-clickhouse-headless.swanlab.svc.cluster.local:9000"},
+    ConnMaxLifetime: 1 * time.Second,
+})
+```
+
+| Pod | 命中次数 |
+|---|---|
+| clickhouse-clickhouse-0-0-0 | 10 |
+| clickhouse-clickhouse-0-1-0 | 10 |
+
+**结论**：通过设置**较短的 `ConnMaxLifetime`**，可以强制 clickhouse-go 定期重建连接，此时 DNS 会被重新解析，从而实现跨 Pod 的负载均衡。
+
+#### 关键发现
+
+| 配置 | 连接分发 | 故障转移 | 运维复杂度 |
+|---|---|---|---|
+| Service DNS + 默认连接池 | ❌ 无（单点） | ❌ 需等连接超时 | 低 |
+| Service DNS + ConnMaxLifetime=1s | ✅ 均匀 | ⚠️ 有延迟（1s 级） | 低 |
+| 多地址 + ConnOpenRandom + 每次新建连接 | ✅ 均匀 | ⚠️ 需应用层处理 | 中（需维护地址列表） |
+| Traefik LB | ✅ 均匀 | ✅ 健康检查自动剔除 | 中（需维护 LB 配置） |
+
+**核心结论**：
+
+1. **单纯使用 Service DNS 不够**：clickhouse-go 默认会长期复用连接，DNS 的多 A 记录优势被抵消；
+2. **缩短 ConnMaxLifetime 是短期可行方案**：设置 1-5s 的 `ConnMaxLifetime` 可以让连接定期轮换，利用 DNS 解析实现负载均衡，无需引入 Traefik；
+3. **代价是连接开销**：每秒重建连接会增加 TCP 握手和认证开销，对高 QPS 场景可能有影响；
+4. **生产环境仍需 Traefik**：Traefik LB 在健康检查和故障剔除方面更可靠，且对客户端完全透明。
+
+---
+
 ### Phase 4：与 ClickHouse Cloud 体验对比
 
 | 维度 | ClickHouse Cloud | 自管 + Traefik LB（实测） | 差距 |
@@ -261,11 +351,29 @@ LB 解决的是连接可用性，不是数据一致性。如果某个 replica �
 
 ### 生产建议（基于验证结果）
 
-1. **缩短 health check 间隔**：从 10s 缩短到 3-5s，减少故障窗口；
-2. **使用 DNS 名称而非静态 IP**：在 Traefik TCP service 中使用 ClickHouse headless Service 的 DNS 名称（如 `clickhouse-clickhouse-headless.swanlab.svc.cluster.local`），让 Kubernetes DNS 自动解析到存活 Pod；
-3. **增加应用层健康检查**：Traefik TCP healthCheck 只能验证端口，建议配合 `clickhouse-client --query "SELECT 1"` 的 sidecar 探针或监控告警；
-4. **写入路径仍需走 Distributed 表**：LB 轮询写入本地表会破坏分片键路由，写入必须指向 Distributed 表入口；
-5. **考虑 Envoy 替代**：如果需要更细粒度的健康检查（如 HTTP `/ping`）、主动异常检测或熔断，Envoy 比 Traefik 更适合有状态后端。
+#### 短期方案（无需 Traefik）
+
+1. **使用 Service DNS + 缩短 ConnMaxLifetime**：
+   - 客户端配置 `clickhouse-clickhouse-headless.swanlab.svc.cluster.local:9000`；
+   - 设置 `ConnMaxLifetime: 5 * time.Second`（或更短），强制连接定期重建；
+   - 利用 Kubernetes DNS 的多 A 记录实现天然负载均衡；
+   - **优势**：无需额外基础设施，对现有架构零侵入；
+   - **代价**：每秒多几次 TCP 握手，对高 QPS 场景需压测验证。
+
+2. **多地址 + ConnOpenRandom（备选）**：
+   - 在 `Addr` 中填入所有 Pod FQDN；
+   - 设置 `ConnOpenStrategy: clickhouse.ConnOpenRandom`；
+   - 每次查询前重建连接（或配合短 `ConnMaxLifetime`）；
+   - **优势**：不依赖 DNS TTL，分发更可控；
+   - **代价**：需维护节点地址列表，扩容时需更新配置。
+
+#### 长期方案（推荐 Traefik）
+
+3. **缩短 health check 间隔**：从 10s 缩短到 3-5s，减少故障窗口；
+4. **使用 DNS 名称而非静态 IP**：在 Traefik TCP service 中使用 ClickHouse headless Service 的 DNS 名称（如 `clickhouse-clickhouse-headless.swanlab.svc.cluster.local`），让 Kubernetes DNS 自动解析到存活 Pod；
+5. **增加应用层健康检查**：Traefik TCP healthCheck 只能验证端口，建议配合 `clickhouse-client --query "SELECT 1"` 的 sidecar 探针或监控告警；
+6. **写入路径仍需走 Distributed 表**：LB 轮询写入本地表会破坏分片键路由，写入必须指向 Distributed 表入口；
+7. **考虑 Envoy 替代**：如果需要更细粒度的健康检查（如 HTTP `/ping`）、主动异常检测或熔断，Envoy 比 Traefik 更适合有状态后端。
 
 ---
 
