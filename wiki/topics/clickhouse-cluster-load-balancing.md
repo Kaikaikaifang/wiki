@@ -174,16 +174,98 @@ Traefik 的 TCP healthCheck 只能做基础层。应用层和复制层需要通�
 
 LB 解决的是连接可用性，不是数据一致性。如果某个 replica 挂了，LB 会把它剔除，但该 replica 恢复后仍需通过复制队列追平数据。复制健康度是独立于 LB 的另一个监控维度。
 
-## 验证路径
+## 验证结果（k3d-test-cluster）
 
-`deploy/charts/TODO.md` 设计了一套基于 k3d 环境的验证方案，分四步：
+`deploy/charts/TODO.md` 设计的验证方案已在 `k3d-test-cluster` 上完整执行。以下是实测结果。
 
-1. **基线确认**：无 LB 时的故障表现；
-2. **Traefik TCP LB 部署**：增加 entrypoints、routers、services；
-3. **行为验证**：连接分发、健康检查、故障剔除、恢复；
-4. **Cloud 体验对比**：量化差距，给出生产建议。
+### 测试环境
 
-这套验证不触碰数据面（不验证复制、DDL、回灌），只聚焦连接层负载均衡的可行性。
+- **集群**：k3d-test-cluster（单节点 K3s v1.33.4）
+- **命名空间**：swanlab
+- **ClickHouse**：`2 shards × 1 replica`（k3d overlay 配置），Operator 管理
+- **Traefik**：v3.6，已有 gateway Deployment + Service + ConfigMap
+- **测试工具**：`clickhouse-client`（Native 协议，端口 9000）
+
+### Phase 1：基线（无 LB，直连 headless Service）
+
+**连接目标**：`clickhouse-clickhouse-headless.swanlab.svc.cluster.local:9000`
+
+| 指标 | 结果 |
+|---|---|
+| 直接查询 `SELECT 1` | ✅ 成功 |
+| `SELECT hostname()` 延迟（10 次） | avg 33.7ms / min 27ms / max 62ms |
+| `SELECT count() FROM system.parts` 延迟（10 次） | avg 35.7ms / min 30ms / max 49ms |
+| 删除一个 ClickHouse Pod 后查询失败数 | **0** |
+| 删除到 Pod Ready 恢复时间 | 29s |
+
+**关键发现**：Kubernetes headless Service 在 Pod 删除后**没有产生查询失败**，因为 Endpoint 控制器会立即将删除的 Pod 从 Endpoints 列表中移除，流量自动路由到存活的 Pod。但 headless Service **没有主动健康检查**，它依赖的是 Kubernetes 的 Pod 生命周期事件，而不是端口探测。
+
+### Phase 2：Traefik TCP LB 部署
+
+在现有 Traefik gateway 上增加 ClickHouse TCP 负载均衡：
+
+1. **静态配置**（`traefik.yaml`）：增加 `clickhouse-native` (`:9000`) 和 `clickhouse-http` (`:8123`) entryPoints；
+2. **动态配置**（`dynamic.yaml`）：增加 TCP routers 和 TCP services，指向两个 ClickHouse Pod IP；
+3. **健康检查**：`interval: 10s`, `timeout: 5s`（TCP 端口探测）；
+4. **Deployment**：增加 `containerPort` 9000 和 8123；
+5. **Service**：已有端口 9000/8123 定义，无需修改。
+
+**部署难点**：
+- Traefik TCP healthCheck 只支持 `interval` 和 `timeout`，不支持 `path`/`scheme`（这些是 HTTP healthCheck 的参数）；
+- ClickHouse Pod IP 在删除重建后会变化，ConfigMap 需要同步更新（本次验证中手动更新了 IP）。
+
+### Phase 3：LB 行为验证
+
+**连接分发测试**（20 次 `SELECT hostname()` 通过 `gateway.swanlab.svc.cluster.local:9000`）：
+
+| 后端 | 命中次数 |
+|---|---|
+| clickhouse-clickhouse-0-0-0 | 10 |
+| clickhouse-clickhouse-0-1-0 | 10 |
+
+✅ **完美轮询**，连接均匀分发到两个 shard。
+
+**故障转移测试**：
+
+| 指标 | 结果 |
+|---|---|
+| 删除 Pod 后查询失败数 | **2** |
+| 错误信息 | `Code: 210. DB::NetException: Connection reset by peer (NETWORK_ERROR)` |
+| 删除到 Pod Ready 恢复时间 | 16s |
+| 恢复后查询是否恢复正常 | ✅ 是 |
+
+**关键发现**：
+- Traefik LB 在 Pod 删除时产生了 **2 次瞬态失败**，而 Kubernetes headless Service 在 Phase 1 中是 **0 次失败**；
+- 原因是 Traefik 的 health check 间隔为 10s，在 Pod 被删除到 health check 标记为 DOWN 之间存在一个窗口期，期间新建连接可能命中正在终止的 Pod；
+- 一旦 health check 将故障 Pod 标记为 DOWN，后续查询立即恢复正常；
+- Pod 重建并 Ready 后，Traefik 不会自动重新添加新 IP（因为 ConfigMap 中是静态 IP），需要手动更新 ConfigMap 或改用 Kubernetes CRD provider 实现动态服务发现。
+
+### Phase 4：与 ClickHouse Cloud 体验对比
+
+| 维度 | ClickHouse Cloud | 自管 + Traefik LB（实测） | 差距 |
+|---|---|---|---|
+| 客户端连接数 | 1 个 endpoint | 1 个 LB 地址 | ✅ 等价 |
+| 连接层负载均衡 | Cloud 内部托管 | Traefik TCP LB（轮询） | ✅ 近似 |
+| 健康检查与故障剔除 | 自动 | TCP 端口探测（10s 间隔） | ⚠️ 有延迟（实测 2 次失败） |
+| 查询层并行化 | Parallel Replicas | Parallel Replicas（手动开启） | ⚠️ 需配置 |
+| 扩容透明性 | 完全透明 | ❌ 需手动更新 ConfigMap IP | ❌ 有差距 |
+| 节点状态 | 无状态（共享存储） | 有状态（本地盘 + 复制） | ❌ 本质差异 |
+| 秒级扩容 | 支持 | 不支持（需数据复制） | ❌ 引擎差异 |
+
+**核心结论**：
+
+1. **连接层可以近似 Cloud**：Traefik LB 让客户端只需配一个地址，连接均匀分发，故障后自动剔除（虽有 10s 级延迟）；
+2. **健康检查延迟是真实存在的**：TCP 端口探测的 10s 间隔在节点故障时会产生瞬态失败，生产环境应缩短间隔或增加应用层探针；
+3. **静态 IP 是运维负担**：ConfigMap 中的硬编码 Pod IP 在 Pod 重建后失效，生产环境应改用 Kubernetes CRD provider 或 DNS 名称实现动态发现；
+4. **状态层无法复制**：ReplicatedMergeTree 的扩容需要数据复制，不是 LB 能解决的。
+
+### 生产建议（基于验证结果）
+
+1. **缩短 health check 间隔**：从 10s 缩短到 3-5s，减少故障窗口；
+2. **使用 DNS 名称而非静态 IP**：在 Traefik TCP service 中使用 ClickHouse headless Service 的 DNS 名称（如 `clickhouse-clickhouse-headless.swanlab.svc.cluster.local`），让 Kubernetes DNS 自动解析到存活 Pod；
+3. **增加应用层健康检查**：Traefik TCP healthCheck 只能验证端口，建议配合 `clickhouse-client --query "SELECT 1"` 的 sidecar 探针或监控告警；
+4. **写入路径仍需走 Distributed 表**：LB 轮询写入本地表会破坏分片键路由，写入必须指向 Distributed 表入口；
+5. **考虑 Envoy 替代**：如果需要更细粒度的健康检查（如 HTTP `/ping`）、主动异常检测或熔断，Envoy 比 Traefik 更适合有状态后端。
 
 ---
 
