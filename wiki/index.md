@@ -3,7 +3,7 @@ title: 内容目录
 type: index
 tags: [索引, 导航]
 source_count: 0
-updated: 2026-05-13
+updated: 2026-05-15
 ---
 
 > 每次摄入后由 LLM 更新。查询时先读此文件定位相关页面。
@@ -19,6 +19,7 @@ updated: 2026-05-13
 - [[topics/ai-agent-harness]] — AI Agent Harness：从单模型会话到多 agent 编排运行时的设计模式与生产实践
 - [[topics/agentic-systems]] — 从增强型 LLM 到 workflow 与自治 agent 的复杂度阶梯
 - [[topics/b-tree-indexes]] — 用叶子链表、树遍历与回表理解索引为什么会快或慢
+- [[topics/clickhouse-cluster-load-balancing]] — 自管 ClickHouse 集群的负载均衡：从客户端多地址到 Traefik TCP LB 的选项对比与 Cloud 体验差距评估
 - [[topics/clickhouse-cluster-sizing]] — 把 ClickHouse 集群的 CPU、内存、磁盘、网络四条约束线拧成一组可验证的选型假设
 - [[topics/clickhouse-common-pitfalls]] — 用 part、主键、Keeper 与内存模型理解 ClickHouse 常见入门误区
 - [[topics/clickhouse-data-export]] — 用导出通道、文件格式和下游消费者理解 ClickHouse 数据导出方案

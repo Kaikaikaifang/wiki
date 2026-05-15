@@ -361,3 +361,7 @@
 ## [2026-05-14] ingest | Harness Engineering vs Platform Engineering
 
 触及页面：`sources/harness-vs-platform-engineering`、`topics/ai-agent-harness`、`index`、`overview`。核心沉淀是：agentic 系统的架构不是两层（model + harness），而是三层（harness + platform + targets）。Harness 负责进程内的任务优化，Platform 负责跨 agent fleet 的治理。Harness 与 Platform 之间的 seam 是企业级 agent 部署中最关键的设计决策。治理引力陷阱（商业、技术、组织三股驱动力）会导致 harness 吸收本属于 platform 的 concerns，最终形成"五个 harness、五种 auth 模型"的不可治理状态。前瞻趋势：harness 变薄（能力迁移到模型），platform 变厚（监管/成本/审计需求增加）。
+
+## [2026-05-15] query | ClickHouse 集群负载均衡验证方案
+
+触及页面：`topics/clickhouse-cluster-load-balancing`（新建）、`deploy/charts/TODO.md`、`index`、`overview`。核心沉淀是：自管 ClickHouse 集群可以在连接层用 Traefik TCP LB 近似 ClickHouse Cloud 的托管体验——客户端只需连接一个入口，健康检查自动剔除故障节点；但状态层和弹性层受限于 ReplicatedMergeTree 引擎，无法复制 Cloud 的秒级扩容。验证方案分四阶段：基线确认、Traefik TCP LB 部署、负载均衡行为验证、与 Cloud 体验对比。生产建议优先复用现有 Traefik 基础设施，写入路径仍应走 Distributed 表，查询层配合 Parallel Replicas 实现服务端并行化。
