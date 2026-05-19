@@ -80,4 +80,4 @@ SharedMergeTree 让我理解了 ClickHouse Cloud 为什么能做到"无分片 + 
 
 来源：[SharedMergeTree | ClickHouse Docs](https://clickhouse.com/docs/cloud/reference/shared-merge-tree)
 
-相关页面：[[entities/clickhouse]] · [[topics/clickhouse-deployment-topologies]] · [[sources/clickhouse-cloud-architecture]] · [[sources/clickhouse-parallel-replicas]] · [[sources/clickhouse-sharding-decision]] · [[sources/clickhouse-replicated-table-engines]]
+相关页面：[[entities/clickhouse]] · [[topics/clickhouse-deployment-topologies]] · [[sources/clickhouse-cloud-architecture]] · [[sources/clickhouse-parallel-replicas]] · [[topics/clickhouse-sharding-decision]] · [[sources/clickhouse-replicated-table-engines]]

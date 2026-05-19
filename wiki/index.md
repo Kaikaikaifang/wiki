@@ -42,6 +42,7 @@ updated: 2026-05-15
 - [[topics/local-llm-inference]] — 本地 LLM 推理的约束博弈：量化、KV cache、上下文长度与 agent 兼容性
 - [[topics/llm-wiki-pattern]] — LLM 增量构建持久 wiki 的模式，替代 RAG 检索
 - [[topics/multi-agent-systems]] — 适合并行开放式任务的多智能体分工与协作模式
+- [[topics/opencode-workflow]] — OpenCode 使用技巧与工作流：上下文管理、AGENTS.md 记忆方案、配置层级与信息传递失真
 - [[topics/knowledge-management]] — 知识管理的核心问题与主要范式对比
 - [[topics/kubernetes-api-groups-and-schema-validation]] — 把 `apiVersion`、core API 与编辑器 schema 假阳性放进同一个判断框架
 - [[topics/kubernetes-autoscaling]] — 把 HPA、VPA、KEDA 与节点伸缩放进同一个分层弹性判断框架
@@ -76,6 +77,7 @@ updated: 2026-05-15
 - [[entities/nodejs]] — JavaScript 服务端运行时，也是 ESM / CommonJS 迁移路径的关键中间层
 - [[entities/envoy]] — 开源 L7 代理与通信总线，服务网格的数据面标准实现
 - [[entities/oh-my-openagent]] — OpenCode 插件，将单一会话扩展为多模型 specialist 并行编排的运行时
+- [[entities/opencode]] — 面向开发者的 AI 编程 Agent 工具，支持 TUI、Web 与桌面端，强调人主导、Agent 协作
 - [[entities/thinking-machines-lab]] — Ilya Sutskever 创立的研究实验室，致力于安全 AGI 与 interaction models
 - [[entities/traefik]] — 云原生反向代理与负载均衡器，Kubernetes ingress 的主流选择
 - [[entities/openclaw]] — 面向 AI agent 的网关与插件框架，支持多通道多 Agent 协同
@@ -140,3 +142,4 @@ updated: 2026-05-15
 - [[sources/use-the-index-luke-the-join-operation]] — Use The Index, Luke 的连接章节（2026-04-14，书籍章节）
 - [[sources/use-the-index-luke-the-where-clause]] — Use The Index, Luke 的 `where` 子句章节（2026-04-14，书籍章节）
 - [[sources/use-the-index-luke]] — Markus Winand 的 SQL 索引与性能教程总览（2026-04-14，书籍总览）
+- [[sources/opencode-usage-tips]] — OpenCode 使用技巧与最佳实践：上下文管理、AGENTS.md、配置层级与子 Agent 信息传递（2026-05-19，网络文章）

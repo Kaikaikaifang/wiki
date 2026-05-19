@@ -161,4 +161,4 @@ SETTINGS
 
 来源：[Parallel replicas | ClickHouse Docs](https://clickhouse.com/docs/deployment-guides/parallel-replicas)
 
-相关页面：[[entities/clickhouse]] · [[topics/clickhouse-deployment-topologies]] · [[sources/clickhouse-cloud-architecture]] · [[sources/clickhouse-sharding-decision]]
+相关页面：[[entities/clickhouse]] · [[topics/clickhouse-deployment-topologies]] · [[sources/clickhouse-cloud-architecture]] · [[topics/clickhouse-sharding-decision]]

@@ -365,3 +365,7 @@
 ## [2026-05-15] query | ClickHouse 集群负载均衡验证方案
 
 触及页面：`topics/clickhouse-cluster-load-balancing`（新建）、`deploy/charts/TODO.md`、`index`、`overview`。核心沉淀是：自管 ClickHouse 集群可以在连接层用 Traefik TCP LB 近似 ClickHouse Cloud 的托管体验——客户端只需连接一个入口，健康检查自动剔除故障节点；但状态层和弹性层受限于 ReplicatedMergeTree 引擎，无法复制 Cloud 的秒级扩容。验证方案分四阶段：基线确认、Traefik TCP LB 部署、负载均衡行为验证、与 Cloud 体验对比。生产建议优先复用现有 Traefik 基础设施，写入路径仍应走 Distributed 表，查询层配合 Parallel Replicas 实现服务端并行化。
+
+## [2026-05-19] ingest | OpenCode 使用技巧与最佳实践
+
+触及页面：`sources/opencode-usage-tips`（新建）、`entities/opencode`（新建）、`topics/opencode-workflow`（新建）、`entities/oh-my-openagent`、`index`、`overview`，并顺手修复 `sources/clickhouse-parallel-replicas` 与 `sources/clickhouse-shared-merge-tree` 中的死链。核心沉淀是：用好 OpenCode 的关键不在于装多少插件，而在于建立"人主导、Agent 协作"的工作节奏。上下文管理是核心技能——200k 之后质量断崖下跌，主动压缩、拆分会话、每完成一件事就提交一次 commit。AGENTS.md 是当前最实用的记忆方案，根目录版本全局注入，子目录版本按需加载。配置层级是深层合并而非简单替换。子 Agent 信息传递失真不是理论问题，已有 verify-subagent-plugin 在尝试解决。本轮无删减候选。

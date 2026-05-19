@@ -79,4 +79,4 @@ oh-my-openagent 最值得关注的是它把"模型选择"从用户手动操作�
 
 来源：[[sources/oh-my-openagent]]
 
-相关页面：[[topics/ai-agent-harness]] · [[topics/multi-agent-systems]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/agent-bridge]] · [[topics/long-horizon-agents]] · [[entities/anthropic]] · [[entities/managed-agents]]
+相关页面：[[topics/ai-agent-harness]] · [[topics/multi-agent-systems]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/agent-bridge]] · [[topics/long-horizon-agents]] · [[topics/opencode-workflow]] · [[entities/opencode]] · [[entities/anthropic]] · [[entities/managed-agents]]
