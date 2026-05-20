@@ -125,13 +125,13 @@ Harness 框架有一种结构性倾向：吸收本属于 platform 层的 concern
 
 ### 关键反模式
 
-| 反模式 | 症状 | 修复 |
-|---|---|---|
-| Auth in the Harness | 安全团队需要读多个仓库源码才能回答授权问题 | 把授权移到 gateway，按 agent 身份和任务上下文统一决策 |
-| Per-Product Harness with No Platform | 多种模型合同、多种审计格式、无统一成本视图 | 先标准化 platform 层（网关、身份、审计），再考虑 harness 标准化 |
-| Harness Vendor as Governance Vendor | 引入第二个 harness 需重建所有控制 | 把治理保留在 platform 层，与 harness 无关 |
-| Model List in Harness Config | 引入新模型需协调所有 harness 更新 | Harness 请求"模型类"，由 AI Gateway 按策略解析为具体模型 |
-| MCP Servers as Direct Dependencies | 每个 MCP 服务器各自实现 auth、限流、审计 | MCP 流量通过 MCP Gateway 统一治理 |
+| 反模式                                  | 症状                        | 修复                                        |
+| ------------------------------------ | ------------------------- | ----------------------------------------- |
+| Auth in the Harness                  | 安全团队需要读多个仓库源码才能回答授权问题     | 把授权移到 gateway，按 agent 身份和任务上下文统一决策        |
+| Per-Product Harness with No Platform | 多种模型合同、多种审计格式、无统一成本视图     | 先标准化 platform 层（网关、身份、审计），再考虑 harness 标准化 |
+| Harness Vendor as Governance Vendor  | 引入第二个 harness 需重建所有控制     | 把治理保留在 platform 层，与 harness 无关            |
+| Model List in Harness Config         | 引入新模型需协调所有 harness 更新     | Harness 请求"模型类"，由 AI Gateway 按策略解析为具体模型   |
+| MCP Servers as Direct Dependencies   | 每个 MCP 服务器各自实现 auth、限流、审计 | MCP 流量通过 MCP Gateway 统一治理                 |
 
 ### 前瞻趋势
 
