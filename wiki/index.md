@@ -56,6 +56,7 @@ updated: 2026-05-15
 - [[topics/software-versioning]] — 把 SemVer、zero-major 和 Epoch SemVer 放进升级风险沟通框架
 - [[topics/clickhouse-production-migration]] — 面向单实例与 7 TiB 数据量场景的 ClickHouse 迁集群方案
 - [[topics/clickhouse-scalar-multilane-backfill]] — 用主键友好 cursor、排序键边界和受控 lane 数量完成 ClickHouse scalar 大表回灌
+- [[topics/clickhouse-query-optimization]] — 把 ClickHouse 查询优化从技巧提升为物理架构判断：ORDER BY 设计、数据类型、预计算、聚合策略和诊断体系
 - [[topics/sql-execution-plans]] — 把执行计划当作 SQL 性能调优的第一现场
 - [[topics/sql-indexing]] — 把索引视为开发者必须掌握的查询设计能力
 - [[topics/sql-join-performance]] — 按 join 算法选择不同索引策略，而不是机械补索引
@@ -143,3 +144,5 @@ updated: 2026-05-15
 - [[sources/use-the-index-luke-the-where-clause]] — Use The Index, Luke 的 `where` 子句章节（2026-04-14，书籍章节）
 - [[sources/use-the-index-luke]] — Markus Winand 的 SQL 索引与性能教程总览（2026-04-14，书籍总览）
 - [[sources/opencode-usage-tips]] — OpenCode 使用技巧与最佳实践：上下文管理、AGENTS.md、配置层级与子 Agent 信息传递（2026-05-19，网络文章）
+- [[sources/clickhouse-optimize-aggregation-in-order]] — `optimize_aggregation_in_order` 设置专项讲解：利用 MergeTree 排序顺序做流式聚合的内存优化（2026-03-31，网络文章）
+- [[sources/clickhouse-query-optimization-guide]] — ClickHouse 官方查询优化权威指南：ORDER BY 设计、数据类型、projection、物化视图、skip index（2026-05-20，网络文章）

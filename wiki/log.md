@@ -369,3 +369,7 @@
 ## [2026-05-19] ingest | OpenCode 使用技巧与最佳实践
 
 触及页面：`sources/opencode-usage-tips`（新建）、`entities/opencode`（新建）、`topics/opencode-workflow`（新建）、`entities/oh-my-openagent`、`index`、`overview`，并顺手修复 `sources/clickhouse-parallel-replicas` 与 `sources/clickhouse-shared-merge-tree` 中的死链。核心沉淀是：用好 OpenCode 的关键不在于装多少插件，而在于建立"人主导、Agent 协作"的工作节奏。上下文管理是核心技能——200k 之后质量断崖下跌，主动压缩、拆分会话、每完成一件事就提交一次 commit。AGENTS.md 是当前最实用的记忆方案，根目录版本全局注入，子目录版本按需加载。配置层级是深层合并而非简单替换。子 Agent 信息传递失真不是理论问题，已有 verify-subagent-plugin 在尝试解决。本轮无删减候选。
+
+## [2026-05-20] ingest | ClickHouse 查询优化权威指南 + in-order 聚合优化
+
+触及页面：`sources/clickhouse-query-optimization-guide`（新建）、`sources/clickhouse-optimize-aggregation-in-order`（新建）、`topics/clickhouse-query-optimization`（新建）、`topics/clickhouse-common-pitfalls`、`entities/clickhouse`、`index`、`overview`。核心沉淀是：ClickHouse 的优化重心不在查询层面，而在建表时的 `ORDER BY` 设计——这本质上是在提前定义数据的物理归宿。官方指南用六层优化框架（ORDER BY 设计 → 数据类型 → 预计算 → 查询模式 → 额外索引 → 分区）把零散的优化技巧串成了有优先级的分层判断体系。`optimize_aggregation_in_order` 则让 GROUP BY 在数据已经排好序时走流式聚合而不构建 hash table，本质上是用建表时的排序成本交换查询时的聚合内存成本。互补更新了常见误区页：新增 Nullable 列的实际开销判断、分区数上限警告和 skip index 必须与 ORDER BY 有相关性的前提。删减预算：本轮无删减候选，本次新增的内容填补了 ClickHouse 主题线中"查询优化"的独立判断层，与已有部署、迁移、误区主题互补而非重叠。

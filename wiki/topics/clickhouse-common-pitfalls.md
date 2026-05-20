@@ -2,8 +2,8 @@
 title: ClickHouse 常见误区
 type: topic
 tags: [数据库, ClickHouse, 性能, 运维]
-source_count: 3
-updated: 2026-04-27
+source_count: 4
+updated: 2026-05-20
 ---
 
 > 我会把 ClickHouse 的新手误区理解成一组物理层约束的提醒：它很快，但你必须顺着它的写入、排序、合并、协调和内存模型来设计系统。
@@ -77,6 +77,14 @@ ClickHouse 的内存超限常来自高基数聚合、大 join、全局排序和�
 
 但这些手段背后的原则只有一个：不要把数据库内存当成无穷缓冲区。查询形状、租户隔离和资源上限必须一起设计。尤其当 ClickHouse 被开放给多人或多个服务使用时，没有配额的自由查询能力，本质上就是允许任意用户制造生产级故障。
 
+## 不要忽视列的物理开销
+
+[[sources/clickhouse-query-optimization-guide]] 里有一条让我重新审视了 "INSERT 时多发几个 NULL 有什么关系" 的惯性思维：每个 Nullable 列都会额外携带一个 UInt8 null mask，这不仅仅是多存一字节，而是**从磁盘读取到向量化执行，每一步都要检查 null mask**。实践中更常见的陷阱是：表定义里设了 Nullable，但实际没有任何 NULL 值——在没验证前，这个 Nullable 就是白付的存储、内存和 CPU 成本。
+
+建表前的正确姿势是用 `countIf(col IS NULL)` 扫描一批代表性数据，确认 NULL 确实存在后再决定是否保留 Nullable。能让应用端发默认值就不要让数据库端承载 NULL：空字符串、0、-1、epoch 通常比 NULL 对 ClickHouse 更友好。
+
+这也适用于分区和 skip index。分区数超过一千个时性能严重退化——分区是管理工具，不是性能工具。Skip index 只有在目标列和 ORDER BY 有实质性相关性时才有效；如果每个 granule 几乎都能命中，index 只是多了写入成本而没有读取收益。
+
 ## 一个实用检查表
 
 新建或评审一张 ClickHouse 表时，我会优先问这些问题：
@@ -100,6 +108,6 @@ ClickHouse 的复杂度不是坏事，它只是把分析数据库真实要处理
 
 ---
 
-来源：[[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-issue-20867]] · [[sources/oneuptime-replicated-replacingmergetree]]
+来源：[[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-issue-20867]] · [[sources/oneuptime-replicated-replacingmergetree]] · [[sources/clickhouse-query-optimization-guide]]
 
-相关页面：[[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/sql-indexing]] · [[topics/query-shape-and-index-usage]] · [[topics/sql-join-performance]] · [[entities/clickhouse]]
+相关页面：[[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-query-optimization]] · [[topics/sql-indexing]] · [[topics/query-shape-and-index-usage]] · [[topics/sql-join-performance]] · [[entities/clickhouse]]

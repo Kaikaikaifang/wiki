@@ -2,8 +2,8 @@
 title: 整体综述
 type: overview
 tags: [方法论, 知识管理]
-source_count: 38
-updated: 2026-05-15
+source_count: 40
+updated: 2026-05-20
 ---
 
 这份 wiki 越往后写，我越清楚它不是“资料仓库”，而更像一条不断长出来的思考主线。起点当然是 [[topics/llm-wiki-pattern]]：Karpathy 提醒我，真正有复利的不是一次次对着原始资料发问，而是把理解编译进一个会持续演化的知识系统。
@@ -66,6 +66,8 @@ updated: 2026-05-15
 
 这次摄入的三篇基础设施文章则新增了负载均衡与服务网格主题。[[sources/choosing-load-balancing-strategy]] 和 [[sources/advanced-load-balancing-traefik]] 共同构建了 [[topics/load-balancing-strategies]]：从 WRR、P2C、HRW、Least-Time 四种核心策略的选择框架，到服务级策略（金丝雀、镜像、故障转移）的组合使用。[[sources/what-is-envoy]] 则新增了 [[topics/service-mesh]] 和 [[entities/envoy]]：Envoy 作为进程外代理的设计哲学——语言无关、独立升级、统一治理——以及 sidecar 模式向 ambient mesh 的演进。同时新增的 [[entities/traefik]] 和 [[topics/progressive-delivery]] 则把负载均衡器从"流量分发工具"重新定位为"发布策略的承载面"。
 
+这次摄入的 [[sources/clickhouse-query-optimization-guide]] 和 [[sources/clickhouse-optimize-aggregation-in-order]] 则把 ClickHouse 主线从"怎么部署"推进到"怎么系统地让查询更快"。前者是 ClickHouse 官方工程博客的综合优化指南，用 ORDER BY 设计、数据类型、projection、物化视图、skip index、字典和多趟分组构建了一个完整的优化分层框架；后者则聚焦于 `optimize_aggregation_in_order` 这一个设置，解释为什么当 GROUP BY 对齐 ORDER BY 时，聚合不需要 hash table 就可以流式完成。它们共同新增了 [[topics/clickhouse-query-optimization]]，也更新了 [[topics/clickhouse-common-pitfalls]] 里的 Nullable、分区和 skip index 误区。这次摄入让我真正意识到，ClickHouse 的优化重心不在查询层面，而在建表时的 `ORDER BY` 设计——这本质上是在提前定义数据的物理归宿。
+
 ## 当前关注
 
 如果要用一句更个人的话来概括，这一阶段我最关心的不是“又学了哪些零散知识点”，而是能不能把这些主题收敛成几套稳定的判断框架。下面这些点，都是我觉得接下来值得继续深挖的方向。
@@ -103,6 +105,7 @@ updated: 2026-05-15
 - 理解 agent 复杂度阶梯的可实现性：prompt chaining → routing → orchestrator-workers → evaluator-optimizer 每一层对应什么代码模块
 - 理解 interaction model 带来的范式变化：从 turn-based 到流式协作，ACI 是否需要同时回答"模型如何调用工具"和"模型如何与人类共享时间"
 - 理解双模型架构中按时间尺度的分工逻辑：实时 presence 与深度推理的边界如何定义，结果如何自然回注到对话流中
+- 理解 ClickHouse 查询优化的物理基础：为什么 ORDER BY 设计是第一优化杠杆，以及如何把"优化"从查询技巧重新定位为"让数据物理组织对齐查询模式"
 
 ## 演化轨迹
 
@@ -135,7 +138,8 @@ updated: 2026-05-15
 - 2026-05-14：摄入 Traefik 负载均衡策略文章，新增负载均衡策略选择框架、渐进式交付与 Traefik/Envoy 代理架构主题
 - 2026-05-15：设计 ClickHouse 集群负载均衡验证方案，新增自管集群连接层负载均衡主题：对比客户端多地址、Traefik TCP LB 与 ClickHouse Cloud 托管体验
 - 2026-05-19：摄入 OpenCode 使用技巧与最佳实践，新增 OpenCode 工具实体与日常工作流主题，把 agent 使用从架构设计拉回具体工具的操作节奏与上下文管理判断
+- 2026-05-20：摄入 ClickHouse 查询优化权威指南与 aggregation-in-order 设置专项文章，新增 ClickHouse 查询优化主题：从 ORDER BY 设计、数据类型、预计算、聚合策略到诊断体系的完整优化框架
 
 ---
 
-相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/ai-agent-harness]] · [[topics/long-horizon-agents]] · [[topics/agent-bridge]] · [[topics/local-llm-inference]] · [[topics/interaction-models]] · [[topics/opencode-workflow]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-data-export]] · [[topics/clickhouse-cluster-load-balancing]] · [[topics/kubernetes-autoscaling]] · [[topics/hdfs-and-oss-hdfs]] · [[topics/software-versioning]] · [[topics/javascript-module-systems]] · [[topics/load-balancing-strategies]] · [[topics/progressive-delivery]] · [[topics/service-mesh]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/anthony-fu]] · [[entities/openclaw]] · [[entities/ilink]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/kubernetes]] · [[entities/hdfs]] · [[entities/oss-hdfs]] · [[entities/nodejs]] · [[entities/oh-my-openagent]] · [[entities/opencode]] · [[entities/antirez]] · [[entities/deepseek]] · [[entities/thinking-machines-lab]] · [[entities/traefik]] · [[entities/envoy]] · [[sources/agent-bridge-design]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/oneuptime-clickhouse-export-file-formats]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/databricks-what-is-hdfs]] · [[sources/aliyun-oss-hdfs-overview]] · [[sources/aliyun-oss-hdfs-notice]] · [[sources/epoch-semantic-versioning]] · [[sources/move-on-to-esm-only]] · [[sources/oh-my-openagent]] · [[sources/ds4-readme]] · [[sources/interaction-models]] · [[sources/harness-vs-platform-engineering]] · [[sources/advanced-load-balancing-traefik]] · [[sources/choosing-load-balancing-strategy]] · [[sources/what-is-envoy]]
+相关页面：[[index]] · [[topics/llm-wiki-pattern]] · [[topics/local-first-search]] · [[topics/agentic-systems]] · [[topics/agent-computer-interface]] · [[topics/multi-agent-systems]] · [[topics/ai-agent-harness]] · [[topics/long-horizon-agents]] · [[topics/agent-bridge]] · [[topics/local-llm-inference]] · [[topics/interaction-models]] · [[topics/opencode-workflow]] · [[topics/sql-indexing]] · [[topics/sql-execution-plans]] · [[topics/query-shape-and-index-usage]] · [[topics/query-result-caching]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-keeper-vs-zookeeper]] · [[topics/clickhouse-replicated-engines-and-conversion]] · [[topics/clickhouse-single-node-to-cluster-migration]] · [[topics/clickhouse-common-pitfalls]] · [[topics/clickhouse-data-export]] · [[topics/clickhouse-cluster-load-balancing]] · [[topics/kubernetes-autoscaling]] · [[topics/hdfs-and-oss-hdfs]] · [[topics/software-versioning]] · [[topics/javascript-module-systems]] · [[topics/load-balancing-strategies]] · [[topics/progressive-delivery]] · [[topics/service-mesh]] · [[entities/qmd]] · [[entities/anthropic]] · [[entities/anthony-fu]] · [[entities/openclaw]] · [[entities/ilink]] · [[entities/managed-agents]] · [[entities/markus-winand]] · [[entities/clickhouse]] · [[entities/clickhouse-keeper]] · [[entities/kubernetes]] · [[entities/hdfs]] · [[entities/oss-hdfs]] · [[entities/nodejs]] · [[entities/oh-my-openagent]] · [[entities/opencode]] · [[entities/antirez]] · [[entities/deepseek]] · [[entities/thinking-machines-lab]] · [[entities/traefik]] · [[entities/envoy]] · [[sources/agent-bridge-design]] · [[sources/clickhouse-replication-and-scaling]] · [[sources/clickhouse-keeper]] · [[sources/clickhouse-operator-introduction]] · [[sources/clickhouse-13-mistakes]] · [[sources/clickhouse-cold-hot-storage]] · [[sources/oneuptime-clickhouse-export-file-formats]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/databricks-what-is-hdfs]] · [[sources/aliyun-oss-hdfs-overview]] · [[sources/aliyun-oss-hdfs-notice]] · [[sources/epoch-semantic-versioning]] · [[sources/move-on-to-esm-only]] · [[sources/oh-my-openagent]] · [[sources/ds4-readme]] · [[sources/interaction-models]] · [[sources/harness-vs-platform-engineering]] · [[sources/advanced-load-balancing-traefik]] · [[sources/choosing-load-balancing-strategy]] · [[sources/what-is-envoy]] · [[sources/clickhouse-optimize-aggregation-in-order]] · [[sources/clickhouse-query-optimization-guide]] · [[topics/clickhouse-query-optimization]]
