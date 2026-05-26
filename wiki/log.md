@@ -388,3 +388,9 @@
 - 更新 `index`、`overview`
 
 删减预算：本轮无删减候选。
+
+## [2026-05-26] ingest | CNPG 事故恢复与存储策略复盘
+
+触及页面：`sources/cnpg-recovery-incident`（新建）、`topics/cloudnativepg-recovery`（新建）、`entities/cloudnativepg`（新建）、`topics/kubernetes-persistent-storage`、`entities/kubernetes`、`index`、`overview`。核心沉淀是：CloudNativePG 事故恢复要先判断权威数据和 PV/PVC 生命周期，再让 Operator 调和；`Retain` 能防误删 PVC 连带删云盘，但不能替代快照和数据库备份；主从同步要看 `pg_stat_replication` / `pg_stat_wal_receiver` 和 WAL LSN，而不能只看 Cluster Ready。
+
+删减预算：保留 `topics/kubernetes-persistent-storage` 原有 ACK 文档框架；将 CNPG 事故经验合并为一个新实战小节，避免重复另写一套 PV/PVC 基础概念；`entities/kubernetes` 只追加一条有状态 Operator 边界判断，不扩写成运维清单。

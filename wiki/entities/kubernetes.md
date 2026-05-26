@@ -2,7 +2,7 @@
 title: Kubernetes
 type: entity
 tags: [Kubernetes, 容器编排, 云原生]
-source_count: 5
+source_count: 6
 updated: 2026-05-26
 ---
 
@@ -18,7 +18,7 @@ Kubernetes 目前在这份 wiki 里主要连接四条线。
 
 第三条是弹性伸缩。[[sources/kubernetes-autoscaling-workloads]] 和 [[sources/ack-node-scaling]] 把 Kubernetes 的伸缩拆成 workload 层与 node 层：HPA、VPA、KEDA 改变 Pod 或副本，节点伸缩则为不可调度 Pod 补充容量。
 
-第四条是持久化存储。 [[topics/kubernetes-persistent-storage]] 把静态卷、动态卷和快照放到同一个判断框架里，让我意识到选型难点不在"怎么挂载"，而在"谁管理云盘的生命周期"。StorageClass 的参数定义实际上是一套存储治理规则，从 `volumeBindingMode` 到 `reclaimPolicy`，每个选择都有长期的运维成本。
+第四条是持久化存储。 [[topics/kubernetes-persistent-storage]] 把静态卷、动态卷和快照放到同一个判断框架里，让我意识到选型难点不在"怎么挂载"，而在"谁管理云盘的生命周期"。StorageClass 的参数定义实际上是一套存储治理规则，从 `volumeBindingMode` 到 `reclaimPolicy`，每个选择都有长期的运维成本。[[sources/cnpg-recovery-incident]] 又把这个判断落到数据库恢复现场：`Retain` 能给误删 PVC 留下云盘，但不能替代快照和备份。
 
 ## 我会保留的系统特征
 
@@ -27,6 +27,7 @@ Kubernetes 目前在这份 wiki 里主要连接四条线。
 - **调度是第一现场**：Label、Taint、affinity、PDB、resource requests 会决定 Pod 能不能落到节点上。
 - **弹性是分层的**：工作负载伸缩和节点伸缩必须配合，单独打开某个控制器不能保证系统真的变得有弹性。
 - **存储选型是架构决策**：静态卷 vs 动态卷、RWO 约束、Snapshot 策略，这些选择应该在应用设计阶段就确定，而不是部署后修补。
+- **有状态 Operator 不能替代数据判断**：CloudNativePG 可以调和 PostgreSQL 实例，但恢复时仍要先确认权威数据、PV/PVC 生命周期和 WAL 复制状态。
 - **共享集群需要收窄边界**：CRD、Operator、watch namespace、证书和 RBAC 都应该被当成平台变更管理。
 
 ## 对我的提醒
@@ -37,6 +38,6 @@ Kubernetes 的抽象很强，但它不会替我消灭物理约束。Pod 需要�
 
 ---
 
-来源：[[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/ack-static-disk-volume]] · [[sources/ack-dynamic-disk-volumes]] · [[sources/ack-disk-volume-snapshots]]
+来源：[[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/ack-static-disk-volume]] · [[sources/ack-dynamic-disk-volumes]] · [[sources/ack-disk-volume-snapshots]] · [[sources/cnpg-recovery-incident]]
 
-相关页面：[[topics/kubernetes-autoscaling]] · [[topics/kubernetes-api-groups-and-schema-validation]] · [[topics/kubernetes-crd-recording-strategy]] · [[topics/kubernetes-persistent-storage]] · [[topics/clickhouse-operator-installation-on-shared-clusters]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/ack-static-disk-volume]] · [[sources/ack-dynamic-disk-volumes]] · [[sources/ack-disk-volume-snapshots]]
+相关页面：[[topics/kubernetes-autoscaling]] · [[topics/kubernetes-api-groups-and-schema-validation]] · [[topics/kubernetes-crd-recording-strategy]] · [[topics/kubernetes-persistent-storage]] · [[topics/cloudnativepg-recovery]] · [[topics/clickhouse-operator-installation-on-shared-clusters]] · [[entities/cloudnativepg]] · [[sources/kubernetes-autoscaling-workloads]] · [[sources/ack-node-scaling]] · [[sources/ack-static-disk-volume]] · [[sources/ack-dynamic-disk-volumes]] · [[sources/ack-disk-volume-snapshots]] · [[sources/cnpg-recovery-incident]]

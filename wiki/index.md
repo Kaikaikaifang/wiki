@@ -48,6 +48,7 @@ updated: 2026-05-15
 - [[topics/kubernetes-autoscaling]] — 把 HPA、VPA、KEDA 与节点伸缩放进同一个分层弹性判断框架
 - [[topics/kubernetes-crd-recording-strategy]] — 什么时候该记录 CRD 安装配置，什么时候不该直接 vendoring 整份上游 CRD
 - [[topics/kubernetes-persistent-storage]] — 把静态卷、动态卷与快照的使用场景放进同一判断框架
+- [[topics/cloudnativepg-recovery]] — CloudNativePG 事故恢复、Retain 存储策略与 PostgreSQL 主从同步验证
 - [[topics/postgresql-index-ddl-locking]] — 理解 PostgreSQL 中索引创建与删除 DDL 的锁强度和线上体感
 - [[topics/progressive-delivery]] — 渐进式交付与蓝绿部署、金丝雀发布、流量镜像
 - [[topics/query-result-caching]] — 用 TTL、准入条件与安全边界复用昂贵 `SELECT` 结果
@@ -69,6 +70,7 @@ updated: 2026-05-15
 - [[entities/andrej-karpathy]] — AI 研究者，LLM Wiki 模式提出者
 - [[entities/anthony-fu]] — 前端开源工具链作者，Epoch SemVer 提案提出者
 - [[entities/clickhouse]] — 面向 OLAP 的列式数据库，强调分析查询性能与可观测性
+- [[entities/cloudnativepg]] — Kubernetes 中管理 PostgreSQL 集群生命周期的 Operator
 - [[entities/deepseek]] — 开放权重 MoE 大模型提供商，以 DeepSeek V4 Flash 的本地推理友好性著称
 - [[entities/clickhouse-keeper]] — ClickHouse 的原生协调服务，面向复制与分布式 DDL
 - [[entities/hdfs]] — Hadoop 生态里的分布式文件系统，用 block、副本和 NameNode / DataNode 组织大数据存储
@@ -96,6 +98,7 @@ updated: 2026-05-15
 - [[sources/ack-static-disk-volume]] — ACK 静态云盘存储卷：手动 PV/PVC 绑定、节点亲和性与 RWO 约束（2026-05-26，网络文章）
 - [[sources/ack-dynamic-disk-volumes]] — ACK 动态云盘存储卷：StorageClass、volumeClaimTemplates 与生产检查单（2026-05-26，网络文章）
 - [[sources/ack-disk-volume-snapshots]] — ACK 云盘快照与恢复：VolumeSnapshot API、动态/静态快照与极速可用（2026-05-26，网络文章）
+- [[sources/cnpg-recovery-incident]] — CNPG 事故恢复与存储策略复盘：从 Retain PV、快照恢复到主从同步验证（2026-05-26，会话复盘）
 - [[sources/aliyun-oss-hdfs-notice]] — 阿里云 OSS-HDFS 使用前须知，强调 `.dlsdata/` 内部目录和 OSS 功能冲突风险（2026-04-28，网络文章）
 - [[sources/aliyun-oss-hdfs-overview]] — 阿里云 OSS-HDFS / JindoFS 服务概览，说明 HDFS 接口如何接入对象存储数据湖（2026-04-28，网络文章）
 - [[sources/altinity-converting-mergetree-to-replicated]] — Altinity 关于把 `MergeTree` 转为 `ReplicatedMergeTree` 的实务路线图（2026-04-16，网络文章）

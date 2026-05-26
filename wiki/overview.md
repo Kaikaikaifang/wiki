@@ -2,7 +2,7 @@
 title: 整体综述
 type: overview
 tags: [方法论, 知识管理]
-source_count: 43
+source_count: 44
 updated: 2026-05-26
 ---
 
@@ -50,6 +50,8 @@ updated: 2026-05-26
 
 这次摄入的 [[sources/kubernetes-autoscaling-workloads]] 和 [[sources/ack-node-scaling]]，则把 Kubernetes 从“部署 ClickHouse 的容器平台”推进成一条独立的调度与控制器主线。它们新增了 [[topics/kubernetes-autoscaling]] 与 [[entities/kubernetes]]：工作负载伸缩负责改变 replica 或 Pod 资源，节点伸缩负责为不可调度 Pod 补容量，两者必须通过调度器、resource requests、节点池、PDB 和云厂商库存接起来。
 
+这次补入的 [[sources/cnpg-recovery-incident]] 则把 Kubernetes 持久化存储从文档判断推进到事故恢复现场。它新增了 [[topics/cloudnativepg-recovery]] 与 [[entities/cloudnativepg]]：CloudNativePG 能调和 PostgreSQL 集群，但不能替我判断哪块 PV 是权威数据；Pod 删除、PVC 删除、PV 回收策略、VolumeSnapshot 和 WAL 复制状态必须分层处理。
+
 这次摄入的 [[sources/databricks-what-is-hdfs]]、[[sources/aliyun-oss-hdfs-overview]] 和 [[sources/aliyun-oss-hdfs-notice]]，则新增了 [[topics/hdfs-and-oss-hdfs]] 这条大数据存储线索：传统 HDFS 用 NameNode、DataNode、block 和副本解决本地集群时代的大文件存储，OSS-HDFS 则把 HDFS 接口语义接到 OSS 对象存储之上，同时引入 `.dlsdata/` 内部目录、生命周期规则、版本控制和后台角色这些新的云上运维边界。
 
 新摄入的 [[sources/epoch-semantic-versioning]] 则把主题扩展到开源维护与软件版本语义。它新增了 [[topics/software-versioning]] 和 [[entities/anthony-fu]]，提醒我版本号不是完美描述变更的事实系统，而是维护者、用户和包管理器之间的风险沟通信号；Epoch SemVer 的价值在于不改现有 SemVer 工具链，却把技术 breaking change 和时代级变化拆开表达。
@@ -92,6 +94,7 @@ updated: 2026-05-26
 - 理解 ClickHouse 集群负载均衡的选项对比：客户端多地址、外部 LB（Traefik/Envoy/云厂商）与 Cloud 托管体验之间的差距与取舍
 - 理解 Kubernetes 弹性伸缩的分层模型：workload 层改副本和资源，node 层补调度容量
 - 理解 Kubernetes 持久化存储的选型框架：静态卷 vs 动态卷的生命周期所有权、StorageClass 的治理含义、RWO 约束对应用架构的影响
+- 理解 CloudNativePG 事故恢复的操作边界：先确认权威数据和 PV/PVC 生命周期，再让 Operator 调和；副本健康要看 WAL，而不只看 Ready
 - 理解 VolumeSnapshot 不只是备份工具，而是迁移验证、快速恢复和开发环境同步的基础设施
 - 理解 HDFS 到 OSS-HDFS 的演化：接口语义可以保留，但底层对象存储会带来新的运维边界
 - 理解软件版本号作为升级契约的沟通作用，而不是把 SemVer 当作机械规则
@@ -142,6 +145,7 @@ updated: 2026-05-26
 - 2026-05-19：摄入 OpenCode 使用技巧与最佳实践，新增 OpenCode 工具实体与日常工作流主题，把 agent 使用从架构设计拉回具体工具的操作节奏与上下文管理判断
 - 2026-05-20：摄入 ClickHouse 查询优化权威指南与 aggregation-in-order 设置专项文章，新增 ClickHouse 查询优化主题：从 ORDER BY 设计、数据类型、预计算、聚合策略到诊断体系的完整优化框架
 - 2026-05-26：摄入 ACK 云盘存储卷三篇文档（静态卷、动态卷、快照），新增 Kubernetes 持久化存储主题：把 PV/PVC/StorageClass 的选型从"怎么挂载"推进到"谁管理生命周期"
+- 2026-05-26：归档 CNPG/PostgreSQL 事故恢复会话，新增 CloudNativePG 恢复主题：把 Retain PV、快照、临时 clone、逻辑迁回和 WAL 复制验证连成一条可复用的恢复路径
 
 ---
 

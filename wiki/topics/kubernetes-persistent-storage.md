@@ -2,13 +2,13 @@
 title: Kubernetes 持久化存储：静态卷、动态卷与快照的选择框架
 type: topic
 tags: [Kubernetes, 持久化存储, CSI, 存储设计]
-source_count: 3
+source_count: 4
 updated: 2026-05-26
 ---
 
 > 在 Kubernetes 里用存储，表面上是写 YAML，实际上是做一系列不可逆的选型决策：云盘类型、绑定策略、回收行为、备份方式，以及这些选择对应用生命周期和运维成本的长期影响。
 
-这篇文章不是某一类存储的教程，而是把 [[sources/ack-static-disk-volume]]、[[sources/ack-dynamic-disk-volumes]] 和 [[sources/ack-disk-volume-snapshots]] 三份 ACK 官方文档放到同一个判断框架里，回答一个问题：**什么时候该用静态卷，什么时候该用动态卷，快照又该什么时候介入**。
+这篇文章不是某一类存储的教程，而是把 [[sources/ack-static-disk-volume]]、[[sources/ack-dynamic-disk-volumes]]、[[sources/ack-disk-volume-snapshots]] 和一次 [[sources/cnpg-recovery-incident]] 放到同一个判断框架里，回答一个问题：**什么时候该用静态卷，什么时候该用动态卷，快照又该什么时候介入**。
 
 ## 静态卷 vs 动态卷：核心差异不在技术，在生命周期所有权
 
@@ -44,6 +44,14 @@ updated: 2026-05-26
 
 这个约束意味着：在选择云盘之前，必须先确定应用是可水平拆分的（每副本独立存储）还是需要共享存储的（需要 NAS、OSS 等其他存储类型）。
 
+## CNPG 事故给我的补课：Retain 是刹车，不是备份
+
+这次 [[sources/cnpg-recovery-incident]] 把 `reclaimPolicy` 从文档参数变成了真实事故里的分水岭。Pod 删除和 PVC 删除看起来都像“资源没了”，但数据后果完全不同：Pod 没了，只要 PVC 还在，控制器通常能重新挂载原盘；PVC 没了，如果 PV 是 `Delete`，底层云盘可能也随之删除，如果 PV 是 `Retain`，才有机会通过 Released PV 重新绑定回来。
+
+我现在会把生产数据库的动态云盘策略默认推向 `Retain`，但不会把它当成备份。`Retain` 防的是误删 PVC 连带删盘；它不防逻辑错误、不防坏数据被复制、不防主从一起写坏，也不提供时间点恢复。真正稳妥的组合是：数据库 PVC 使用 Retain，关键操作前做 VolumeSnapshot，长期再配 WAL 归档或数据库级备份。
+
+还有一个实践细节值得保留：Operator 管理的数据库不要只看 Kubernetes 层面的 Ready。对于 PostgreSQL 副本，仍然要回到数据库自己的复制视图——主库看 `pg_stat_replication`，副本看 `pg_stat_wal_receiver`，确认 WAL LSN 能持续追上。否则一个“Ready 的副本”也可能已经因为缺失 WAL segment 而无法继续同步。
+
 ## 快照：不是"高级功能"，而是运维基线
 
 VolumeSnapshot 的设计和 PVC/PV 是对称的：VolumeSnapshotContent 对应 PV，VolumeSnapshot 对应 PVC，VolumeSnapshotClass 对应 StorageClass。这种对称性让它很容易被已有 Kubernetes 经验的团队上手。
@@ -76,6 +84,6 @@ VolumeSnapshot 的设计和 PVC/PV 是对称的：VolumeSnapshotContent 对应 P
 
 对于在阿里云 ACK 上运行有状态应用的人来说，这些细节是避不开的。对于使用其他云厂商或自管集群的人来说，抽象概念（PV/PVC/StorageClass/VolumeSnapshot 的关系）仍然适用，但具体参数需要对照对应厂商的 CSI 文档。
 
-来源：[[sources/ack-static-disk-volume]] · [[sources/ack-dynamic-disk-volumes]] · [[sources/ack-disk-volume-snapshots]]
+来源：[[sources/ack-static-disk-volume]] · [[sources/ack-dynamic-disk-volumes]] · [[sources/ack-disk-volume-snapshots]] · [[sources/cnpg-recovery-incident]]
 
-相关页面：[[entities/kubernetes]] · [[topics/kubernetes-autoscaling]] · [[topics/clickhouse-deployment-topologies]]
+相关页面：[[entities/kubernetes]] · [[entities/cloudnativepg]] · [[topics/cloudnativepg-recovery]] · [[topics/kubernetes-autoscaling]] · [[topics/clickhouse-deployment-topologies]]
