@@ -47,6 +47,7 @@ updated: 2026-05-15
 - [[topics/kubernetes-api-groups-and-schema-validation]] — 把 `apiVersion`、core API 与编辑器 schema 假阳性放进同一个判断框架
 - [[topics/kubernetes-autoscaling]] — 把 HPA、VPA、KEDA 与节点伸缩放进同一个分层弹性判断框架
 - [[topics/kubernetes-crd-recording-strategy]] — 什么时候该记录 CRD 安装配置，什么时候不该直接 vendoring 整份上游 CRD
+- [[topics/kubernetes-persistent-storage]] — 把静态卷、动态卷与快照的使用场景放进同一判断框架
 - [[topics/postgresql-index-ddl-locking]] — 理解 PostgreSQL 中索引创建与删除 DDL 的锁强度和线上体感
 - [[topics/progressive-delivery]] — 渐进式交付与蓝绿部署、金丝雀发布、流量镜像
 - [[topics/query-result-caching]] — 用 TTL、准入条件与安全边界复用昂贵 `SELECT` 结果
@@ -92,6 +93,9 @@ updated: 2026-05-15
 - [[sources/agent-bridge-design]] — Agent Bridge 的设计与实现：从 OpenClaw 微信插件到通用 Channel-Agent 桥接层（2026-04-29，项目文档）
 - [[sources/building-effective-ai-agents]] — Anthropic 的 agent 工程文章（2026-04-13，网络文章）
 - [[sources/ack-node-scaling]] — 阿里云 ACK 关于节点自动伸缩与节点即时弹性的概览（2026-04-28，网络文章）
+- [[sources/ack-static-disk-volume]] — ACK 静态云盘存储卷：手动 PV/PVC 绑定、节点亲和性与 RWO 约束（2026-05-26，网络文章）
+- [[sources/ack-dynamic-disk-volumes]] — ACK 动态云盘存储卷：StorageClass、volumeClaimTemplates 与生产检查单（2026-05-26，网络文章）
+- [[sources/ack-disk-volume-snapshots]] — ACK 云盘快照与恢复：VolumeSnapshot API、动态/静态快照与极速可用（2026-05-26，网络文章）
 - [[sources/aliyun-oss-hdfs-notice]] — 阿里云 OSS-HDFS 使用前须知，强调 `.dlsdata/` 内部目录和 OSS 功能冲突风险（2026-04-28，网络文章）
 - [[sources/aliyun-oss-hdfs-overview]] — 阿里云 OSS-HDFS / JindoFS 服务概览，说明 HDFS 接口如何接入对象存储数据湖（2026-04-28，网络文章）
 - [[sources/altinity-converting-mergetree-to-replicated]] — Altinity 关于把 `MergeTree` 转为 `ReplicatedMergeTree` 的实务路线图（2026-04-16，网络文章）

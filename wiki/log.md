@@ -373,3 +373,18 @@
 ## [2026-05-20] ingest | ClickHouse 查询优化权威指南 + in-order 聚合优化
 
 触及页面：`sources/clickhouse-query-optimization-guide`（新建）、`sources/clickhouse-optimize-aggregation-in-order`（新建）、`topics/clickhouse-query-optimization`（新建）、`topics/clickhouse-common-pitfalls`、`entities/clickhouse`、`index`、`overview`。核心沉淀是：ClickHouse 的优化重心不在查询层面，而在建表时的 `ORDER BY` 设计——这本质上是在提前定义数据的物理归宿。官方指南用六层优化框架（ORDER BY 设计 → 数据类型 → 预计算 → 查询模式 → 额外索引 → 分区）把零散的优化技巧串成了有优先级的分层判断体系。`optimize_aggregation_in_order` 则让 GROUP BY 在数据已经排好序时走流式聚合而不构建 hash table，本质上是用建表时的排序成本交换查询时的聚合内存成本。互补更新了常见误区页：新增 Nullable 列的实际开销判断、分区数上限警告和 skip index 必须与 ORDER BY 有相关性的前提。删减预算：本轮无删减候选，本次新增的内容填补了 ClickHouse 主题线中"查询优化"的独立判断层，与已有部署、迁移、误区主题互补而非重叠。
+
+## [2026-05-26] ingest | ACK 云盘存储卷（静态、动态、快照）
+
+摄入阿里云 ACK 官方三篇云盘存储文档：
+- `raw/articles/ack-static-disk-volume.md` — 静态卷的手动 PV/PVC 绑定流程
+- `raw/articles/ack-dynamic-disk-volumes.md` — 动态卷的 StorageClass 与 volumeClaimTemplates
+- `raw/articles/ack-disk-volume-snapshots.md` — VolumeSnapshot / VolumeSnapshotClass 快照与恢复
+
+触及页面：
+- 新增 `sources/ack-static-disk-volume`、`sources/ack-dynamic-disk-volumes`、`sources/ack-disk-volume-snapshots`
+- 新增 `topics/kubernetes-persistent-storage` — 把静态卷、动态卷与快照的使用场景放进同一判断框架
+- 更新 `entities/kubernetes` — 补充持久化存储第四条主线
+- 更新 `index`、`overview`
+
+删减预算：本轮无删减候选。
