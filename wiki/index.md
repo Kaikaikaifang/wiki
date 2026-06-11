@@ -3,7 +3,7 @@ title: 内容目录
 type: index
 tags: [索引, 导航]
 source_count: 0
-updated: 2026-05-15
+updated: 2026-06-11
 ---
 
 > 每次摄入后由 LLM 更新。查询时先读此文件定位相关页面。
@@ -30,6 +30,7 @@ updated: 2026-05-15
 - [[topics/clickhouse-sharding-decision]] — 在冷热分层前提下，何时分片、何时全副本的决策框架与真实案例分析
 - [[topics/clickhouse-single-node-to-cluster-migration]] — 从单节点 ClickHouse 迁到多副本多分片集群时，如何判断无缝切换、引擎切换与迁移步骤
 - [[topics/ddl-vs-dml]] — 用“改结构”和“改数据”的区别理解 `ON CLUSTER` 为什么只管 DDL
+- [[topics/ducklake]] — 把元数据全部交给 SQL 数据库管理的 lakehouse 格式，与 Iceberg、Delta Lake 的数据层通用但元数据层独立
 - [[topics/hybrid-retrieval]] — 组合 BM25、向量检索、查询扩展与重排的检索范式
 - [[topics/hdfs-and-oss-hdfs]] — 从 NameNode / DataNode 到 OSS-HDFS，理解 HDFS 语义如何被对象存储承接
 - [[topics/interaction-models]] — 把实时多模态交互能力原生内建到模型中，以 micro-turns 实现真正的人机协作
@@ -72,6 +73,8 @@ updated: 2026-05-15
 - [[entities/clickhouse]] — 面向 OLAP 的列式数据库，强调分析查询性能与可观测性
 - [[entities/cloudnativepg]] — Kubernetes 中管理 PostgreSQL 集群生命周期的 Operator
 - [[entities/deepseek]] — 开放权重 MoE 大模型提供商，以 DeepSeek V4 Flash 的本地推理友好性著称
+- [[entities/duckdb]] — 面向分析型负载的进程内数据库，DuckLake 的创建者与参考实现
+- [[entities/ducklake]] — 数据格式实体，把元数据全部交给 SQL 数据库管理的 lakehouse 格式
 - [[entities/clickhouse-keeper]] — ClickHouse 的原生协调服务，面向复制与分布式 DDL
 - [[entities/hdfs]] — Hadoop 生态里的分布式文件系统，用 block、副本和 NameNode / DataNode 组织大数据存储
 - [[entities/ilink]] — 微信 iLink API，面向 Bot 开发者的长轮询消息接口
@@ -122,6 +125,8 @@ updated: 2026-05-15
 - [[sources/clickhouse-replicated-table-engines]] — ClickHouse 复制引擎文档，说明从 `MergeTree` 迁移到 `ReplicatedMergeTree` 的官方路径（2026-04-16，网络文章）
 - [[sources/clickhouse-replication-and-scaling]] — ClickHouse 分片与多副本集群示例（2026-04-16，网络文章）
 - [[sources/clickhouse-separation-storage-compute]] — ClickHouse 存算分离与 S3 架构指南（2026-04-16，网络文章）
+- [[sources/ducklake-manifesto]] — DuckLake 宣言：为什么 lakehouse 元数据应该放在数据库里而不是 JSON 文件里（2026-06-11，网络文章）
+- [[sources/ducklake-v1-0-announcement]] — DuckLake v1.0 发布说明，包含 Data Inlining、Sorted Tables、Bucket Partitioning、Variant 类型等生产级功能（2026-04-13，网络文章）
 - [[sources/ds4-readme]] — antirez 的 DeepSeek V4 Flash 专用推理引擎，聚焦非对称量化、磁盘 KV cache 与官方向量验证（2026-05-09，项目文档）
 - [[sources/harness-vs-platform-engineering]] — Harness Engineering 与 Platform Engineering 的分层架构：agentic 系统的三层参考架构与治理引力陷阱（2026-05-08，网络文章）
 - [[sources/databricks-what-is-hdfs]] — Databricks 对 HDFS 的基础介绍，聚焦 block、副本、NameNode 与 DataNode（2021-12-08，网络文章）

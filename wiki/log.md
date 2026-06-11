@@ -394,3 +394,9 @@
 触及页面：`sources/cnpg-recovery-incident`（新建）、`topics/cloudnativepg-recovery`（新建）、`entities/cloudnativepg`（新建）、`topics/kubernetes-persistent-storage`、`entities/kubernetes`、`index`、`overview`。核心沉淀是：CloudNativePG 事故恢复要先判断权威数据和 PV/PVC 生命周期，再让 Operator 调和；`Retain` 能防误删 PVC 连带删云盘，但不能替代快照和数据库备份；主从同步要看 `pg_stat_replication` / `pg_stat_wal_receiver` 和 WAL LSN，而不能只看 Cluster Ready。
 
 删减预算：保留 `topics/kubernetes-persistent-storage` 原有 ACK 文档框架；将 CNPG 事故经验合并为一个新实战小节，避免重复另写一套 PV/PVC 基础概念；`entities/kubernetes` 只追加一条有状态 Operator 边界判断，不扩写成运维清单。
+
+## [2026-06-11] ingest | DuckLake 宣言与 v1.0 发布
+
+触及页面：`sources/ducklake-manifesto`（新建）、`sources/ducklake-v1-0-announcement`（新建）、`topics/ducklake`（新建）、`entities/duckdb`（新建）、`entities/ducklake`（新建）、`index`、`overview`。核心沉淀是：DuckLake 的核心判断是把 lakehouse 全部元数据交给 SQL 数据库管理，而不是像 Iceberg/Delta Lake 那样用 JSON/Avro 文件；数据层仍用通用 Parquet 格式，竞争边界在元数据层。v1.0 的 Data Inlining、Sorted Tables、Bucket Partitioning、Variant 类型和 Deletion Vectors 把写入优化、查询优化与类型系统演进放到了同一框架。
+
+删减预算：本轮无删减候选。DuckLake 是全新主题，与现有 ClickHouse 冷热分层、HDFS/OSS-HDFS 数据存储主题互补而非重叠。
