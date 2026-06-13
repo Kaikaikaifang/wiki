@@ -412,3 +412,9 @@
 触及页面：`sources/agent-first-product-engineering`（新建）、`topics/agent-first-engineering`（新建）、`entities/posthog`（更新）、`index`、`overview`。核心沉淀是：agent 不是产品的附加功能，而是一种新的交互层——它坐在用户和产品之间；PostHog 从 6000+ 日活 MCP 用户的两次架构迭代中提炼出五条原则——让 agent 能做用户能做的一切（默认关闭端点 + product team opt-in）、在 agent 的抽象层级上设计（用 SQL 替代 UI 原语）、预加载通用上下文（固定 + 动态平衡）、把 skill 写成"给优秀员工的入职指南"（领域知识 + 边界情况 + 品味）、把 agent 当作真实用户（headless dogfooding + trace review + eval loop）。
 
 删减预算：本轮无删减候选。新增内容补充了 agent 主线中缺失的"产品层"视角，与现有 agentic-systems、agent-computer-interface、ai-agent-harness 主题互补。
+
+## [2026-06-13] ingest | Paul Graham 伟大工作与假工作
+
+触及页面：`sources/paul-graham-great-work`（新建）、`sources/paul-graham-lose-time-and-money`（新建）、`topics/doing-great-work`（新建）、`topics/fake-work`（新建）、`entities/paul-graham`（新建）、`index`、`overview`。核心沉淀是：伟大工作的四步方法论——选择领域、学到前沿、发现裂缝、探索裂缝；好奇心是贯穿始终的引擎，而"以年计的拖延"是最隐蔽的时间浪费。假工作比娱乐更危险——它既不快乐也不产出，却绕过了进化赋予的直觉警报。识别假工作的关键是一天结束时问自己"我今天做了什么"，如果答案是"基本上没什么"，那你做了假工作。
+
+删减预算：本轮无删减候选。两个新增主题与现有 `topics/knowledge-management` 互补而非重叠——知识管理是工具，伟大工作是方法论，假工作是警报系统。

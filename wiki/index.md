@@ -3,7 +3,7 @@ title: 内容目录
 type: index
 tags: [索引, 导航]
 source_count: 0
-updated: 2026-06-11
+updated: 2026-06-13
 ---
 
 > 每次摄入后由 LLM 更新。查询时先读此文件定位相关页面。
@@ -30,9 +30,11 @@ updated: 2026-06-11
 - [[topics/clickhouse-sharding-decision]] — 在冷热分层前提下，何时分片、何时全副本的决策框架与真实案例分析
 - [[topics/clickhouse-single-node-to-cluster-migration]] — 从单节点 ClickHouse 迁到多副本多分片集群时，如何判断无缝切换、引擎切换与迁移步骤
 - [[topics/ddl-vs-dml]] — 用“改结构”和“改数据”的区别理解 `ON CLUSTER` 为什么只管 DDL
+- [[topics/doing-great-work]] — 如何找到值得做的事并持续做下去：好奇心、前沿、裂缝与探索的四步方法论
 - [[topics/ducklake]] — 把元数据全部交给 SQL 数据库管理的 lakehouse 格式，与 Iceberg、Delta Lake 的数据层通用但元数据层独立
 - [[topics/duckdb-vs-clickhouse]] — DuckDB 与 ClickHouse 的互补定位：嵌入式引擎 vs 生产级 OLAP 服务
 - [[topics/agent-first-engineering]] — Agent 优先的产品设计五原则：从 PostHog 6000+ 日活 MCP 用户的两次架构迭代
+- [[topics/fake-work]] — 识别既不快乐也不产出的“伪工作”：为什么假工作比娱乐更危险
 - [[topics/hybrid-retrieval]] — 组合 BM25、向量检索、查询扩展与重排的检索范式
 - [[topics/hdfs-and-oss-hdfs]] — 从 NameNode / DataNode 到 OSS-HDFS，理解 HDFS 语义如何被对象存储承接
 - [[topics/interaction-models]] — 把实时多模态交互能力原生内建到模型中，以 micro-turns 实现真正的人机协作
@@ -85,6 +87,7 @@ updated: 2026-06-11
 - [[entities/managed-agents]] — Anthropic 的托管式长程 agent 运行时产品
 - [[entities/markus-winand]] — 以 SQL 索引与执行计划教学著称的数据库作者
 - [[entities/nodejs]] — JavaScript 服务端运行时，也是 ESM / CommonJS 迁移路径的关键中间层
+- [[entities/paul-graham]] — Y Combinator 创始人，关于如何做出伟大工作、识别假工作与时间陷阱的思考者
 - [[entities/envoy]] — 开源 L7 代理与通信总线，服务网格的数据面标准实现
 - [[entities/oh-my-openagent]] — OpenCode 插件，将单一会话扩展为多模型 specialist 并行编排的运行时
 - [[entities/opencode]] — 面向开发者的 AI 编程 Agent 工具，支持 TUI、Web 与桌面端，强调人主导、Agent 协作
@@ -163,5 +166,7 @@ updated: 2026-06-11
 - [[sources/use-the-index-luke-the-where-clause]] — Use The Index, Luke 的 `where` 子句章节（2026-04-14，书籍章节）
 - [[sources/use-the-index-luke]] — Markus Winand 的 SQL 索引与性能教程总览（2026-04-14，书籍总览）
 - [[sources/opencode-usage-tips]] — OpenCode 使用技巧与最佳实践：上下文管理、AGENTS.md、配置层级与子 Agent 信息传递（2026-05-19，网络文章）
+- [[sources/paul-graham-great-work]] — Paul Graham 关于如何做出伟大工作的四步方法论：好奇心、前沿、裂缝与探索（2026-06-13，网络文章）
+- [[sources/paul-graham-lose-time-and-money]] — Paul Graham 关于假工作与时间陷阱的类比：为什么假工作比娱乐更危险（2026-06-13，网络文章）
 - [[sources/clickhouse-optimize-aggregation-in-order]] — `optimize_aggregation_in_order` 设置专项讲解：利用 MergeTree 排序顺序做流式聚合的内存优化（2026-03-31，网络文章）
 - [[sources/clickhouse-query-optimization-guide]] — ClickHouse 官方查询优化权威指南：ORDER BY 设计、数据类型、projection、物化视图、skip index（2026-05-20，网络文章）
