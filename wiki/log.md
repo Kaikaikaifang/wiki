@@ -400,3 +400,15 @@
 触及页面：`sources/ducklake-manifesto`（新建）、`sources/ducklake-v1-0-announcement`（新建）、`topics/ducklake`（新建）、`entities/duckdb`（新建）、`entities/ducklake`（新建）、`index`、`overview`。核心沉淀是：DuckLake 的核心判断是把 lakehouse 全部元数据交给 SQL 数据库管理，而不是像 Iceberg/Delta Lake 那样用 JSON/Avro 文件；数据层仍用通用 Parquet 格式，竞争边界在元数据层。v1.0 的 Data Inlining、Sorted Tables、Bucket Partitioning、Variant 类型和 Deletion Vectors 把写入优化、查询优化与类型系统演进放到了同一框架。
 
 删减预算：本轮无删减候选。DuckLake 是全新主题，与现有 ClickHouse 冷热分层、HDFS/OSS-HDFS 数据存储主题互补而非重叠。
+
+## [2026-06-13] ingest | DuckDB 与 ClickHouse/Postgres/SQLite 对比
+
+触及页面：`sources/duckdb-vs-clickhouse-posthog`（新建）、`sources/duckdb-vs-postgres`（新建）、`sources/duckdb-vs-sqlite`（新建）、`topics/duckdb-vs-clickhouse`（新建）、`entities/duckdb`（更新）、`entities/posthog`（新建）、`index`、`overview`。核心沉淀是：DuckDB 与 ClickHouse 不是竞争而是互补——ClickHouse 是生产级 OLAP 服务（长驻进程、水平扩展、高并发写入），DuckDB 是嵌入式分析引擎（进程内、零配置、用完即销毁）；PostHog 同时使用 Postgres + ClickHouse + DuckDB 的三数据库栈，按工作负载分层；DuckDB 与 Postgres 的对比揭示了 OLAP 与 OLTP 的根本差异（列式 vs 行式、向量化 vs Volcano、嵌入式 vs 客户端-服务器）；与 SQLite 的对比则澄清了"SQLite of OLAP"的精确含义——核心不是"本地性"而是"便携性 + 分析马力"。
+
+删减预算：本轮无删减候选。新增内容与现有 ClickHouse 部署、查询优化、DuckLake 主题互补，不重叠。
+
+## [2026-06-13] ingest | Agent-first 产品设计的五原则
+
+触及页面：`sources/agent-first-product-engineering`（新建）、`topics/agent-first-engineering`（新建）、`entities/posthog`（更新）、`index`、`overview`。核心沉淀是：agent 不是产品的附加功能，而是一种新的交互层——它坐在用户和产品之间；PostHog 从 6000+ 日活 MCP 用户的两次架构迭代中提炼出五条原则——让 agent 能做用户能做的一切（默认关闭端点 + product team opt-in）、在 agent 的抽象层级上设计（用 SQL 替代 UI 原语）、预加载通用上下文（固定 + 动态平衡）、把 skill 写成"给优秀员工的入职指南"（领域知识 + 边界情况 + 品味）、把 agent 当作真实用户（headless dogfooding + trace review + eval loop）。
+
+删减预算：本轮无删减候选。新增内容补充了 agent 主线中缺失的"产品层"视角，与现有 agentic-systems、agent-computer-interface、ai-agent-harness 主题互补。

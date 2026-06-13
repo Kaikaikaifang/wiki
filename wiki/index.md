@@ -31,6 +31,8 @@ updated: 2026-06-11
 - [[topics/clickhouse-single-node-to-cluster-migration]] — 从单节点 ClickHouse 迁到多副本多分片集群时，如何判断无缝切换、引擎切换与迁移步骤
 - [[topics/ddl-vs-dml]] — 用“改结构”和“改数据”的区别理解 `ON CLUSTER` 为什么只管 DDL
 - [[topics/ducklake]] — 把元数据全部交给 SQL 数据库管理的 lakehouse 格式，与 Iceberg、Delta Lake 的数据层通用但元数据层独立
+- [[topics/duckdb-vs-clickhouse]] — DuckDB 与 ClickHouse 的互补定位：嵌入式引擎 vs 生产级 OLAP 服务
+- [[topics/agent-first-engineering]] — Agent 优先的产品设计五原则：从 PostHog 6000+ 日活 MCP 用户的两次架构迭代
 - [[topics/hybrid-retrieval]] — 组合 BM25、向量检索、查询扩展与重排的检索范式
 - [[topics/hdfs-and-oss-hdfs]] — 从 NameNode / DataNode 到 OSS-HDFS，理解 HDFS 语义如何被对象存储承接
 - [[topics/interaction-models]] — 把实时多模态交互能力原生内建到模型中，以 micro-turns 实现真正的人机协作
@@ -75,6 +77,7 @@ updated: 2026-06-11
 - [[entities/deepseek]] — 开放权重 MoE 大模型提供商，以 DeepSeek V4 Flash 的本地推理友好性著称
 - [[entities/duckdb]] — 面向分析型负载的进程内数据库，DuckLake 的创建者与参考实现
 - [[entities/ducklake]] — 数据格式实体，把元数据全部交给 SQL 数据库管理的 lakehouse 格式
+- [[entities/posthog]] — 全栈开发者平台，提供产品分析、Feature Flags、A/B 测试、数据仓库，同时用 Postgres + ClickHouse + DuckDB 三数据库栈
 - [[entities/clickhouse-keeper]] — ClickHouse 的原生协调服务，面向复制与分布式 DDL
 - [[entities/hdfs]] — Hadoop 生态里的分布式文件系统，用 block、副本和 NameNode / DataNode 组织大数据存储
 - [[entities/ilink]] — 微信 iLink API，面向 Bot 开发者的长轮询消息接口
@@ -127,6 +130,10 @@ updated: 2026-06-11
 - [[sources/clickhouse-separation-storage-compute]] — ClickHouse 存算分离与 S3 架构指南（2026-04-16，网络文章）
 - [[sources/ducklake-manifesto]] — DuckLake 宣言：为什么 lakehouse 元数据应该放在数据库里而不是 JSON 文件里（2026-06-11，网络文章）
 - [[sources/ducklake-v1-0-announcement]] — DuckLake v1.0 发布说明，包含 Data Inlining、Sorted Tables、Bucket Partitioning、Variant 类型等生产级功能（2026-04-13，网络文章）
+- [[sources/duckdb-vs-clickhouse-posthog]] — PostHog 同时使用 DuckDB 和 ClickHouse 的原因对比（2026-05-01，网络文章）
+- [[sources/duckdb-vs-postgres]] — DuckDB 与 Postgres 的 OLAP vs OLTP 详细对比（2026-06-13，网络文章）
+- [[sources/duckdb-vs-sqlite]] — DuckDB 与 SQLite 的嵌入式数据库对比：OLAP vs OLTP（2026-06-13，网络文章）
+- [[sources/agent-first-product-engineering]] — PostHog 的 agent-first 产品设计五原则（2026-06-13，网络文章）
 - [[sources/ds4-readme]] — antirez 的 DeepSeek V4 Flash 专用推理引擎，聚焦非对称量化、磁盘 KV cache 与官方向量验证（2026-05-09，项目文档）
 - [[sources/harness-vs-platform-engineering]] — Harness Engineering 与 Platform Engineering 的分层架构：agentic 系统的三层参考架构与治理引力陷阱（2026-05-08，网络文章）
 - [[sources/databricks-what-is-hdfs]] — Databricks 对 HDFS 的基础介绍，聚焦 block、副本、NameNode 与 DataNode（2021-12-08，网络文章）
