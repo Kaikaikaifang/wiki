@@ -7,6 +7,7 @@ file: raw/articles/ducklake-manifesto.md
 type: source
 tags: [数据湖仓, DuckDB, 数据格式, SQL]
 source_count: 1
+updated: 2026-06-11
 ---
 
 DuckLake 的核心主张是：既然 lakehouse 的目录层最终还是要引入一个数据库，那为什么不干脆把全部元数据也交给数据库来管理？Mark Raasveldt 和 Hannes Mühleisen 在这篇宣言里把 Iceberg 和 Delta Lake 的元数据文件迷宫拆开来看，指出它们为了不依赖数据库而做的种种妥协——JSON/Avro 快照文件、两层 manifest、为原子性而引入的 catalog 服务——本质上都在证明一件事：把元数据放在数据库里是更合理的设计。

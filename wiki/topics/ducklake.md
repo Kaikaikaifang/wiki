@@ -97,4 +97,4 @@ DuckLake 的核心判断是：**不要在没有数据库的地方重新发明数
 
 来源：[[sources/ducklake-manifesto]] · [[sources/ducklake-v1-0-announcement]]
 
-相关页面：[[entities/duckdb]] · [[entities/ducklake]] · [[topics/clickhouse-deployment-topologies]] · [[topics/clickhouse-cold-hot-storage]] · [[topics/clickhouse-data-export]] · [[topics/hdfs-and-oss-hdfs]]
+相关页面：[[entities/duckdb]] · [[entities/ducklake]] · [[topics/clickhouse-deployment-topologies]] · [[sources/clickhouse-cold-hot-storage]] · [[topics/clickhouse-data-export]] · [[topics/hdfs-and-oss-hdfs]]

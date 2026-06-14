@@ -418,3 +418,9 @@
 触及页面：`sources/paul-graham-great-work`（新建）、`sources/paul-graham-lose-time-and-money`（新建）、`topics/doing-great-work`（新建）、`topics/fake-work`（新建）、`entities/paul-graham`（新建）、`index`、`overview`。核心沉淀是：伟大工作的四步方法论——选择领域、学到前沿、发现裂缝、探索裂缝；好奇心是贯穿始终的引擎，而"以年计的拖延"是最隐蔽的时间浪费。假工作比娱乐更危险——它既不快乐也不产出，却绕过了进化赋予的直觉警报。识别假工作的关键是一天结束时问自己"我今天做了什么"，如果答案是"基本上没什么"，那你做了假工作。
 
 删减预算：本轮无删减候选。两个新增主题与现有 `topics/knowledge-management` 互补而非重叠——知识管理是工具，伟大工作是方法论，假工作是警报系统。
+
+## [2026-06-14] query | 训练指标存储架构
+
+触及页面：`topics/training-metrics-storage-architecture`（新建）、`index`。核心沉淀是：类似 Weights & Biases / SwanLab 的产品，不应把本地、云端、私有化做成三套存储体系，而应统一为一套 run-centric 数据协议：事实数据用 `Parquet + zstd`，元信息和文件注册用 SQL catalog，本地零部署分析交给 DuckDB，云端在线 serving 交给 ClickHouse。文档进一步把需求拆成元信息层、时序事实层、staging/flush、小文件治理、前端适配接口和 DuckLake 借鉴边界，并明确拒绝了"本地强制服务化"、"全量 JSON blob"和"一开始就做通用 lakehouse"三条路径。
+
+删减预算：本轮无删减候选。新增页面是在现有 [[topics/duckdb-vs-clickhouse]]、[[topics/ducklake]] 与 [[topics/clickhouse-data-export]] 三条线之间做统一收束，没有发现需要合并或下沉的旧段落。

@@ -7,6 +7,7 @@ file: raw/articles/ducklake-v1-0-announcement.md
 type: source
 tags: [数据湖仓, DuckDB, 数据格式, SQL]
 source_count: 1
+updated: 2026-06-11
 ---
 
 DuckLake v1.0 发布文章不只是版本公告，而是 DuckLake 团队把一年来的工程判断和盘托出：一个把元数据全部放在 SQL 数据库里的 lakehouse 格式，已经通过了生产环境的验证。
