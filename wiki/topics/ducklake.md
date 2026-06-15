@@ -2,8 +2,8 @@
 title: DuckLake 数据格式的 SQL 元数据架构
 type: topic
 tags: [数据湖仓, 数据格式, 数据库设计, SQL]
-source_count: 2
-updated: 2026-06-11
+source_count: 3
+updated: 2026-06-15
 ---
 
 > 读 DuckLake 宣言时，我有一种被"点醒"的感觉：Iceberg 和 Delta Lake 为了不依赖数据库，用 JSON 和 Avro 在对象存储上搭了一个复杂的文件协议；但既然 lakehouse 的 catalog 层最终还是要引入数据库来保证事务一致性，那为什么不干脆让数据库管理所有元数据？
@@ -73,6 +73,12 @@ DuckLake 把 Variant 类型作为 JSON 的替代方案：二进制编码、支�
 
 文章认为 Variant 最终会替代 JSON 成为半结构化数据的主流类型。这个判断值得关注的理由是：它触及了数据湖格式和查询引擎之间的接口设计。如果数据湖格式能提供更精确的类型信息，查询引擎就能做更激进的下推优化——这正是 DuckLake 把元数据放在数据库里能带来的好处之一。
 
+## 从架构判断到产品形态
+
+[[sources/announcing-ducklake-1-0-on-motherduck]] 让我把 DuckLake 的理解往前推了一步：它不再只是一个“架构上说得通”的格式，而已经开始长出清晰的托管产品形态。MotherDuck 给出的 Fully Managed、Bring-Your-Own-Bucket、Bring-Your-Own-Compute 三种托管方式，本质上是在回答一个过去 lakehouse 讨论里常被忽略的问题：**团队到底想把控制权停留在 catalog、存储还是计算层？**
+
+这很关键，因为它说明 DuckLake 的“数据库管理元数据”路线不只是理论上更优雅，也更容易被 productize。元数据本来就在数据库里，权限、事务、并发、服务端托管和多引擎接入就更容易长在同一层上，而不是像 Iceberg 那样把 catalog、元数据文件和对象存储操作拆成多个边界。
+
 ## 与现有 Lakehouse 格式的关系
 
 DuckLake 不是 Iceberg 或 Delta Lake 的替代者，而是**同一设计空间中的不同选择**。
@@ -95,6 +101,6 @@ DuckLake 的核心判断是：**不要在没有数据库的地方重新发明数
 
 对于我的 ClickHouse 迁移工作，DuckLake 提供了一种有趣的对比：ClickHouse 用本地 part 合并和对象存储外部卷来管理数据生命周期；DuckLake 用 SQL 数据库管理元数据，用对象存储承载数据。两者都把对象存储作为容量层，但元数据管理的路径完全不同。这种对比让我更清楚 ClickHouse 的设计选择——以及它的局限性。
 
-来源：[[sources/ducklake-manifesto]] · [[sources/ducklake-v1-0-announcement]]
+来源：[[sources/ducklake-manifesto]] · [[sources/ducklake-v1-0-announcement]] · [[sources/announcing-ducklake-1-0-on-motherduck]]
 
-相关页面：[[entities/duckdb]] · [[entities/ducklake]] · [[topics/clickhouse-deployment-topologies]] · [[sources/clickhouse-cold-hot-storage]] · [[topics/clickhouse-data-export]] · [[topics/hdfs-and-oss-hdfs]]
+相关页面：[[entities/duckdb]] · [[entities/ducklake]] · [[entities/motherduck]] · [[topics/clickhouse-deployment-topologies]] · [[sources/clickhouse-cold-hot-storage]] · [[topics/clickhouse-data-export]] · [[topics/hdfs-and-oss-hdfs]]

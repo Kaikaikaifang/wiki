@@ -2,8 +2,8 @@
 title: DuckLake 元数据库优先的 Lakehouse 格式
 type: entity
 tags: [数据湖仓, DuckDB, 数据格式, SQL]
-source_count: 2
-updated: 2026-06-11
+source_count: 3
+updated: 2026-06-15
 ---
 
 DuckLake 是 DuckDB 团队提出的一种 lakehouse 格式，核心设计是把全部元数据放在 SQL 数据库中，而不是像 Iceberg 或 Delta Lake 那样用 JSON/Avro 文件存储。数据文件仍使用开放的 Parquet 格式，存放在对象存储上。
@@ -17,6 +17,8 @@ DuckLake 是 DuckDB 团队提出的一种 lakehouse 格式，核心设计是把�
 
 DuckLake 的参考实现是 DuckDB 的 `ducklake` 扩展，支持 SQLite、PostgreSQL 和 DuckDB 作为 catalog 后端。v1.0 于 2026 年 4 月发布，承诺向后兼容。
 
-来源：[[sources/ducklake-manifesto]] · [[sources/ducklake-v1-0-announcement]]
+新增的 [[sources/announcing-ducklake-1-0-on-motherduck]] 还让我看到 DuckLake 的另一个重要侧面：它已经开始被包装成托管 lakehouse 服务，而不是只存在于本地扩展和架构讨论里。MotherDuck 把它组织成 Fully Managed、Bring-Your-Own-Bucket、Bring-Your-Own-Compute 三种形态，说明 DuckLake 的开放格式路线和“元数据归数据库”路线，天然适合长出多引擎与多拥有权模型。
 
-相关页面：[[topics/ducklake]] · [[entities/duckdb]]
+来源：[[sources/ducklake-manifesto]] · [[sources/ducklake-v1-0-announcement]] · [[sources/announcing-ducklake-1-0-on-motherduck]]
+
+相关页面：[[topics/ducklake]] · [[entities/duckdb]] · [[entities/motherduck]]

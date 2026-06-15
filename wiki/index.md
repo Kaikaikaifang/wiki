@@ -3,7 +3,7 @@ title: 内容目录
 type: index
 tags: [索引, 导航]
 source_count: 0
-updated: 2026-06-14
+updated: 2026-06-15
 ---
 
 > 每次摄入后由 LLM 更新。查询时先读此文件定位相关页面。
@@ -29,6 +29,7 @@ updated: 2026-06-14
 - [[topics/clickhouse-replicated-engines-and-conversion]] — 把 `Replicated` 数据库引擎、`ReplicatedMergeTree` 与旧表迁移路径放进同一生产判断框架
 - [[topics/clickhouse-sharding-decision]] — 在冷热分层前提下，何时分片、何时全副本的决策框架与真实案例分析
 - [[topics/clickhouse-single-node-to-cluster-migration]] — 从单节点 ClickHouse 迁到多副本多分片集群时，如何判断无缝切换、引擎切换与迁移步骤
+- [[topics/dashboard-storytelling]] — 仪表盘不是图表拼盘，而是一个需要问题定义、叙事结构与克制交互的决策界面
 - [[topics/ddl-vs-dml]] — 用“改结构”和“改数据”的区别理解 `ON CLUSTER` 为什么只管 DDL
 - [[topics/doing-great-work]] — 如何找到值得做的事并持续做下去：好奇心、前沿、裂缝与探索的四步方法论
 - [[topics/ducklake]] — 把元数据全部交给 SQL 数据库管理的 lakehouse 格式，与 Iceberg、Delta Lake 的数据层通用但元数据层独立
@@ -87,6 +88,7 @@ updated: 2026-06-14
 - [[entities/kubernetes]] — 以声明式 API、调度器和控制器构成的容器编排系统
 - [[entities/managed-agents]] — Anthropic 的托管式长程 agent 运行时产品
 - [[entities/markus-winand]] — 以 SQL 索引与执行计划教学著称的数据库作者
+- [[entities/motherduck]] — 围绕 DuckDB 与 DuckLake 构建的云端数据平台，强调托管 lakehouse 与自然语言分析体验
 - [[entities/nodejs]] — JavaScript 服务端运行时，也是 ESM / CommonJS 迁移路径的关键中间层
 - [[entities/paul-graham]] — Y Combinator 创始人，关于如何做出伟大工作、识别假工作与时间陷阱的思考者
 - [[entities/envoy]] — 开源 L7 代理与通信总线，服务网格的数据面标准实现
@@ -133,6 +135,7 @@ updated: 2026-06-14
 - [[sources/clickhouse-replication-and-scaling]] — ClickHouse 分片与多副本集群示例（2026-04-16，网络文章）
 - [[sources/clickhouse-separation-storage-compute]] — ClickHouse 存算分离与 S3 架构指南（2026-04-16，网络文章）
 - [[sources/ducklake-manifesto]] — DuckLake 宣言：为什么 lakehouse 元数据应该放在数据库里而不是 JSON 文件里（2026-06-11，网络文章）
+- [[sources/announcing-ducklake-1-0-on-motherduck]] — MotherDuck 视角下的 DuckLake 1.0：稳定规范、多引擎和三种托管拥有权模型（2026-04-17，网络文章）
 - [[sources/ducklake-v1-0-announcement]] — DuckLake v1.0 发布说明，包含 Data Inlining、Sorted Tables、Bucket Partitioning、Variant 类型等生产级功能（2026-04-13，网络文章）
 - [[sources/duckdb-vs-clickhouse-posthog]] — PostHog 同时使用 DuckDB 和 ClickHouse 的原因对比（2026-05-01，网络文章）
 - [[sources/duckdb-vs-postgres]] — DuckDB 与 Postgres 的 OLAP vs OLTP 详细对比（2026-06-13，网络文章）
@@ -154,6 +157,7 @@ updated: 2026-06-14
 - [[sources/qmd]] — QMD README（tobi/qmd，2026-04-13，项目文档）
 - [[sources/scaling-managed-agents-decoupling-the-brain-from-the-hands]] — Anthropic 关于 Managed Agents 运行时架构的文章（2026-04-13，网络文章）
 - [[sources/use-the-index-luke-anatomy-of-an-index]] — Use The Index, Luke 的索引结构章节（2026-04-14，书籍章节）
+- [[sources/vibe-coding-dashboards-best-practices]] — 用问题定义、图表映射、视觉层级与叙事弧线约束 AI 生成仪表盘（2026-04-14，网络文章）
 - [[sources/what-is-envoy]] — Envoy 官方文档：进程外架构、过滤器链、xDS 动态配置与服务网格设计哲学（envoy 1.39.0-dev，官方文档）
 - [[sources/use-the-index-luke-clustering-data]] — Use The Index, Luke 的聚簇与覆盖索引章节（2026-04-14，书籍章节）
 - [[sources/use-the-index-luke-execution-plans]] — Use The Index, Luke 的执行计划附录（2026-04-14，书籍章节）

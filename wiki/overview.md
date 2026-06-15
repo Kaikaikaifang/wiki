@@ -2,8 +2,8 @@
 title: 整体综述
 type: overview
 tags: [方法论, 知识管理]
-source_count: 52
-updated: 2026-06-13
+source_count: 54
+updated: 2026-06-15
 ---
 
 这份 wiki 越往后写，我越清楚它不是“资料仓库”，而更像一条不断长出来的思考主线。起点当然是 [[topics/llm-wiki-pattern]]：Karpathy 提醒我，真正有复利的不是一次次对着原始资料发问，而是把理解编译进一个会持续演化的知识系统。
@@ -57,6 +57,10 @@ updated: 2026-06-13
 这次摄入的 [[sources/ducklake-manifesto]] 和 [[sources/ducklake-v1-0-announcement]] 则新增了 [[topics/ducklake]] 这条数据湖格式线索：DuckLake 的核心判断是——既然 lakehouse 的 catalog 层最终还是要引入数据库来保证事务一致性，那不如干脆把全部元数据也交给数据库来管理。数据文件仍用开放的 Parquet 格式存放在对象存储上，但元数据、快照、schema 变更和统计信息全部放在 SQL 数据库的表里。这让我意识到，lakehouse 格式的真正竞争不在数据层（Parquet 已经是事实标准），而在元数据层。DuckLake 的 Data Inlining、Sorted Tables、Bucket Partitioning 和 Variant 类型，则把写入优化、查询优化与类型系统演进放到了同一设计框架里。
 
 这次摄入的 [[sources/duckdb-vs-clickhouse-posthog]]、[[sources/duckdb-vs-postgres]] 和 [[sources/duckdb-vs-sqlite]] 则补充了 DuckDB 的多维定位：它与 ClickHouse 不是竞争关系而是互补——ClickHouse 是生产级 OLAP 服务（长驻进程、水平扩展、高并发写入），DuckDB 是嵌入式分析引擎（进程内、零配置、用完即销毁）。PostHog 同时用 ClickHouse 处理热分析、用 DuckDB 处理数据仓库的即席查询，这个"三数据库栈"（Postgres + ClickHouse + DuckDB）让我看到不同数据库可以按工作负载分层共存。而与 Postgres 的对比则进一步揭示了 OLAP 与 OLTP 的根本差异：列式 vs 行式、向量化执行 vs Volcano 模型、嵌入式 vs 客户端-服务器。与 SQLite 的对比则澄清了"SQLite of OLAP"这个称号的精确含义——DuckDB 的核心不是"本地性"，而是"便携性 + 分析马力"。
+
+这次摄入的 [[sources/announcing-ducklake-1-0-on-motherduck]] 则把 DuckLake 这条线从“格式与架构判断”推进到“产品与托管边界”层面。它补充了 [[entities/motherduck]]，也更新了 [[topics/ducklake]]：DuckLake 的关键不只是把元数据从 JSON/Avro 文件迁到 SQL 数据库，而是这种架构天然更容易长出托管 catalog、serverless compute 和 BYO Bucket / BYO Compute 这类控制权分层。也就是说，DuckLake 的优势不只在格式层，开始延伸到 productize 的速度与形态。
+
+另一篇 [[sources/vibe-coding-dashboards-best-practices]] 看似偏轻，但我反而觉得它补上了一个之前 wiki 里缺失的产品设计视角：当 Agent 越来越会“自动生成页面”，人类更需要一套判断仪表盘是否真的在帮助理解的框架。它新增了 [[topics/dashboard-storytelling]]，把问题定义、图表类型映射、视觉层级、叙事弧线和克制交互放在同一个工作流里，提醒我 dashboard 不是图表拼盘，而是一个面向决策的叙事界面。
 
 这次摄入的 [[sources/agent-first-product-engineering]] 则把 wiki 的 agent 主线从"架构设计"推进到"产品设计"层面。它新增了 [[topics/agent-first-engineering]] 和 [[entities/posthog]]：agent 不是产品的附加功能，而是一种新的交互层。PostHog 从 6000+ 日活 MCP 用户的两次架构迭代中提炼出五条原则——让 agent 能做用户能做的一切、在 agent 的抽象层级上设计（用 SQL 替代 UI 原语）、预加载通用上下文、把 skill 写成"给优秀员工的入职指南"而非 step-by-step 手册、以及把 agent 当作真实用户来做 headless dogfooding 和 trace review。这补充了 agent 主线中缺失的"产品层"视角。
 
@@ -164,6 +168,7 @@ updated: 2026-06-13
 - 2026-06-13：摄入 DuckDB 与 ClickHouse/Postgres/SQLite 三篇对比文章，新增 DuckDB 定位主题：DuckDB 不是 ClickHouse 的替代者，而是嵌入式分析引擎；PostHog 同时使用 Postgres + ClickHouse + DuckDB 的三数据库栈，按工作负载分层；DuckDB 的核心不是"本地性"而是"便携性 + 分析马力"
 - 2026-06-13：摄入 Agent-first 产品设计五原则，新增 Agent 产品层主题：agent 不是附加功能而是新交互层；在 agent 的抽象层级上设计（SQL 替代 UI 原语）；默认关闭端点 + product team opt-in 的治理模式；headless dogfooding 和 trace review 作为 agent 测试方法
 - 2026-06-13：摄入 Paul Graham 的两篇文章，新增 [[topics/doing-great-work]]、[[topics/fake-work]] 与 [[entities/paul-graham]]：伟大工作的四步方法论（选择领域 → 学到前沿 → 发现裂缝 → 探索裂缝），以及假工作作为现代时间陷阱的识别——既不快乐也不产出的活动比娱乐更危险，因为它们绕过了进化赋予的直觉警报
+- 2026-06-15：摄入 MotherDuck 的两篇文章，新增 [[entities/motherduck]] 与 [[topics/dashboard-storytelling]]，并更新 [[topics/ducklake]]：前者把 DuckLake 从格式判断推进到托管产品形态，后者则把 AI 生成仪表盘拉回到问题定义、叙事结构与交互克制的基本功
 
 ---
 

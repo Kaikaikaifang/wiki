@@ -424,3 +424,9 @@
 触及页面：`topics/training-metrics-storage-architecture`（新建）、`index`。核心沉淀是：类似 Weights & Biases / SwanLab 的产品，不应把本地、云端、私有化做成三套存储体系，而应统一为一套 run-centric 数据协议：事实数据用 `Parquet + zstd`，元信息和文件注册用 SQL catalog，本地零部署分析交给 DuckDB，云端在线 serving 交给 ClickHouse。文档进一步把需求拆成元信息层、时序事实层、staging/flush、小文件治理、前端适配接口和 DuckLake 借鉴边界，并明确拒绝了"本地强制服务化"、"全量 JSON blob"和"一开始就做通用 lakehouse"三条路径。
 
 删减预算：本轮无删减候选。新增页面是在现有 [[topics/duckdb-vs-clickhouse]]、[[topics/ducklake]] 与 [[topics/clickhouse-data-export]] 三条线之间做统一收束，没有发现需要合并或下沉的旧段落。
+
+## [2026-06-15] ingest | MotherDuck 的 DuckLake 与仪表盘文章
+
+触及页面：`sources/announcing-ducklake-1-0-on-motherduck`（新建）、`sources/vibe-coding-dashboards-best-practices`（新建）、`entities/motherduck`（新建）、`topics/dashboard-storytelling`（新建）、`topics/ducklake`、`entities/ducklake`、`index`、`overview`。核心沉淀是：MotherDuck 视角把 DuckLake 从“SQL 管元数据”的架构判断推进到了可托管交付的产品形态，关键在 Fully Managed、BYO Bucket、BYO Compute 三层控制权拆分；另一篇文章则把 AI 生成 dashboard 拉回到更基本的设计纪律——先定义问题、再选图表、再组织叙事，最后才加交互。
+
+删减预算：保留 `topics/ducklake` 原有元数据层判断，新增一节承接托管产品形态；`topics/dashboard-storytelling` 独立成页，不把数据可视化方法零碎塞进 `agent-first-engineering`；本轮无其他删减候选。
