@@ -62,6 +62,7 @@ updated: 2026-06-15
 - [[topics/service-db-network-latency-diagnosis]] — 用冷连接、热连接与双侧耗时拆分判断接口慢点是否在数据库链路
 - [[topics/service-mesh]] — 服务网格的设计模式与 trade-offs
 - [[topics/software-versioning]] — 把 SemVer、zero-major 和 Epoch SemVer 放进升级风险沟通框架
+- [[topics/training-metrics-hosting-boundaries]] — 从 MotherDuck 的三档托管模型理解训练指标产品的控制权分层：catalog、storage、compute 应分别决定由谁托管
 - [[topics/training-metrics-storage-architecture]] — 面向训练指标产品的统一存储协议：Parquet 事实层、SQL catalog、DuckDB 本地分析与 ClickHouse 在线 serving 分工
 - [[topics/clickhouse-production-migration]] — 面向单实例与 7 TiB 数据量场景的 ClickHouse 迁集群方案
 - [[topics/clickhouse-scalar-multilane-backfill]] — 用主键友好 cursor、排序键边界和受控 lane 数量完成 ClickHouse scalar 大表回灌

@@ -430,3 +430,9 @@
 触及页面：`sources/announcing-ducklake-1-0-on-motherduck`（新建）、`sources/vibe-coding-dashboards-best-practices`（新建）、`entities/motherduck`（新建）、`topics/dashboard-storytelling`（新建）、`topics/ducklake`、`entities/ducklake`、`index`、`overview`。核心沉淀是：MotherDuck 视角把 DuckLake 从“SQL 管元数据”的架构判断推进到了可托管交付的产品形态，关键在 Fully Managed、BYO Bucket、BYO Compute 三层控制权拆分；另一篇文章则把 AI 生成 dashboard 拉回到更基本的设计纪律——先定义问题、再选图表、再组织叙事，最后才加交互。
 
 删减预算：保留 `topics/ducklake` 原有元数据层判断，新增一节承接托管产品形态；`topics/dashboard-storytelling` 独立成页，不把数据可视化方法零碎塞进 `agent-first-engineering`；本轮无其他删减候选。
+
+## [2026-06-15] query | 训练指标托管边界
+
+触及页面：`topics/training-metrics-hosting-boundaries`（新建）、`index`。核心沉淀是：MotherDuck 提供的 Fully Managed、BYO Bucket、BYO Compute 三档 DuckLake 托管方式，真正值得借鉴的不是产品套餐，而是 `catalog / storage / compute` 三层控制权拆分。对训练指标产品来说，这意味着不该把本地、云端、私有化做成三套架构，而该基于统一协议提供三种托管边界：全托管、自带存储、自带计算。文档进一步强化了 `catalog` 作为控制面的优先级，并把开放 `Parquet` 数据层与可替换 compute 层之间的关系写得更清楚。
+
+删减预算：本轮无删减候选。新增页面是对 [[topics/training-metrics-storage-architecture]] 的补充，前者讲统一协议，后者讲托管边界，职责划分清楚，无需合并。
